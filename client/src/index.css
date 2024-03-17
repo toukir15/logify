@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-shadow {
+    box-shadow: 0 0 10px 3px #0000001a;
+}
+.rdrDefinedRangesWrapper {
+    display: none;
+}
+.rdrCalendarWrapper, .rdrDateRangeWrapper, .rdrMonth {
+    width: 100% !important;
+}
+.rdrWeekDay{
+    font-size: 16px;
+}
+.rdrDayNumber{
+    font-size: 16px;
+}
+.rdrDay{
+    height:47px !important;
+    border-radius: 19px !important;
+}
+.rdrMonthName{
+    font-size: 16px;
+}
+.rdrMonthAndYearWrapper{
+    font-size: 16px;
+}
+.rdrDateDisplay{
+    font-size: 16px;
+}
+.rdrEndEdge {
+    border-top-right-radius: 19px !important;
+    border-bottom-right-radius: 19px !important;
+}
+.rdrStartEdge {
+    border-top-left-radius: 19px !important;
+    border-bottom-left-radius: 19px !important;
+}
+.rdrDayStartOfMonth .rdrInRange, .rdrDayStartOfMonth .rdrEndEdge, .rdrDayStartOfWeek .rdrInRange, .rdrDayStartOfWeek .rdrEndEdge {
+    border-top-left-radius: 19px !important;
+    border-bottom-left-radius: 19px !important;
+}
+.rdrDayEndOfMonth .rdrInRange, .rdrDayEndOfMonth .rdrStartEdge, .rdrDayEndOfWeek .rdrInRange, .rdrDayEndOfWeek .rdrStartEdge {
+    border-top-right-radius: 19px !important;
+    border-bottom-right-radius: 19px !important;
+}
+.rdrDayHovered{
+    border-radius: 19px !important;
+}
+/* 
+.css-1nmdiq5-menu{
+    visibility: hidden !important;
+} */
+
+.indicatorContainer{
+    display: none;
+}

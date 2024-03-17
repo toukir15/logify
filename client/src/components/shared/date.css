@@ -1,0 +1,47 @@
+.rdrSelected{
+    background-color: #4256D0;
+    border-radius: 50%;
+}
+.rdrDay{
+    height: 44px;
+    width: 39px;
+}
+.rdrDayHovered{
+    border-radius: 50%;
+    height: 44px;
+    width: 39px;
+    border-color: #4256D0;
+    color: #4256D0;
+}
+.rdrDayStartPreview {
+    border-radius: 50%;
+    border: 0px;
+}
+.rdrDayEndPreview{
+    border-radius: 0px;
+    border: 0px;
+}
+
+.rdrDays{
+    width: 300px;
+}
+
+.rdrWeekDays{
+    width: 270px;
+}
+
+.rdrWeekDay{
+    font-size: 16px;
+}
+
+.rdrDayNumber{
+    font-size: 16px;
+}
+
+.rdrMonthAndYearPickers{
+    font-size: 16px;
+}
+
+.rdrDayToday .rdrDayNumber span:after{
+    background-color: #4256D0;
+}
