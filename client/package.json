@@ -23,7 +23,8 @@
     "react-select": "^5.8.0",
     "react-simple-image-viewer": "^1.2.2",
     "react-toastify": "^10.0.5",
-    "react-tooltip": "^5.26.2"
+    "react-tooltip": "^5.26.2",
+    "sweetalert2": "^11.10.6"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",

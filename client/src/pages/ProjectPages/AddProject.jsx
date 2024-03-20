@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import Date from "../../components/shared/Date";
 import { BsCheckLg, BsInfo } from "react-icons/bs";
 import { Tooltip } from "react-tooltip";
@@ -8,6 +8,7 @@ import Select, { components } from "react-select";
 import { CgProfile } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import { useNotify } from "../../hooks/useNotify"
+import { GlobalContext } from "../../providers/GlobalProvider";
 
 const MultiValue = props => (
     <components.MultiValue {...props}>
@@ -50,6 +51,7 @@ const customStyle = {
 }
 
 const AddProject = () => {
+    const { projectsDataRefetch } = useContext(GlobalContext)
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
     const [addImage, setAddImage] = useState({})
@@ -95,18 +97,17 @@ const AddProject = () => {
         const IDNumber = e.target.IDNumber?.value
         const projectValue = e.target.projectValue?.value
         const projectDescriptioin = e.target.projectDescription?.value
-        const projectOwner = projectOwnerRef.current.state.selectValue.map(singleValue => singleValue?.value)
-        const riskConsequences = riskConsequencesRef.current.state.selectValue.map(singleValue => singleValue?.value)
-        const riskConsequencesImpact = riskConsequencesImpactRef.current.state.selectValue.map(singleValue => singleValue?.value)
-        const riskCategories = riskCategoriesRef.current.state.selectValue.map(singleValue => singleValue?.value)
-        const likelihood = likelihoodRef.current.state.selectValue.map(singleValue => singleValue?.value)
-        const riskRatting = riskRattingRef.current.state.selectValue.map(singleValue => singleValue?.value)
+        const projectOwner = projectOwnerRef.current.state.selectValue
+        const riskConsequences = riskConsequencesRef.current.state.selectValue
+        const riskConsequencesImpact = riskConsequencesImpactRef.current.state.selectValue
+        const riskCategories = riskCategoriesRef.current.state.selectValue
+        const likelihood = likelihoodRef.current.state.selectValue
+        const riskRatting = riskRattingRef.current.state.selectValue
 
         if (!addImage || !riskMatrixTemplate || !projectName || !client || !IDNumber || !projectDescriptioin || !riskConsequences.length || !riskConsequencesImpact.length || !riskCategories.length || !likelihood.length || !riskRatting.length || !projectValue || !projectOwner.length) {
             useNotify("Some data is messing!", "warning")
             return
         }
-
         const projectData = new FormData();
         projectData.append('file', addImage);
         projectData.append('file', riskMatrixTemplate);
@@ -114,13 +115,13 @@ const AddProject = () => {
         projectData.append('client', client);
         projectData.append('ID_number', IDNumber);
         projectData.append('project_description', projectDescriptioin);
-        projectData.append('risk_consequences', riskConsequences);
-        projectData.append('risk_consequences_impact', riskConsequencesImpact);
-        projectData.append('risk_categories', riskCategories);
-        projectData.append('likelihood', likelihood);
-        projectData.append('risk_ratting', riskRatting);
+        projectData.append('risk_consequences', JSON.stringify(riskConsequences));
+        projectData.append('risk_consequences_impact', JSON.stringify(riskConsequencesImpact));
+        projectData.append('risk_categories', JSON.stringify(riskCategories));
+        projectData.append('likelihood', JSON.stringify(likelihood));
+        projectData.append('risk_ratting', JSON.stringify(riskRatting));
         projectData.append('project_value', projectValue);
-        projectData.append('project_owner', projectOwner);
+        projectData.append('project_owner', JSON.stringify(projectOwner));
         projectData.append('start_date', startDate);
         projectData.append('end_date', endDate);
 
@@ -131,6 +132,7 @@ const AddProject = () => {
         })
             .then(data => {
                 if (data.status == 200) {
+                    projectsDataRefetch()
                     navigate("/projects")
                 }
             })

@@ -6,6 +6,7 @@ import { Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import RiskViewDetails from "../pages/ProjectPages/ProjectLogsPages/RiskViewDetails";
 const Projects = lazy(() => import("../pages/ProjectPages/Projects"))
+const EditProject = lazy(() => import("../pages/ProjectPages/EditProjects"))
 const AddProject = lazy(() => import("../pages/ProjectPages/AddProject"))
 const ProjectDetails = lazy(() => import("../pages/ProjectPages/ProjectDetails"))
 const ControlOpen = lazy(() => import("../pages/ProjectPages/ProjectLogsPages/ControlOpen"))
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
             {
                 path: "/projects/add-project",
                 element: <Suspense fallback={"loading..."}><AddProject /></Suspense>
+            },
+            {
+                path: "/projects/edit-project",
+                element: <Suspense fallback={"loading..."}><EditProject /></Suspense>
             },
             {
                 path: "/projects/logs",

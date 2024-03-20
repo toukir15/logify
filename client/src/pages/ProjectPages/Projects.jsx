@@ -5,15 +5,53 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import moment from 'moment';
+import Swal from 'sweetalert2'
+import { useContext } from "react";
+import { GlobalContext } from "../../providers/GlobalProvider";
 
 const Projects = () => {
-    const { isLoading, error, data: projectsData } = useQuery({
-        queryKey: ['repoData'],
-        queryFn: () =>
-            axios.get('/projects_api/get_projects')
-                .then((res) => res.data)
-    })
     const navigate = useNavigate()
+    const { projectsData, projectsDataRefetch, handleSingleProjectData } = useContext(GlobalContext)
+    // const { isLoading, error, data: projectsData, refetch } = useQuery({
+    //     queryKey: ['repoData'],
+    //     queryFn: () =>
+    //         axios.get('/projects_api/get_projects')
+    //             .then((res) => res.data)
+    // })
+
+    const handleProjectDelete = (e, id) => {
+        e.stopPropagation()
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Delete"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(`/projects_api/delete_projects?id=${id}`)
+                    .then(response => {
+                        if (response.data.result.deletedCount) {
+                            Swal.fire({
+                                title: "Deleted!",
+                                text: "Your file has been deleted.",
+                                icon: "success"
+                            });
+                        }
+                        projectsDataRefetch();
+                    }
+                    )
+            }
+        });
+    }
+
+    const handleEditProject = (e, id) => {
+        e.stopPropagation()
+        navigate(`/projects/edit-project?id=${id}`)
+    }
+
     return (
         <div className="py-10 px-20">
             <div className="flex justify-end">
@@ -47,14 +85,16 @@ const Projects = () => {
                                 </td>
                                 <td className="py-5 px-4 text-start"><div className="flex gap-3">
                                     <button><FaRegEye size={18} /></button>
-                                    <button> <BiSolidEditAlt className="text-primary" size={22} /></button>
-                                    <button><RiDeleteBinLine className="text-[#ef2828e5]" size={18} /></button>
+                                    <button> <BiSolidEditAlt onClick={(e) => {
+                                        handleEditProject(e, projectData._id)
+                                        handleSingleProjectData(projectData._id)
+                                    }} className="text-primary" size={22} /></button>
+                                    <button><RiDeleteBinLine onClick={(e) => handleProjectDelete(e, projectData._id)} className="text-[#ef2828e5]" size={18} /></button>
                                 </div>
                                 </td>
                             </tr>
                         );
                     })}
-
                 </tbody>
             </table >
 

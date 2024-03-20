@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "name": "logify",
+  "version": "1.0.0",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "client": "cd client && npm run dev",
+    "server": "cd server && npm i && npx nodemon index.js",
+    "start": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

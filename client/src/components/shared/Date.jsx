@@ -2,15 +2,17 @@ import { useState } from "react";
 import { Calendar } from "react-date-range";
 import { FaCalendarAlt } from "react-icons/fa";
 import { IoMdClose } from "react-icons/io";
+import moment from 'moment';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import "./date.css"
 
 // eslint-disable-next-line react/prop-types
 const Date = ({ dateData }) => {
-    const { date, setDate } = dateData || {}
+    console.log(dateData)
+    const { date, refName } = dateData || {}
     const [isControlDateOpen, setIsControlDateOpen] = useState(false)
-    const formattedDate = `${("0" + date?.getDate()).slice(-2)}/${("0" + (date?.getMonth() + 1)).slice(-2)}/${date?.getFullYear()}`;
+    const formattedDate = moment(date).format("DD/MM/YYYY");
 
     return (
         <div>
@@ -29,7 +31,7 @@ const Date = ({ dateData }) => {
                             <p className='border border-[#e9e9e9] py-3 px-6 rounded text-primary mb-2'>{date ? formattedDate : "DD/MM/YY"}</p>
                         </div>
                         <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
-                            <Calendar onChange={item => setDate(item)}
+                            <Calendar ref={refName}
                                 date={date}
                             />
                         </div>
