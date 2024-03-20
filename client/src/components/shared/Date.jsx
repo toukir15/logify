@@ -9,8 +9,7 @@ import "./date.css"
 
 // eslint-disable-next-line react/prop-types
 const Date = ({ dateData }) => {
-    console.log(dateData)
-    const { date, refName } = dateData || {}
+    const { date, setDate } = dateData || {}
     const [isControlDateOpen, setIsControlDateOpen] = useState(false)
     const formattedDate = moment(date).format("DD/MM/YYYY");
 
@@ -31,7 +30,7 @@ const Date = ({ dateData }) => {
                             <p className='border border-[#e9e9e9] py-3 px-6 rounded text-primary mb-2'>{date ? formattedDate : "DD/MM/YY"}</p>
                         </div>
                         <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
-                            <Calendar ref={refName}
+                            <Calendar onChange={item => setDate(item)}
                                 date={date}
                             />
                         </div>
