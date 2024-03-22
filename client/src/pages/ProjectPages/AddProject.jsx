@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from "react";
 import Date from "../../components/shared/Date";
-import { BsCheckLg, BsInfo } from "react-icons/bs";
+import { BsInfo } from "react-icons/bs";
 import { Tooltip } from "react-tooltip";
 import axios from 'axios'
 import CreatableSelect from 'react-select/creatable';
@@ -90,6 +90,7 @@ const AddProject = () => {
 
     const handleProjects = (e) => {
         e.preventDefault();
+        console.log(e.target.addImage.files[0])
         const addImage = e.target.addImage.files[0]
         const riskMatrixTemplate = e.target.riskMatrixTemplate.files[0]
         const projectName = e.target.projectName?.value
@@ -108,6 +109,7 @@ const AddProject = () => {
             useNotify("Some data is messing!", "warning")
             return
         }
+
         const projectData = new FormData();
         projectData.append('file', addImage);
         projectData.append('file', riskMatrixTemplate);

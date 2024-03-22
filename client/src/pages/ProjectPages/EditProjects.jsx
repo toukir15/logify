@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useNotify } from "../../hooks/useNotify"
 import { GlobalContext } from "../../providers/GlobalProvider";
 import moment from 'moment';
+import { FaCalendarAlt } from "react-icons/fa";
 
 const MultiValue = props => (
     <components.MultiValue {...props}>
@@ -66,6 +67,9 @@ const EditProject = () => {
     const riskRattingRef = useRef(null)
     const navigate = useNavigate();
 
+
+    const [isControlDateOpen, setIsControlDateOpen] = useState(false)
+
     const handleAddImageChange = (e, actionName) => {
         if (e.target?.files[0]?.type?.split("/")[0] == "image") {
             const reader = new FileReader()
@@ -92,8 +96,8 @@ const EditProject = () => {
 
     const handleProjects = (e) => {
         e.preventDefault();
-        const addImage = e.target.addImage.files[0]
-        const riskMatrixTemplate = e.target.riskMatrixTemplate.files[0]
+        const addImage = e.target.addImage.files[0] ? e.target.addImage.files[0] : singleProjectData.add_image
+        const riskMatrixTemplate = e.target.riskMatrixTemplate.files[0] ? e.target.riskMatrixTemplate.files[0] : singleProjectData.risk_metrix_template
         const projectName = e.target.projectName?.value
         const client = e.target.client?.value
         const IDNumber = e.target.IDNumber?.value
@@ -105,6 +109,10 @@ const EditProject = () => {
         const riskCategories = riskCategoriesRef.current.state.selectValue
         const likelihood = likelihoodRef.current.state.selectValue
         const riskRatting = riskRattingRef.current.state.selectValue
+
+        console.log({ addImage, riskMatrixTemplate, projectName, client, IDNumber, projectValue, projectDescriptioin, projectOwner, riskConsequences, riskConsequencesImpact, riskCategories, likelihood, riskRatting })
+
+        const data = { addImage, riskMatrixTemplate, projectName, client, IDNumber, projectValue, projectDescriptioin, projectOwner, riskConsequences, riskConsequencesImpact, riskCategories, likelihood, riskRatting }
 
         const projectData = new FormData();
         projectData.append('file', addImage);
@@ -120,10 +128,14 @@ const EditProject = () => {
         projectData.append('risk_ratting', JSON.stringify(riskRatting));
         projectData.append('project_value', projectValue);
         projectData.append('project_owner', JSON.stringify(projectOwner));
-        projectData.append('start_date', startDate);
-        projectData.append('end_date', endDate);
+        projectData.append('start_date', startDate ? startDate : singleProjectData.start_date);
+        projectData.append('end_date', endDate ? endDate : singleProjectData.end_date);
 
-        axios.patch('/projects_api/update_project', singleProjectData)
+        axios.post(`/projects_api/update_project?id=${singleProjectData._id}`, projectData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
             .then(data => {
                 if (data.status == 200) {
                     // navigate("/projects")

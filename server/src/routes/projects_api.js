@@ -23,7 +23,6 @@ const run = async () => {
         try {
             const { project_name, client, ID_number, project_description, risk_consequences, risk_consequences_impact, risk_categories, likelihood, risk_ratting, project_value, project_owner, start_date, end_date
             } = req.body;
-            console.log()
             const project_data = {
                 add_image: req.files[0].filename,
                 risk_metrix_template: req.files[1].filename,
@@ -68,9 +67,71 @@ const run = async () => {
         }
     });
 
-    router.patch("/update_project", async (req, res) => {
-        console.log(req)
+    router.post("/update_project", upload.array('file', 2), async (req, res) => {
+
+        const { project_name, client, ID_number, project_description, risk_consequences, risk_consequences_impact, risk_categories, likelihood, risk_ratting, project_value, project_owner, start_date, end_date
+        } = req.body;
+        console.log({ upload_file_one: req?.files[0]?.filename, upload_file_two: req?.files[1]?.filename })
+        // console.log({ default_one: req?.body?.file[0], default_two: req?.body?.file[1] })
+        // const project_data = {
+        //     add_image: req.files[0]?.filename ? req.files[0]?.filename : req.body.file[0],
+        //     risk_metrix_template: req.files[1]?.filename ? req.files[0]?.filename : req.body.file[1],
+        // };
+        // console.log(risk_consequences)
+        const result = await projects_collection.updateOne(
+            { _id: new ObjectId(req.query.id) },
+            [
+                {
+                    $set: { add_image: req?.files[0]?.filename && req?.files[0]?.filename }
+                },
+                {
+                    $set: { risk_metrix_template: req?.files[1]?.filename && req?.files[1]?.filename }
+                },
+                {
+                    $set: { project_name: project_name }
+                },
+                {
+                    $set: { client: client }
+                },
+                {
+                    $set: { ID_number: ID_number }
+                },
+                {
+                    $set: { project_description: project_description }
+                },
+                {
+                    $set: { project_value: project_value }
+                },
+                {
+                    $set: { start_date: start_date }
+                },
+                {
+                    $set: { end_date: end_date }
+                },
+                {
+                    $set: { risk_consequences: JSON.parse(risk_consequences) }
+                },
+                {
+                    $set: { risk_consequences_impact: JSON.parse(risk_consequences_impact) }
+                },
+                {
+                    $set: { risk_categories: JSON.parse(risk_categories) }
+                },
+                {
+                    $set: { likelihood: JSON.parse(likelihood) }
+                },
+                {
+                    $set: { risk_ratting: JSON.parse(risk_ratting) }
+                },
+                {
+                    $set: { project_owner: JSON.parse(project_owner) }
+                },
+            ]
+        );
+        console.log(result)
     })
+
+
 
 };
 
