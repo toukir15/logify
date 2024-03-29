@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useContext } from 'react';
 import JoditEditor from 'jodit-react';
 import { FiPlus } from "react-icons/fi"
 import { BsInfo } from "react-icons/bs";
@@ -7,6 +7,7 @@ import { Tooltip } from 'react-tooltip'
 import Select, { components } from "react-select";
 import ImageViewer from 'react-simple-image-viewer';
 import { CgProfile } from 'react-icons/cg';
+import { GlobalContext } from '../../../providers/GlobalProvider';
 
 const options = [
     { value: 'construction', label: 'Construction' },
@@ -28,17 +29,17 @@ const Option = props => (
 );
 
 const AddRisk = () => {
+    const { singleProjectData } = useContext(GlobalContext)
+    console.log(singleProjectData)
     const editor = useRef(null);
     const [content, setContent] = useState('');
     const [selectedOption, setSelectedOption] = useState(null);
     const [consequencesInputNumber, setConsequencesInputNumber] = useState(1)
-
     const [currentImage, setCurrentImage] = useState(0);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const images = [
-        'https://api.logify.au/uploads/risk_matrix_image-1702530495480-613704814.png',
+        `http://localhost:5000/public/uploads/${singleProjectData.risk_matrix_template}`,
     ];
-
     const openImageViewer = useCallback((index) => {
         setCurrentImage(index);
         setIsViewerOpen(true);
@@ -95,7 +96,7 @@ const AddRisk = () => {
                         className='w-[70%] '
                         defaultValue={selectedOption}
                         onChange={setSelectedOption}
-                        options={options}
+                        options={singleProjectData.risk_categories}
                         isClearable={true}
                         styles={{
                             control: (baseStyles, state) => ({
@@ -168,7 +169,7 @@ const AddRisk = () => {
                                         className={`w-[70%] z-[40+${consequencesInputNumber}]`}
                                         defaultValue={selectedOption}
                                         onChange={setSelectedOption}
-                                        options={options}
+                                        options={singleProjectData.risk_consequences}
                                         isClearable={true}
                                         placeholder={'Consequence'}
                                         styles={{
@@ -183,7 +184,7 @@ const AddRisk = () => {
                                         className={`w-[70%] z-[40+${consequencesInputNumber}]`}
                                         defaultValue={selectedOption}
                                         onChange={setSelectedOption}
-                                        options={options}
+                                        options={singleProjectData.risk_consequences_impact}
                                         isClearable={true}
                                         placeholder={'Impact'}
                                         styles={{
@@ -213,7 +214,7 @@ const AddRisk = () => {
                                 className='w-[70%] '
                                 defaultValue={selectedOption}
                                 onChange={setSelectedOption}
-                                options={options}
+                                options={singleProjectData.likelihood}
                                 isClearable={true}
                                 placeholder={'Likelihood'}
                                 styles={{
@@ -227,7 +228,7 @@ const AddRisk = () => {
                                 className='w-[70%] '
                                 defaultValue={selectedOption}
                                 onChange={setSelectedOption}
-                                options={options}
+                                options={singleProjectData.risk_ratting}
                                 isClearable={true}
                                 placeholder={'Ratting'}
                                 styles={{
@@ -263,7 +264,7 @@ const AddRisk = () => {
                                 <img
                                     src={src}
                                     onClick={() => openImageViewer(index)}
-                                    className='w-full rounded'
+                                    className='w-full h-[500px] object-cover rounded'
                                     key={index}
                                     alt=""
                                 />

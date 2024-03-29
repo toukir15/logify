@@ -5,9 +5,13 @@ import MainLayout from "../layouts/MainLayout";
 import { Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import RiskViewDetails from "../pages/ProjectPages/ProjectLogsPages/RiskViewDetails";
+import SignUpPage from "../pages/AuthenticationPage/SignUpPage";
+import LoginPage from "../pages/AuthenticationPage/LoginPage";
+import VerifyPage from "../pages/AuthenticationPage/VerifyPage";
 const Projects = lazy(() => import("../pages/ProjectPages/Projects"))
 const EditProject = lazy(() => import("../pages/ProjectPages/EditProjects"))
 const AddProject = lazy(() => import("../pages/ProjectPages/AddProject"))
+const ViewProject = lazy(() => import("../pages/ProjectPages/ProjectLogsPages/ViewProject"))
 const ProjectDetails = lazy(() => import("../pages/ProjectPages/ProjectDetails"))
 const ControlOpen = lazy(() => import("../pages/ProjectPages/ProjectLogsPages/ControlOpen"))
 const ControlClosed = lazy(() => import("../pages/ProjectPages/ProjectLogsPages/ControlClosed"))
@@ -48,6 +52,10 @@ const router = createBrowserRouter([
             {
                 path: "/projects/edit-project",
                 element: <Suspense fallback={"loading..."}><EditProject /></Suspense>
+            },
+            {
+                path: "/projects/view-project",
+                element: <Suspense fallback={"loading..."}><ViewProject /></Suspense>
             },
             {
                 path: "/projects/logs",
@@ -97,6 +105,18 @@ const router = createBrowserRouter([
             },
 
         ]
+    },
+    {
+        path: "/login",
+        element: <LoginPage />
+    },
+    {
+        path: "/sign-up",
+        element: <SignUpPage />
+    },
+    {
+        path: "/verify",
+        element: <VerifyPage />
     },
 ]);
 

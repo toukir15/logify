@@ -1,6 +1,6 @@
 import { useContext, useRef, useState } from "react";
 import Date from "../../components/shared/Date";
-import { BsCheckLg, BsInfo } from "react-icons/bs";
+import { BsInfo } from "react-icons/bs";
 import { Tooltip } from "react-tooltip";
 import axios from 'axios'
 import CreatableSelect from 'react-select/creatable';
@@ -9,8 +9,6 @@ import { CgProfile } from "react-icons/cg";
 import { useNavigate } from "react-router-dom";
 import { useNotify } from "../../hooks/useNotify"
 import { GlobalContext } from "../../providers/GlobalProvider";
-import moment from 'moment';
-import { FaCalendarAlt } from "react-icons/fa";
 
 const MultiValue = props => (
     <components.MultiValue {...props}>
@@ -22,6 +20,7 @@ const Option = props => (
         <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
     </components.Option>
 );
+
 const options = [
     { value: 'construction', label: 'Construction', },
     { value: 'schedule', label: 'Schedule', },
@@ -54,7 +53,7 @@ const customStyle = {
 }
 
 const EditProject = () => {
-    const { singleProjectData } = useContext(GlobalContext)
+    const { singleProjectData, projectsDataRefetch } = useContext(GlobalContext)
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
     const [addImage, setAddImage] = useState({})
@@ -66,9 +65,6 @@ const EditProject = () => {
     const likelihoodRef = useRef(null)
     const riskRattingRef = useRef(null)
     const navigate = useNavigate();
-
-
-    const [isControlDateOpen, setIsControlDateOpen] = useState(false)
 
     const handleAddImageChange = (e, actionName) => {
         if (e.target?.files[0]?.type?.split("/")[0] == "image") {
@@ -96,8 +92,8 @@ const EditProject = () => {
 
     const handleProjects = (e) => {
         e.preventDefault();
-        const addImage = e.target.addImage.files[0] ? e.target.addImage.files[0] : singleProjectData.add_image
-        const riskMatrixTemplate = e.target.riskMatrixTemplate.files[0] ? e.target.riskMatrixTemplate.files[0] : singleProjectData.risk_metrix_template
+        const addImage = e.target.addImage.files[0]
+        const riskMatrixTemplate = e.target.riskMatrixTemplate.files[0]
         const projectName = e.target.projectName?.value
         const client = e.target.client?.value
         const IDNumber = e.target.IDNumber?.value
@@ -110,13 +106,14 @@ const EditProject = () => {
         const likelihood = likelihoodRef.current.state.selectValue
         const riskRatting = riskRattingRef.current.state.selectValue
 
-        console.log({ addImage, riskMatrixTemplate, projectName, client, IDNumber, projectValue, projectDescriptioin, projectOwner, riskConsequences, riskConsequencesImpact, riskCategories, likelihood, riskRatting })
-
-        const data = { addImage, riskMatrixTemplate, projectName, client, IDNumber, projectValue, projectDescriptioin, projectOwner, riskConsequences, riskConsequencesImpact, riskCategories, likelihood, riskRatting }
+        if (!projectName || !client || !IDNumber || !projectDescriptioin || !riskConsequences.length || !riskConsequencesImpact.length || !riskCategories.length || !likelihood.length || !riskRatting.length || !projectValue || !projectOwner.length) {
+            useNotify("Some data is messing!", "warning")
+            return
+        }
 
         const projectData = new FormData();
-        projectData.append('file', addImage);
-        projectData.append('file', riskMatrixTemplate);
+        projectData.append('add_image', addImage);
+        projectData.append('risk_matrix_template', riskMatrixTemplate);
         projectData.append('project_name', projectName);
         projectData.append('client', client);
         projectData.append('ID_number', IDNumber);
@@ -138,7 +135,8 @@ const EditProject = () => {
         })
             .then(data => {
                 if (data.status == 200) {
-                    // navigate("/projects")
+                    projectsDataRefetch()
+                    navigate("/projects")
                 }
             })
             .catch(error => console.log(error))
@@ -197,7 +195,7 @@ const EditProject = () => {
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="addImage">Add Image</label>
-                    <input onChange={(e) => handleAddImageChange(e, "add image")} type="file" id="addImage" className="hidden" />
+                    <input onChange={(e) => handleAddImageChange(e, "add image")} name="add_image" type="file" id="addImage" className="hidden" />
                     <label type="button" htmlFor="addImage" className="py-2 px-5 rounded-full text-white text-sm bg-primary cursor-pointer">Upload File</label>
                     {addImage.placeholder && singleProjectData.add_image && <div className="border p-2 ml-2 border-[#4E81CD]">
                         <img className="h-[30px]" src={addImage.placeholder} alt="" />
@@ -295,13 +293,13 @@ const EditProject = () => {
                     <label className="w-[30%]" htmlFor="">Risk matrix template
                     </label>
                     <div className="w-[70%]">
-                        <input onChange={(e) => handleAddImageChange(e, "risk matrix template")} type="file" id="riskMatrixTemplate" className="hidden" />
+                        <input onChange={(e) => handleAddImageChange(e, "risk matrix template")} name="risk_matrix_template" type="file" id="riskMatrixTemplate" className="hidden" />
                         <label type="button" htmlFor="riskMatrixTemplate" className="py-2 px-5 rounded-full text-white text-sm bg-primary cursor-pointer ">Upload File</label>
                         {riskMatrixTemplate.placeholder && singleProjectData.add_image && <div className="border p-2 ml-2 border-[#4E81CD] mt-2 rounded">
                             <img src={riskMatrixTemplate.placeholder} alt="" />
                         </div>}
-                        {!riskMatrixTemplate.placeholder && singleProjectData.risk_metrix_template && <div className="border p-2 ml-2 border-[#4E81CD] mt-2 rounded">
-                            <img src={`http://localhost:5000/public/uploads/${singleProjectData.risk_metrix_template}`} alt="" />
+                        {!riskMatrixTemplate.placeholder && singleProjectData.risk_matrix_template && <div className="border p-2 ml-2 border-[#4E81CD] mt-2 rounded">
+                            <img src={`http://localhost:5000/public/uploads/${singleProjectData.risk_matrix_template}`} alt="" />
                         </div>}
                     </div>
                 </div>

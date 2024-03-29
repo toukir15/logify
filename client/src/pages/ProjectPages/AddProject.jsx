@@ -90,7 +90,6 @@ const AddProject = () => {
 
     const handleProjects = (e) => {
         e.preventDefault();
-        console.log(e.target.addImage.files[0])
         const addImage = e.target.addImage.files[0]
         const riskMatrixTemplate = e.target.riskMatrixTemplate.files[0]
         const projectName = e.target.projectName?.value

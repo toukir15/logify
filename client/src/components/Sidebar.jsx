@@ -4,10 +4,18 @@ import logo from "../assets/logo-x1DR2QCW.png"
 import { IoHomeOutline, IoSettingsOutline } from "react-icons/io5";
 import { CiLogout } from "react-icons/ci";
 import { FaAngleDown } from "react-icons/fa6";
+import axios from "axios";
 
 const Sidebar = () => {
     const [isOpenProfile, setIsOpenProfile] = useState(true)
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
+
+    const handleSendEmail = (e) => {
+        e.preventDefault()
+        axios.post(`/users_api/add_user`, { email: e.target.email.value })
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
+    }
     return (
         <aside className="w-[14%] bg-[#0E1B6B] text-white p-4 flex flex-col  justify-between">
             <div>
@@ -55,12 +63,14 @@ const Sidebar = () => {
                     onClick={() => setIsInviteModalOpen(false)}
                     className="w-screen h-screen bg-[#40444E66] fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center z-10"
                 >
-                    <div onClick={(e) => e.stopPropagation()} data-aos="zoom-in" className="w-[500px] relative bg-white py-[90px] px-16 rounded-lg  text-primary">
-                        <input type="text" className="border py-2 w-full px-2 text-primary rounded outline-none" placeholder="Email Address" />
+                    <form onSubmit={(e) => {
+                        handleSendEmail(e)
+                    }} onClick={(e) => e.stopPropagation()} data-aos="zoom-in" className="w-[500px] relative bg-white py-[90px] px-16 rounded-lg  text-primary">
+                        <input type="email" id="email" className="border py-2 w-full px-2 text-primary rounded outline-none" placeholder="Email Address" />
                         <div className="flex justify-center items-center text-white mt-5">
                             <button className="bg-primary px-10 py-2 rounded-lg">Invite</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             )}
         </aside>

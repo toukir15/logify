@@ -13,8 +13,9 @@ const storage = multer.diskStorage({
         cb(null, file.fieldname + '-' + uniqueSuffix + "." + file.mimetype.split("/")[1]);
     }
 });
-const upload = multer({ storage, limits: { fileSize: 10000000 } });
-
+const upload = multer({
+    storage, limits: { fileSize: 10000000 }
+});
 const run = async () => {
     const db = await connectDatabase();
     const projects_collection = db.collection("projects");
@@ -25,7 +26,7 @@ const run = async () => {
             } = req.body;
             const project_data = {
                 add_image: req.files[0].filename,
-                risk_metrix_template: req.files[1].filename,
+                risk_matrix_template: req.files[1].filename,
                 project_name,
                 client,
                 ID_number,
@@ -67,72 +68,38 @@ const run = async () => {
         }
     });
 
-    router.post("/update_project", upload.array('file', 2), async (req, res) => {
-
-        const { project_name, client, ID_number, project_description, risk_consequences, risk_consequences_impact, risk_categories, likelihood, risk_ratting, project_value, project_owner, start_date, end_date
-        } = req.body;
-        console.log({ upload_file_one: req?.files[0]?.filename, upload_file_two: req?.files[1]?.filename })
-        // console.log({ default_one: req?.body?.file[0], default_two: req?.body?.file[1] })
-        // const project_data = {
-        //     add_image: req.files[0]?.filename ? req.files[0]?.filename : req.body.file[0],
-        //     risk_metrix_template: req.files[1]?.filename ? req.files[0]?.filename : req.body.file[1],
-        // };
-        // console.log(risk_consequences)
-        const result = await projects_collection.updateOne(
-            { _id: new ObjectId(req.query.id) },
-            [
-                {
-                    $set: { add_image: req?.files[0]?.filename && req?.files[0]?.filename }
-                },
-                {
-                    $set: { risk_metrix_template: req?.files[1]?.filename && req?.files[1]?.filename }
-                },
-                {
-                    $set: { project_name: project_name }
-                },
-                {
-                    $set: { client: client }
-                },
-                {
-                    $set: { ID_number: ID_number }
-                },
-                {
-                    $set: { project_description: project_description }
-                },
-                {
-                    $set: { project_value: project_value }
-                },
-                {
-                    $set: { start_date: start_date }
-                },
-                {
-                    $set: { end_date: end_date }
-                },
-                {
-                    $set: { risk_consequences: JSON.parse(risk_consequences) }
-                },
-                {
-                    $set: { risk_consequences_impact: JSON.parse(risk_consequences_impact) }
-                },
-                {
-                    $set: { risk_categories: JSON.parse(risk_categories) }
-                },
-                {
-                    $set: { likelihood: JSON.parse(likelihood) }
-                },
-                {
-                    $set: { risk_ratting: JSON.parse(risk_ratting) }
-                },
-                {
-                    $set: { project_owner: JSON.parse(project_owner) }
-                },
-            ]
-        );
-        console.log(result)
-    })
-
-
-
+    router.post("/update_project", upload.fields([
+        { name: 'add_image', maxCount: 1 },
+        { name: 'risk_matrix_template', maxCount: 1 }]),
+        async (req, res) => {
+            try {
+                let updateFields = {
+                    project_name: req.body.project_name,
+                    client: req.body.client,
+                    ID_number: req.body.ID_number,
+                    project_description: req.body.project_description,
+                    project_value: req.body.project_value,
+                    start_date: req.body.start_date,
+                    end_date: req.body.end_date,
+                    risk_consequences: JSON.parse(req.body.risk_consequences),
+                    risk_consequences_impact: JSON.parse(req.body.risk_consequences_impact),
+                    risk_categories: JSON.parse(req.body.risk_categories),
+                    likelihood: JSON.parse(req.body.likelihood),
+                    risk_ratting: JSON.parse(req.body.risk_ratting),
+                    project_owner: JSON.parse(req.body.project_owner)
+                };
+                if (req.files.add_image) {
+                    updateFields.add_image = req.files.add_image[0].filename;
+                }
+                if (req.files.risk_matrix_template) {
+                    updateFields.risk_matrix_template = req.files.risk_matrix_template[0].filename;
+                }
+                const result = await projects_collection.updateOne({ _id: new ObjectId(req.query.id) }, { $set: updateFields });
+                res.status(200).send("Project updated successfully.");
+            } catch (error) {
+                res.status(500).send("An error occurred while updating the project.");
+            }
+        });
 };
 
 run(); // Call run function to execute the code inside it

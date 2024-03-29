@@ -3,7 +3,6 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { BiSolidEditAlt } from "react-icons/bi";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useQuery } from "@tanstack/react-query";
 import moment from 'moment';
 import Swal from 'sweetalert2'
 import { useContext } from "react";
@@ -12,13 +11,6 @@ import { GlobalContext } from "../../providers/GlobalProvider";
 const Projects = () => {
     const navigate = useNavigate()
     const { projectsData, projectsDataRefetch, handleSingleProjectData } = useContext(GlobalContext)
-    // const { isLoading, error, data: projectsData, refetch } = useQuery({
-    //     queryKey: ['repoData'],
-    //     queryFn: () =>
-    //         axios.get('/projects_api/get_projects')
-    //             .then((res) => res.data)
-    // })
-
     const handleProjectDelete = (e, id) => {
         e.stopPropagation()
         Swal.fire({
@@ -52,6 +44,11 @@ const Projects = () => {
         navigate(`/projects/edit-project?id=${id}`)
     }
 
+    const handleViewProject = (e, id) => {
+        e.stopPropagation()
+        navigate(`/projects/view-project?id=${id}`)
+    }
+
     return (
         <div className="py-10 px-20">
             <div className="flex justify-end">
@@ -71,7 +68,11 @@ const Projects = () => {
                 <tbody>
                     {projectsData?.map((projectData, index) => {
                         return (
-                            <tr onClick={() => navigate(`/projects/logs/control/open/${"45121245112"}`)} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
+                            <tr onClick={() => {
+                                navigate(`/projects/logs/control/open/${"45121245112"}`)
+                                handleSingleProjectData(projectData._id)
+                            }
+                            } className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
                                 <td className="py-5 px-4 text-start" > {projectData.project_name}</td>
                                 <td className="py-5 px-4 text-start"><img className="h-10 w-10" src={`http://localhost:5000/public/uploads/${projectData.add_image}`} alt="" /> </td>
                                 <td className="py-5 px-4 text-start">{projectData.ID_number}</td>
@@ -81,10 +82,13 @@ const Projects = () => {
                                     <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(projectData.start_date).format("DD/MM/YYYY")}</p>
                                 </td>
                                 <td className="py-5 px-4 text-start">
-                                    <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(projectData.start_date).format("DD/MM/YYYY")}</p>
+                                    <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(projectData.end_date).format("DD/MM/YYYY")}</p>
                                 </td>
                                 <td className="py-5 px-4 text-start"><div className="flex gap-3">
-                                    <button><FaRegEye size={18} /></button>
+                                    <button><FaRegEye onClick={(e) => {
+                                        handleSingleProjectData(projectData._id)
+                                        handleViewProject(e, projectData._id)
+                                    }} size={18} /></button>
                                     <button> <BiSolidEditAlt onClick={(e) => {
                                         handleEditProject(e, projectData._id)
                                         handleSingleProjectData(projectData._id)

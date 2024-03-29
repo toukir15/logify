@@ -13,9 +13,11 @@ app.use(cors({
 }))
 
 const projects_api = require("./src/routes/projects_api")
+const users_api = require("./src/routes/users_api")
 
 app.use(express.json())
 app.use('/api/v1/projects_api', projects_api)
+app.use('/api/v1/users_api', users_api)
 
 app.get('/', (req, res) => {
     console.log('logify server is running')
