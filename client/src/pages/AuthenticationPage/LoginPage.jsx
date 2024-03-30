@@ -1,8 +1,9 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 export default function LoginPage() {
+    const navigate = useNavigate()
     const handleLogin = (e) => {
         e.preventDefault()
         const loginData = {
@@ -11,8 +12,10 @@ export default function LoginPage() {
         }
         axios.post("/users_api/login", loginData)
             .then(response => {
-                document.cookie = "access_token=" + response.data.token;
-                console.log(response.data.token)
+                if (response.status == 200) {
+                    navigate("/projects")
+                    console.log(response)
+                }
             })
             .catch(error => console.log(error))
     }

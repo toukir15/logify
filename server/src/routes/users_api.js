@@ -3,6 +3,7 @@ const connectDatabase = require('../config/connectDatabase');
 const bcrypt = require('bcryptjs');
 const transporter = require('../utils/send_mail')
 const jwt = require('jsonwebtoken');
+const CryptoJS = require("crypto-js")
 
 const generateToken = (data) => jwt.sign(data, process.env.SECRET_KEY, { expiresIn: '1h' });
 
@@ -41,8 +42,6 @@ const run = async () => {
         }
     })
 
-
-
     router.post("/login", async (req, res) => {
         const { email, password } = req.body
         const findUser = await users_collection.findOne({ email: email })
@@ -50,10 +49,11 @@ const run = async () => {
             if (findUser.is_verified) {
                 const match = await bcrypt.compare(password, findUser.password);
                 if (match) {
-                    const token = jwt.sign(req.body, process.env.SECRET_KEY, { expiresIn: '7d' });
-                    res.cookie("access_token", token, {
+                    const token = jwt.sign({ email: req.body.email }, process.env.SECRET_KEY, { expiresIn: '15d' });
+                    var cryptoEncrypt = CryptoJS.AES.encrypt(token, process.env.ENCRYPTION_KEY).toString();
+                    res.cookie("access_token", cryptoEncrypt, {
                         httpOnly: true,
-                    }).status(200).send({ token: token, message: "Login successful" })
+                    }).status(200).send({ message: "Login successful" })
                 }
                 else {
                     res.status(203).send("Password does not match.")
@@ -62,8 +62,6 @@ const run = async () => {
             else {
                 res.status(203).send("Email does not verified.")
             }
-
-
         }
         else {
             res.status(203).send("User not found")

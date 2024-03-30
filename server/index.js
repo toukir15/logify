@@ -4,12 +4,17 @@ const PORT = process.env.PORT || 5000
 const app = express()
 const cors = require("cors")
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use('/public', express.static('public'));
+
 app.use(cors({
-    origin: "*",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
 }))
 
 const projects_api = require("./src/routes/projects_api")

@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require('multer');
 const connectDatabase = require('../config/connectDatabase');
 const { ObjectId } = require("mongodb");
+const verifyJWT = require("../middlewares/verifyJWT")
 
 const router = express.Router();
 const storage = multer.diskStorage({
@@ -49,7 +50,7 @@ const run = async () => {
         }
     });
 
-    router.get("/get_projects", async (req, res) => {
+    router.get("/get_projects", verifyJWT, async (req, res) => {
         try {
             const result = await projects_collection.find().sort({ timestamp: -1 }).toArray();
             res.send(result);

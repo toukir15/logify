@@ -1,4 +1,4 @@
-axios.defaults.baseURL = "http://localhost:5000/api/v1";
+
 
 import React from 'react'
 import ReactDOM from 'react-dom/client'
@@ -12,6 +12,8 @@ import 'react-date-range/dist/theme/default.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
+axios.defaults.baseURL = "http://localhost:5000/api/v1";
+axios.defaults.withCredentials = true;
 import {
   QueryClient,
   QueryClientProvider,
