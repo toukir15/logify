@@ -8,7 +8,9 @@ import RiskViewDetails from "../pages/ProjectPages/ProjectLogsPages/RiskViewDeta
 import SignUpPage from "../pages/AuthenticationPage/SignUpPage";
 import LoginPage from "../pages/AuthenticationPage/LoginPage";
 import VerifyPage from "../pages/AuthenticationPage/VerifyPage";
+import Loading from "../components/shared/Loading";
 const Projects = lazy(() => import("../pages/ProjectPages/Projects"))
+const ProtectedRoute = lazy(() => import("./ProtectedRoute"))
 const EditProject = lazy(() => import("../pages/ProjectPages/EditProjects"))
 const AddProject = lazy(() => import("../pages/ProjectPages/AddProject"))
 const ViewProject = lazy(() => import("../pages/ProjectPages/ProjectLogsPages/ViewProject"))
@@ -27,7 +29,7 @@ const Filter = lazy(() => import("../pages/ProjectPages/ProjectLogsPages/Filter"
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <MainLayout />,
+        element: <Suspense fallback={<Loading />}><ProtectedRoute> <MainLayout /></ProtectedRoute></Suspense>,
         children: [
             {
                 path: "/",
@@ -35,27 +37,27 @@ const router = createBrowserRouter([
             },
             {
                 path: "/projects",
-                element: <Suspense fallback={"loading..."}><Projects /></Suspense>
+                element: <Suspense fallback={<Loading />}><Projects /></Suspense>
             },
             {
                 path: "/profile/settings",
-                element: <Suspense fallback={"loading..."}><SettingsPage /></Suspense>
+                element: <Suspense fallback={<Loading />}><SettingsPage /></Suspense>
             },
             {
                 path: "/profile/users",
-                element: <Suspense fallback={"loading..."}><Users /></Suspense>
+                element: <Suspense fallback={<Loading />}><Users /></Suspense>
             },
             {
                 path: "/projects/add-project",
-                element: <Suspense fallback={"loading..."}><AddProject /></Suspense>
+                element: <Suspense fallback={<Loading />}><AddProject /></Suspense>
             },
             {
                 path: "/projects/edit-project",
-                element: <Suspense fallback={"loading..."}><EditProject /></Suspense>
+                element: <Suspense fallback={<Loading />}><EditProject /></Suspense>
             },
             {
                 path: "/projects/view-project",
-                element: <Suspense fallback={"loading..."}><ViewProject /></Suspense>
+                element: <Suspense fallback={<Loading />}><ViewProject /></Suspense>
             },
             {
                 path: "/projects/logs",
@@ -67,39 +69,39 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "/projects/logs/control/open/:slag",
-                        element: <Suspense fallback={"loading..."}><ControlOpen /></Suspense>
+                        element: <Suspense fallback={<Loading />}><ControlOpen /></Suspense>
                     },
                     {
                         path: "/projects/logs/control/closed/:slag",
-                        element: <Suspense fallback={"loading..."}><ControlClosed /></Suspense>
+                        element: <Suspense fallback={<Loading />}><ControlClosed /></Suspense>
                     },
                     {
                         path: "/projects/logs/risk/open/:slag",
-                        element: <Suspense fallback={"loading..."}><RiskOpen /></Suspense>
+                        element: <Suspense fallback={<Loading />}><RiskOpen /></Suspense>
                     },
                     {
                         path: "/projects/logs/risk/closed/:slag",
-                        element: <Suspense fallback={"loading..."}><RiskClosed /></Suspense>
+                        element: <Suspense fallback={<Loading />}><RiskClosed /></Suspense>
                     },
                     {
                         path: "/projects/logs/:open-risk-status/:open-closed-status/filter/:slag",
-                        element: <Suspense fallback={"loading..."}><Filter /></Suspense>
+                        element: <Suspense fallback={<Loading />}><Filter /></Suspense>
                     },
                     {
                         path: "/projects/logs/control/:open-closed-status/:slag/view-control/:slag",
-                        element: <Suspense fallback={"loading..."}><ControlViewDetails /></Suspense>
+                        element: <Suspense fallback={<Loading />}><ControlViewDetails /></Suspense>
                     },
                     {
                         path: "/projects/logs/risk/:open-closed-status/:slag/view-risk/:slag",
-                        element: <Suspense fallback={"loading..."}><RiskViewDetails /></Suspense>
+                        element: <Suspense fallback={<Loading />}><RiskViewDetails /></Suspense>
                     },
                     {
                         path: "/projects/logs/:control-risk/:open-closed/add-control/:slag",
-                        element: <Suspense fallback={"loading..."}><AddControl /></Suspense>
+                        element: <Suspense fallback={<Loading />}><AddControl /></Suspense>
                     },
                     {
                         path: "/projects/logs/:control-risk/:open-closed/add-risk/:slag",
-                        element: <Suspense fallback={"loading..."}><AddRisk /></Suspense>
+                        element: <Suspense fallback={<Loading />}><AddRisk /></Suspense>
                     },
                 ]
             },

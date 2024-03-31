@@ -15,7 +15,6 @@ const verifyJWT = (req, res, next) => {
     try {
         const tokenEncrypted = req?.cookies?.access_token
         const token = decrypt(tokenEncrypted);
-        console.log(token)
         if (!token) {
             return res.clearCookie("access_token").status(403).send({ status: 'failed', message: "Unauthorized access" })
         }

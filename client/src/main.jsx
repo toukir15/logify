@@ -12,22 +12,25 @@ import 'react-date-range/dist/theme/default.css';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios'
-axios.defaults.baseURL = "http://localhost:5000/api/v1";
+axios.defaults.baseURL = `${import.meta.env.VITE_BASE_URL}${import.meta.env.VITE_API_START_POINT}${import.meta.env.VITE_API_VERSION}`
 axios.defaults.withCredentials = true;
 import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
+import { AuthProvider } from './providers/AuthProvider.jsx'
 const queryClient = new QueryClient()
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <GlobalProvider>
-        <RouterProvider router={router}>
-          <App />
-        </RouterProvider>
-      </GlobalProvider>
+      <AuthProvider>
+        <GlobalProvider>
+          <RouterProvider router={router}>
+            <App />
+          </RouterProvider>
+        </GlobalProvider>
+      </AuthProvider>
       <ToastContainer />
     </QueryClientProvider>
   </React.StrictMode>,

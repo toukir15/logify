@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 
 export default function LoginPage() {
-    const navigate = useNavigate()
     const handleLogin = (e) => {
         e.preventDefault()
         const loginData = {
@@ -13,8 +12,8 @@ export default function LoginPage() {
         axios.post("/users_api/login", loginData)
             .then(response => {
                 if (response.status == 200) {
-                    navigate("/projects")
-                    console.log(response)
+                    window.location.href = `${import.meta.env.VITE_CLIENT_URL}/projects`
+                    console.log("object")
                 }
             })
             .catch(error => console.log(error))

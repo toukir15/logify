@@ -1,5 +1,7 @@
 const express = require("express")
-require("dotenv").config()
+const path = require('path')
+console.log(path.resolve)
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const PORT = process.env.PORT || 5000
 const app = express()
 const cors = require("cors")
@@ -11,7 +13,7 @@ app.use(cookieParser());
 app.use('/public', express.static('public'));
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: `${process.env.VITE_CLIENT_URL}`,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
     exposedHeaders: ["set-cookie"],

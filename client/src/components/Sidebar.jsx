@@ -16,6 +16,16 @@ const Sidebar = () => {
             .then(response => console.log(response))
             .catch(error => console.log(error))
     }
+
+    const handleSignOut = () => {
+        axios.post(`/users_api/sign_out`)
+            .then(response => {
+                console.log(import.meta.env.VITE_CLIENT_URL)
+                // window.location.href = `${import.meta.env.VITE_BASE_URL}/login`
+            })
+            .catch(error => console.log(error))
+    }
+
     return (
         <aside className="w-[14%] bg-[#0E1B6B] text-white p-4 flex flex-col  justify-between">
             <div>
@@ -44,7 +54,7 @@ const Sidebar = () => {
                             <NavLink to='/profile/settings' className="flex items-center gap-2 hover:bg-primary p-2 rounded-lg  pl-10">Settings</NavLink>
                             <NavLink to='/profile/users' className="flex items-center gap-2 hover:bg-primary p-2 rounded-lg  pl-10">Users</NavLink>
                         </div>}
-                    <NavLink className="flex items-center gap-2 hover:bg-primary p-2 rounded-lg"><CiLogout size={20} /><p>Sign Out</p></NavLink>
+                    <button onClick={handleSignOut} className="flex items-center gap-2 hover:bg-primary p-2 rounded-lg"><CiLogout size={20} /><p>Sign Out</p></button>
                 </div>
             </div>
             <div className="flex gap-2 items-center text-light-gray">

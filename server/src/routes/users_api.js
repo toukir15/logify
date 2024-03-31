@@ -3,7 +3,8 @@ const connectDatabase = require('../config/connectDatabase');
 const bcrypt = require('bcryptjs');
 const transporter = require('../utils/send_mail')
 const jwt = require('jsonwebtoken');
-const CryptoJS = require("crypto-js")
+const CryptoJS = require("crypto-js");
+const verifyJWT = require("../middlewares/verifyJWT");
 
 const generateToken = (data) => jwt.sign(data, process.env.SECRET_KEY, { expiresIn: '1h' });
 
@@ -68,6 +69,24 @@ const run = async () => {
         }
     })
 
+    router.post("/sign_out", async (req, res) => {
+        try {
+            console.log(process.env.KEY)
+            // res.redirect("/login")
+            return res
+                .clearCookie("access_token")
+                .status(200)
+                .send({ message: "Successfully logged out" });
+        } catch (error) {
+            res.status(500).send({ message: "Internal server error" })
+        }
+    })
+
+    router.get("/get_user", verifyJWT, async (req, res) => {
+        console.log(req.email)
+        const result = await users_collection.findOne({ email: req.email })
+        res.status(200).send(result)
+    })
 
 
     // router.post("/add_user", async (req, res) => {
