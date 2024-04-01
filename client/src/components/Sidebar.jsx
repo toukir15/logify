@@ -18,10 +18,9 @@ const Sidebar = () => {
     }
 
     const handleSignOut = () => {
-        axios.post(`/users_api/sign_out`)
+        axios.post(`/authentication_api/sign_out`)
             .then(response => {
-                console.log(import.meta.env.VITE_CLIENT_URL)
-                // window.location.href = `${import.meta.env.VITE_BASE_URL}/login`
+                window.location.href = `${import.meta.env.VITE_CLIENT_URL}/login`
             })
             .catch(error => console.log(error))
     }

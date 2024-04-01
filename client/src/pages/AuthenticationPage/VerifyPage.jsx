@@ -7,7 +7,7 @@ export default function VerifyPage() {
     const handleEmailVerify = () => {
         const urlParams = new URLSearchParams(window.location.search);
         const token = urlParams.get('token');
-        axios.patch("users_api/verify_email", { token })
+        axios.patch("/authentication_api/verify_email", { token })
             .then(response => {
                 if (response.status == 200) {
                     navigate("/login")

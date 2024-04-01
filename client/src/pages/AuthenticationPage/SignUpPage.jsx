@@ -12,7 +12,7 @@ export default function SignUpPage() {
             password: e.target.password.value,
             confirm_password: e.target.confirmPassword.value,
         }
-        axios.post("/users_api/sign_up", signUpData)
+        axios.post("/authentication_api/sign_up", signUpData)
             .then(response => console.log(response))
             .catch(error => console.log(error))
     }

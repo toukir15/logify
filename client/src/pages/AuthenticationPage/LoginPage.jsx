@@ -9,7 +9,7 @@ export default function LoginPage() {
             email: e.target.email.value,
             password: e.target.password.value
         }
-        axios.post("/users_api/login", loginData)
+        axios.post("/authentication_api/login", loginData)
             .then(response => {
                 if (response.status == 200) {
                     window.location.href = `${import.meta.env.VITE_CLIENT_URL}/projects`
