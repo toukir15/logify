@@ -76,15 +76,12 @@ const AddProject = () => {
                 }
                 else if (actionName == "risk matrix template") {
                     setRiskMatrixTemplate({
-                        placeholder: r.target.result,
+                        placeholder: r.target.resuzlt,
                         file: e.target.files[0]
                     })
                 }
             }
             reader.readAsDataURL(e.target.files[0])
-        }
-        else {
-            console.log(e.target?.files[0]?.type?.split("/")[0])
         }
     }
 
@@ -126,7 +123,7 @@ const AddProject = () => {
         projectData.append('start_date', startDate);
         projectData.append('end_date', endDate);
 
-        axios.post('/projects_api/add_projects', projectData, {
+        axios.patch('/projects_api/add_projects', projectData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },

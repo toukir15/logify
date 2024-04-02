@@ -23,8 +23,9 @@ const verifyJWT = (req, res, next) => {
                 if (err) {
                     return res.clearCookie("access_token").status(403).send({ status: 'failed', message: "Unauthorized access" });
                 }
-                const { email } = decode
+                const { email, id } = decode
                 req.email = email
+                req.id = id
                 next()
             })
         }

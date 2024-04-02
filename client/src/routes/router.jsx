@@ -9,6 +9,7 @@ import SignUpPage from "../pages/AuthenticationPage/SignUpPage";
 import LoginPage from "../pages/AuthenticationPage/LoginPage";
 import VerifyPage from "../pages/AuthenticationPage/VerifyPage";
 import Loading from "../components/shared/Loading";
+import CheckEmailPage from "../pages/AuthenticationPage/CheckEmailPage";
 const Projects = lazy(() => import("../pages/ProjectPages/Projects"))
 const ProtectedRoute = lazy(() => import("./ProtectedRoute"))
 const EditProject = lazy(() => import("../pages/ProjectPages/EditProjects"))
@@ -119,6 +120,10 @@ const router = createBrowserRouter([
     {
         path: "/verify",
         element: <VerifyPage />
+    },
+    {
+        path: "/check-email",
+        element: <CheckEmailPage />
     },
 ]);
 

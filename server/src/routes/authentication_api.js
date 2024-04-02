@@ -1,14 +1,12 @@
 
-
 const express = require("express");
 const connectDatabase = require('../config/connectDatabase');
 const bcrypt = require('bcryptjs');
 const transporter = require('../utils/send_mail')
 const jwt = require('jsonwebtoken');
 const CryptoJS = require("crypto-js");
-const generateToken = (data) => jwt.sign(data, process.env.SECRET_KEY, { expiresIn: '2m' });
-
-const router = express.Router();
+const generateToken = (data) => jwt.sign(data, process.env.SECRET_KEY, { expiresIn: '1h' });
+const router = express.Router()
 const run = async () => {
     const db = await connectDatabase();
     const users_collection = db.collection("users");
@@ -21,13 +19,13 @@ const run = async () => {
             subject: "Email varification email",
             text: "Hello world?",
             html: `
-                    <div style='padding-bottom: 8px'>
-                      <h1 style='color: #40444E; margin: 0px'>Hi, To verify your email.</h1> <br/>
-                     <a style='color:white; text-decoration:none; padding:8px 10px; background:#40444E; border-radius: 4px' href="http://localhost:5173/verify?token=${generateToken(req.body)}">Click here</a>
-                    </div>
-                  `
+            <div style='padding-bottom: 8px'>
+            <h1 style='color: #40444E; margin: 0px'>Hi, To verify your email.</h1> <br/>
+            <a style='color:white; text-decoration:none; padding:8px 10px; background:#40444E; border-radius: 4px' href="http://localhost:5173/verify?token=${generateToken(req.body)}">Click here</a>
+            </div>
+            `
         });
-        if (!find_user.is_verified && !find_user.email) {
+        if (!find_user) {
             const salt = bcrypt.genSaltSync(10);
             const hash = bcrypt.hashSync(req.body.password, salt);
             const userData = {
@@ -36,9 +34,10 @@ const run = async () => {
                 email: req.body.email_address,
                 password: hash,
                 is_verified: false,
+                role: 'admin'
             }
             const result = await users_collection.insertOne(userData)
-            console.log(result)
+            res.status(200).send({ message: "User created successfully" })
         }
     })
 
@@ -49,7 +48,7 @@ const run = async () => {
             if (findUser.is_verified) {
                 const match = await bcrypt.compare(password, findUser.password);
                 if (match) {
-                    const token = jwt.sign({ email: req.body.email }, process.env.SECRET_KEY, { expiresIn: '15d' });
+                    const token = jwt.sign({ email: req.body.email, id: findUser._id }, process.env.SECRET_KEY, { expiresIn: '15d' });
                     var cryptoEncrypt = CryptoJS.AES.encrypt(token, process.env.ENCRYPTION_KEY).toString();
                     res.cookie("access_token", cryptoEncrypt, {
                         httpOnly: true,
@@ -87,7 +86,7 @@ const run = async () => {
             const decoded = jwt.verify(token, process.env.SECRET_KEY);
             if (decoded) {
                 const result = await users_collection.updateOne(
-                    { email: decoded.email_address },
+                    { email: decoded?.email_address },
                     { $set: { is_verified: true } }
                 );
                 if (result.modifiedCount === 1) {
@@ -103,6 +102,38 @@ const run = async () => {
             res.status(500).json({ success: false, message: "Internal server error" });
         }
     });
+    router.put("/invited_user", async (req, res) => {
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(req.body.password, salt);
+        const decodedId = jwt.verify(req.body.admin_id, process.env.SECRET_KEY).admin_id
+        await transporter.sendMail({
+            from: 'toukir486@gmail.com',
+            to: `${req.body.email_address}`,
+            subject: "Email varification email",
+            text: "Hello world?",
+            html: `
+                    <div style='padding-bottom: 8px'>
+                      <h1 style='color: #40444E; margin: 0px'>Hi, To verify your email.</h1> <br/>
+                     <a style='color:white; text-decoration:none; padding:8px 10px; background:#40444E; border-radius: 4px' href="http://localhost:5173/verify?token=${generateToken(req.body)}">Click here</a>
+                    </div>
+                  `
+        });
+
+        const result = await users_collection.updateOne(
+            { email: req.body.email_address },
+            {
+                $set: {
+                    admin_id: decodedId,
+                    first_name: req.body.first_name,
+                    last_name: req.body.last_name,
+                    password: hash
+                }
+            },
+        )
+        console.log({ email: req.body.email_address })
+        res.status(200).send(result)
+    })
+
 };
 
 run();
