@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const generateToken = (data) => jwt.sign(data, process.env.SECRET_KEY);
 const multer = require('multer');
 const bcrypt = require('bcryptjs');
+const { ObjectId } = require("mongodb");
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -26,50 +27,74 @@ const run = async () => {
     const users_collection = db.collection("users");
 
     router.get("/get_user", verifyJWT, async (req, res) => {
-        const result = await users_collection.findOne({ email: req.email })
-        res.status(200).send(result)
+        try {
+            const result = await users_collection.findOne({ email: req.email })
+            res.status(200).send(result)
+        }
+        catch (error) {
+            res.status(500).send({ message: "Internal server error." })
+        }
+    })
+
+    router.get("/get_users", verifyJWT, async (req, res) => {
+        try {
+            const result = await users_collection.find({ admin_id: req.id }).toArray()
+            res.status(200).send(result)
+        }
+        catch (error) {
+            res.status(500).send("Internal server error.")
+        }
     })
 
     router.post("/add_user", verifyJWT, async (req, res) => {
-        const find_user = await users_collection.findOne({ email: req.body.email })
-        if (find_user && !find_user?.is_verified) {
-            await transporter.sendMail({
-                from: 'toukir486@gmail.com',
-                to: `${req.body.email}`,
-                subject: "Send mail for create an account",
-                text: "Hello dear, hope that you are well.",
-                html: `
-                    <div style='padding-bottom: 8px'>
-                      <h1 style='color: #40444E; margin: 0px'>Hi, To create an account.</h1> <br/>
-                     <a style='color:white; text-decoration:none; padding:8px 10px; background:#40444E; border-radius: 4px' href="${process.env.VITE_CLIENT_URL}/sign-up?invited_email=${req.body.email}&id=${generateToken({ admin_id: req.id })}">Click here</a>
-                    </div>
-                  `
-            });
-        }
+        try {
+            const find_user = await users_collection.findOne({ email: req.body.email })
 
-        if (!find_user?.is_verified && !find_user?.email) {
-            await transporter.sendMail({
-                from: 'toukir486@gmail.com',
-                to: `${req.body.email}`,
-                subject: "Send mail for create an account",
-                text: "Hello dear, hope that you are well.",
-                html: `
+            if (find_user && !find_user?.is_verified) {
+                await transporter.sendMail({
+                    from: 'toukir486@gmail.com',
+                    to: `${req.body.email}`,
+                    subject: "Send mail for create an account",
+                    text: "Hello dear, hope that you are well.",
+                    html: `
                     <div style='padding-bottom: 8px'>
                       <h1 style='color: #40444E; margin: 0px'>Hi, To create an account.</h1> <br/>
                      <a style='color:white; text-decoration:none; padding:8px 10px; background:#40444E; border-radius: 4px' href="${process.env.VITE_CLIENT_URL}/sign-up?invited_email=${req.body.email}&id=${generateToken({ admin_id: req.id })}">Click here</a>
                     </div>
                   `
-            });
-            const userData = {
-                first_name: "",
-                last_name: "",
-                email: req.body.email,
-                password: "",
-                is_verified: false,
-                role: "user",
+                });
+                return res.status(200).send({ isEmailExist: false })
             }
-            const result = await users_collection.insertOne(userData)
-            res.status(200).send(result)
+
+            if (!find_user?.is_verified && !find_user?.email) {
+                await transporter.sendMail({
+                    from: 'toukir486@gmail.com',
+                    to: `${req.body.email}`,
+                    subject: "Send mail for create an account",
+                    text: "Hello dear, hope that you are well.",
+                    html: `
+                    <div style='padding-bottom: 8px'>
+                      <h1 style='color: #40444E; margin: 0px'>Hi, To create an account.</h1> <br/>
+                     <a style='color:white; text-decoration:none; padding:8px 10px; background:#40444E; border-radius: 4px' href="${process.env.VITE_CLIENT_URL}/sign-up?invited_email=${req.body.email}&id=${generateToken({ admin_id: req.id })}">Click here</a>
+                    </div>
+                  `
+                });
+                const userData = {
+                    first_name: "",
+                    last_name: "",
+                    email: req.body.email,
+                    password: "",
+                    is_verified: false,
+                    role: "user",
+                    admin_id: req.id
+                }
+                const result = await users_collection.insertOne(userData)
+                return res.status(200).send(result)
+            }
+            res.status(200).send({ isEmailExist: true })
+        }
+        catch (error) {
+            res.status(500).send({ message: 'Internal server error' })
         }
     })
 
@@ -89,6 +114,17 @@ const run = async () => {
             res.status(200).send({ result: result, message: "Update profile data successfully." })
         } catch (error) {
             res.status(500).send(error, 'Internal server error');
+        }
+    })
+
+    router.delete("/delete_user", verifyJWT, async (req, res) => {
+        console.log('delete')
+        try {
+            const result = await users_collection.deleteOne({ _id: new ObjectId(req.body.id) })
+            res.status(200).send(result)
+        }
+        catch (error) {
+            res.status(500).send({ message: 'Internal server error' })
         }
     })
 

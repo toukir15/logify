@@ -6,10 +6,18 @@ export const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
     const [singleProjectData, setSingleProjectData] = useState({})
     const currentUrl = window.location.href;
+
     const { isLoading: projectDataIsLoading, error: projectsDataError, data: projectsData, refetch: projectsDataRefetch } = useQuery({
-        queryKey: ['repoData'],
+        queryKey: ['projectData'],
         queryFn: () =>
             axios.get('/projects_api/get_projects')
+                .then((res) => res.data)
+    })
+
+    const { isLoading: usersDataLoading, error: usersDataError, data: usersData, refetch: usersDataRefeatch } = useQuery({
+        queryKey: ['usersData'],
+        queryFn: () =>
+            axios.get('/users_api/get_users')
                 .then((res) => res.data)
     })
 
@@ -24,7 +32,9 @@ export const GlobalProvider = ({ children }) => {
         projectsData,
         projectsDataRefetch,
         handleSingleProjectData,
-        singleProjectData
+        singleProjectData,
+        usersData,
+        usersDataRefeatch
     };
     return (
         <GlobalContext.Provider value={GlobalInfo}>

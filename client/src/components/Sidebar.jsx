@@ -1,25 +1,37 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../assets/logo-x1DR2QCW.png"
 import { IoHomeOutline, IoSettingsOutline } from "react-icons/io5";
 import { CiLogout } from "react-icons/ci";
 import { FaAngleDown } from "react-icons/fa6";
 import axios from "axios";
+import { GlobalContext } from "../providers/GlobalProvider";
 
 const Sidebar = () => {
+    const { usersDataRefeatch } = useContext(GlobalContext)
     const [isOpenProfile, setIsOpenProfile] = useState(true)
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
+    const [notifyEmailExist, setNotifyEmailExist] = useState(false)
 
     const handleSendEmail = (e) => {
         e.preventDefault()
         axios.post(`/users_api/add_user`, { email: e.target.email.value })
-            .then(response => console.log(response))
+            .then(response => {
+                usersDataRefeatch()
+                if (response.data?.isEmailExist) {
+                    setNotifyEmailExist(true)
+                }
+                else {
+                    setIsInviteModalOpen(false)
+                    setNotifyEmailExist(false)
+                }
+            })
             .catch(error => console.log(error))
     }
 
     const handleSignOut = () => {
         axios.post(`/authentication_api/sign_out`)
-            .then(response => {
+            .then(() => {
                 window.location.href = `${import.meta.env.VITE_CLIENT_URL}/login`
             })
             .catch(error => console.log(error))
@@ -69,12 +81,16 @@ const Sidebar = () => {
                 <div
                     data-aos=""
                     id="invite_modal"
-                    onClick={() => setIsInviteModalOpen(false)}
+                    onClick={() => {
+                        setNotifyEmailExist(false)
+                        setIsInviteModalOpen(false)
+                    }}
                     className="w-screen h-screen bg-[#40444E66] fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center z-10"
                 >
                     <form onSubmit={(e) => {
                         handleSendEmail(e)
                     }} onClick={(e) => e.stopPropagation()} data-aos="zoom-in" className="w-[500px] relative bg-white py-[90px] px-16 rounded-lg  text-primary">
+                        {notifyEmailExist && <div className=" absolute top-12 left-1/2 -translate-x-1/2 text-red-500">Email is Already Exist</div>}
                         <input type="email" id="email" className="border py-2 w-full px-2 text-primary rounded outline-none" placeholder="Email Address" />
                         <div className="flex justify-center items-center text-white mt-5">
                             <button className="bg-primary px-10 py-2 rounded-lg">Invite</button>

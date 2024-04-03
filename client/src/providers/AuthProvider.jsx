@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
             axios.get('/users_api/get_user')
                 .then((res) => res.data)
     })
-    console.log(user)
     // auth info
     const AuthInfo = {
         user,

@@ -13,7 +13,6 @@ export default function LoginPage() {
             .then(response => {
                 if (response.status == 200) {
                     window.location.href = `${import.meta.env.VITE_CLIENT_URL}/projects`
-                    console.log("object")
                 }
             })
             .catch(error => console.log(error))

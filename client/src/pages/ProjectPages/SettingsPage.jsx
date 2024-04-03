@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const SettingsPage = () => {
-    const { user } = useContext(AuthContext)
+    const { user, userDataRefetch } = useContext(AuthContext)
     const [profileImage, setProfileImage] = useState({})
     const navigate = useNavigate();
 
@@ -53,6 +53,7 @@ const SettingsPage = () => {
             .then(data => {
                 console.log(data)
                 if (data.status == 200) {
+                    userDataRefetch()
                     navigate("/projects")
                 }
             })
