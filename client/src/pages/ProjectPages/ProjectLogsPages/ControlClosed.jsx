@@ -64,7 +64,6 @@ const ControlClosed = () => {
                             </tr>
                         );
                     })}
-
                 </tbody>
             </table>
 

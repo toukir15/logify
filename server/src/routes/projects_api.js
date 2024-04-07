@@ -21,7 +21,7 @@ const run = async () => {
     const db = await connectDatabase();
     const projects_collection = db.collection("projects");
 
-    router.post("/add_projects", upload.array('file', 2), async (req, res) => {
+    router.post("/add_project", upload.array('file', 2), async (req, res) => {
         try {
             const { project_name, client, ID_number, project_description, risk_consequences, risk_consequences_impact, risk_categories, likelihood, risk_ratting, project_value, project_owner, start_date, end_date
             } = req.body;
@@ -46,7 +46,7 @@ const run = async () => {
             await projects_collection.insertOne(project_data);
             res.status(200).send('File uploaded successfully');
         } catch (error) {
-            res.status(500).send(error, 'Internal server error');
+            res.status(500).send('Internal server error');
         }
     });
 

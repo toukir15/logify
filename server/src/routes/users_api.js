@@ -118,7 +118,6 @@ const run = async () => {
     })
 
     router.delete("/delete_user", verifyJWT, async (req, res) => {
-        console.log('delete')
         try {
             const result = await users_collection.deleteOne({ _id: new ObjectId(req.body.id) })
             res.status(200).send(result)

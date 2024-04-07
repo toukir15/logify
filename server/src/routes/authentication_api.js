@@ -12,32 +12,47 @@ const run = async () => {
     const users_collection = db.collection("users");
 
     router.post("/sign_up", async (req, res) => {
-        const find_user = await users_collection.findOne({ email: req.body.email_address })
-        await transporter.sendMail({
-            from: 'toukir486@gmail.com',
-            to: "toukir.developer.bd@gmail.com",
-            subject: "Email varification email",
-            text: "Hello world?",
-            html: `
+        try {
+            const find_user = await users_collection.findOne({ email: req.body.email_address })
+            if (find_user.is_verified) {
+                return res.status(200).send({ is_already_crated: true })
+            }
+            else {
+                await transporter.sendMail({
+                    from: 'toukir486@gmail.com',
+                    to: `${req.body.email_address}`,
+                    subject: "Email varification email",
+                    text: "Hello world?",
+                    html: `
             <div style='padding-bottom: 8px'>
             <h1 style='color: #40444E; margin: 0px'>Hi, To verify your email.</h1> <br/>
             <a style='color:white; text-decoration:none; padding:8px 10px; background:#40444E; border-radius: 4px' href="http://localhost:5173/verify?token=${generateToken(req.body)}">Click here</a>
             </div>
             `
-        });
-        if (!find_user) {
-            const salt = bcrypt.genSaltSync(10);
-            const hash = bcrypt.hashSync(req.body.password, salt);
-            const userData = {
-                first_name: req.body.first_name,
-                last_name: req.body.last_name,
-                email: req.body.email_address,
-                password: hash,
-                is_verified: false,
-                role: 'admin'
+                });
+
+                const salt = bcrypt.genSaltSync(10);
+                const hash = bcrypt.hashSync(req.body.password, salt);
+
+                if (find_user && !find_user.is_verified) {
+                    await users_collection.updateOne({ email: req.body.email_address }, { $set: { password: hash } })
+                }
+                else {
+                    const userData = {
+                        first_name: req.body.first_name,
+                        last_name: req.body.last_name,
+                        email: req.body.email_address,
+                        password: hash,
+                        is_verified: false,
+                        role: 'admin'
+                    }
+                    await users_collection.insertOne(userData)
+                }
+                res.status(200).send({ message: "User created successfully" })
             }
-            const result = await users_collection.insertOne(userData)
-            res.status(200).send({ message: "User created successfully" })
+        }
+        catch (error) {
+            res.status(500).send({ message: "Internal server error." })
         }
     })
 
@@ -48,7 +63,7 @@ const run = async () => {
             if (findUser.is_verified) {
                 const match = await bcrypt.compare(password, findUser.password);
                 if (match) {
-                    const token = jwt.sign({ email: req.body.email, id: findUser._id }, process.env.SECRET_KEY, { expiresIn: '15d' });
+                    const token = jwt.sign({ email: req.body.email, id: findUser._id, role: findUser.role }, process.env.SECRET_KEY, { expiresIn: '15d' });
                     var cryptoEncrypt = CryptoJS.AES.encrypt(token, process.env.ENCRYPTION_KEY).toString();
                     res.cookie("access_token", cryptoEncrypt, {
                         httpOnly: true,
@@ -102,36 +117,47 @@ const run = async () => {
             res.status(500).json({ success: false, message: "Internal server error" });
         }
     });
+
     router.put("/invited_user", async (req, res) => {
-        const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(req.body.password, salt);
-        const decodedId = jwt.verify(req.body.admin_id, process.env.SECRET_KEY).admin_id
-        await transporter.sendMail({
-            from: 'toukir486@gmail.com',
-            to: `${req.body.email_address}`,
-            subject: "Email varification email",
-            text: "Hello world?",
-            html: `
+        try {
+            const find_user = await users_collection.findOne({ email: req.body.email_address })
+            if (find_user.is_verified) {
+                return res.status(200).send({ is_already_crated: true })
+            }
+            else {
+                const salt = bcrypt.genSaltSync(10);
+                const hash = bcrypt.hashSync(req.body.password, salt);
+                const decodedId = jwt.verify(req.body.admin_id, process.env.SECRET_KEY).admin_id
+                await transporter.sendMail({
+                    from: 'toukir486@gmail.com',
+                    to: `${req.body.email_address}`,
+                    subject: "Email varification email",
+                    text: "Hello world?",
+                    html: `
                     <div style='padding-bottom: 8px'>
                       <h1 style='color: #40444E; margin: 0px'>Hi, To verify your email.</h1> <br/>
                      <a style='color:white; text-decoration:none; padding:8px 10px; background:#40444E; border-radius: 4px' href="http://localhost:5173/verify?token=${generateToken(req.body)}">Click here</a>
                     </div>
                   `
-        });
+                });
 
-        const result = await users_collection.updateOne(
-            { email: req.body.email_address },
-            {
-                $set: {
-                    admin_id: decodedId,
-                    first_name: req.body.first_name,
-                    last_name: req.body.last_name,
-                    password: hash
-                }
-            },
-        )
-        console.log({ email: req.body.email_address })
-        res.status(200).send(result)
+                const result = await users_collection.updateOne(
+                    { email: req.body.email_address },
+                    {
+                        $set: {
+                            admin_id: decodedId,
+                            first_name: req.body.first_name,
+                            last_name: req.body.last_name,
+                            password: hash
+                        }
+                    },
+                )
+                return res.status(200).send(result)
+            }
+        }
+        catch (error) {
+            res.status(500).send({ message: "Internal server error." })
+        }
     })
 
 };

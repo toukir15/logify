@@ -20,12 +20,7 @@ const Option = props => (
         <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
     </components.Option>
 );
-const options = [
-    { value: 'construction', label: 'Construction', },
-    { value: 'schedule', label: 'Schedule', },
-    { value: 'commercial', label: 'Commercial', },
-    { value: 'design', label: 'Design', },
-];
+
 const customStyle = {
     control: base => ({
         ...base,
@@ -51,7 +46,8 @@ const customStyle = {
 }
 
 const AddProject = () => {
-    const { projectsDataRefetch } = useContext(GlobalContext)
+    const { projectsDataRefetch, usersData } = useContext(GlobalContext)
+    const selectProjectOwnerData = usersData.map(user => ({ value: user.first_name, label: user.first_name, email: user.email }))
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
     const [addImage, setAddImage] = useState({})
@@ -63,6 +59,7 @@ const AddProject = () => {
     const likelihoodRef = useRef(null)
     const riskRattingRef = useRef(null)
     const navigate = useNavigate();
+
 
     const handleAddImageChange = (e, actionName) => {
         if (e.target?.files[0]?.type?.split("/")[0] == "image") {
@@ -76,7 +73,7 @@ const AddProject = () => {
                 }
                 else if (actionName == "risk matrix template") {
                     setRiskMatrixTemplate({
-                        placeholder: r.target.resuzlt,
+                        placeholder: r.target.result,
                         file: e.target.files[0]
                     })
                 }
@@ -85,7 +82,7 @@ const AddProject = () => {
         }
     }
 
-    const handleProjects = (e) => {
+    const handleProject = (e) => {
         e.preventDefault();
         const addImage = e.target.addImage.files[0]
         const riskMatrixTemplate = e.target.riskMatrixTemplate.files[0]
@@ -95,6 +92,7 @@ const AddProject = () => {
         const projectValue = e.target.projectValue?.value
         const projectDescriptioin = e.target.projectDescription?.value
         const projectOwner = projectOwnerRef.current.state.selectValue
+        console.log(projectOwner)
         const riskConsequences = riskConsequencesRef.current.state.selectValue
         const riskConsequencesImpact = riskConsequencesImpactRef.current.state.selectValue
         const riskCategories = riskCategoriesRef.current.state.selectValue
@@ -123,7 +121,7 @@ const AddProject = () => {
         projectData.append('start_date', startDate);
         projectData.append('end_date', endDate);
 
-        axios.patch('/projects_api/add_projects', projectData, {
+        axios.post('/projects_api/add_project', projectData, {
             headers: {
                 "Content-Type": "multipart/form-data",
             },
@@ -131,14 +129,14 @@ const AddProject = () => {
             .then(data => {
                 if (data.status == 200) {
                     projectsDataRefetch()
-                    navigate("/projects")
+                    // navigate("/projects")
                 }
             })
             .catch(error => console.log(error))
     }
     return (
         <div className="w-full py-20">
-            <form onSubmit={handleProjects} method="post" className="flex w-[50%] mx-auto flex-col">
+            <form onSubmit={handleProject} method="post" className="flex w-[50%] mx-auto flex-col">
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="projectName">Project Name</label>
                     <input placeholder="Enter project name" name="projectName" id="projectName" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
@@ -173,7 +171,7 @@ const AddProject = () => {
                     <Select
                         className='w-[70%] z-[50]'
                         ref={projectOwnerRef}
-                        options={options}
+                        options={selectProjectOwnerData}
                         isClearable={true}
                         components={{ MultiValue, Option }}
                         isMulti={true}

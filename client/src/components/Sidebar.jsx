@@ -6,18 +6,24 @@ import { CiLogout } from "react-icons/ci";
 import { FaAngleDown } from "react-icons/fa6";
 import axios from "axios";
 import { GlobalContext } from "../providers/GlobalProvider";
+import { AuthContext } from "../providers/AuthProvider";
+import avatar from "../assets/avatar.png"
 
 const Sidebar = () => {
     const { usersDataRefeatch } = useContext(GlobalContext)
+    const { user } = useContext(AuthContext)
     const [isOpenProfile, setIsOpenProfile] = useState(true)
     const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
     const [notifyEmailExist, setNotifyEmailExist] = useState(false)
+    const [addUserLoading, setAddUserLoading] = useState(false)
 
     const handleSendEmail = (e) => {
         e.preventDefault()
+        setAddUserLoading(true)
         axios.post(`/users_api/add_user`, { email: e.target.email.value })
             .then(response => {
                 usersDataRefeatch()
+                setAddUserLoading(false)
                 if (response.data?.isEmailExist) {
                     setNotifyEmailExist(true)
                 }
@@ -38,7 +44,7 @@ const Sidebar = () => {
     }
 
     return (
-        <aside className="w-[14%] bg-[#0E1B6B] text-white p-4 flex flex-col  justify-between">
+        <aside className="w-[14%] bg-[#161618] text-white p-4 flex flex-col  justify-between">
             <div>
                 <div className="flex items-center gap-2 ml-8 mb-8">
                     <img src={logo} className="w-10 h-10" alt="" />
@@ -69,10 +75,11 @@ const Sidebar = () => {
                 </div>
             </div>
             <div className="flex gap-2 items-center text-light-gray">
-                <img src="https://api.logify.au/uploads/profile_image-1701937729070-898258012.jpg" className="w-10 h-10 object-cover rounded-full " alt="" />
+                {user?.profile_image && <img src={`http://localhost:5000/public/uploads/${user?.profile_image}`} className="w-10 h-10 object-cover rounded-full " alt="" />}
+                {!user?.profile_image && <img src={avatar} className="w-10 h-10 object-cover rounded-full " alt="" />}
                 <div>
-                    <p>Nabil Newaz</p>
-                    <p className="text-sm">nabilnewaz@gmail.com</p>
+                    <p>{user.first_name} {user.last_name}</p>
+                    <p className="text-sm">{user.email}</p>
                 </div>
             </div>
 
@@ -91,9 +98,9 @@ const Sidebar = () => {
                         handleSendEmail(e)
                     }} onClick={(e) => e.stopPropagation()} data-aos="zoom-in" className="w-[500px] relative bg-white py-[90px] px-16 rounded-lg  text-primary">
                         {notifyEmailExist && <div className=" absolute top-12 left-1/2 -translate-x-1/2 text-red-500">Email is Already Exist</div>}
-                        <input type="email" id="email" className="border py-2 w-full px-2 text-primary rounded outline-none" placeholder="Email Address" />
+                        <input required type="email" id="email" className="border py-2 w-full px-2 text-primary rounded outline-none" placeholder="Email Address" />
                         <div className="flex justify-center items-center text-white mt-5">
-                            <button className="bg-primary px-10 py-2 rounded-lg">Invite</button>
+                            <button disabled={addUserLoading} className={`${addUserLoading ? "bg-[#727fd2]" : "bg-primary"}  px-10 py-2 rounded-lg`}>Invite</button>
                         </div>
                     </form>
                 </div>

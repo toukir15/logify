@@ -67,7 +67,6 @@ const ControlOpen = () => {
 
                 </tbody>
             </table>
-
         </div>
     );
 };

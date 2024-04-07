@@ -5,12 +5,19 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from 'moment';
 import Swal from 'sweetalert2'
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { GlobalContext } from "../../providers/GlobalProvider";
+import Pagination from "../../components/shared/Pagination";
 
 const Projects = () => {
     const navigate = useNavigate()
     const { projectsData, projectsDataRefetch, handleSingleProjectData } = useContext(GlobalContext)
+
+    const [projectCurrentPage, setProjectCurrentPage] = useState(1)
+    const projectTotalButton = Math.ceil(projectsData.length / 7)
+    const projectTotalButtonArray = [...Array(projectTotalButton).keys()]
+    const projectDataShowPosition = 7 * projectCurrentPage
+
     const handleProjectDelete = (e, id) => {
         e.stopPropagation()
         Swal.fire({
@@ -55,7 +62,7 @@ const Projects = () => {
                 <Link to='/projects/add-project' className="bg-primary rounded-lg text-white py-2 px-4 mb-8">Add Projects</Link>
             </div>
             <table className="w-full">
-                <thead>
+                {projectsData > 0 && <thead>
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Project Name</th>
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Image</th>
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">ID Number</th>
@@ -64,15 +71,17 @@ const Projects = () => {
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Start Date</th>
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">End Date</th>
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Action</th>
-                </thead>
+                </thead>}
                 <tbody>
-                    {projectsData?.map((projectData, index) => {
+                    {projectsData.slice(projectDataShowPosition - 7, projectDataShowPosition)?.map((projectData, index) => {
                         return (
-                            <tr onClick={() => {
-                                navigate(`/projects/logs/control/open/${"45121245112"}`)
-                                handleSingleProjectData(projectData._id)
-                            }
-                            } className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
+                            <tr
+                                onClick={() => {
+                                    navigate(`/projects/logs/control/open/${"45121245112"}`)
+                                    handleSingleProjectData(projectData._id)
+                                }
+                                }
+                                className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
                                 <td className="py-5 px-4 text-start" > {projectData.project_name}</td>
                                 <td className="py-5 px-4 text-start"><img className="h-10 w-10" src={`http://localhost:5000/public/uploads/${projectData.add_image}`} alt="" /> </td>
                                 <td className="py-5 px-4 text-start">{projectData.ID_number}</td>
@@ -85,15 +94,23 @@ const Projects = () => {
                                     <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(projectData.end_date).format("DD/MM/YYYY")}</p>
                                 </td>
                                 <td className="py-5 px-4 text-start"><div className="flex gap-3">
-                                    <button><FaRegEye onClick={(e) => {
-                                        handleSingleProjectData(projectData._id)
-                                        handleViewProject(e, projectData._id)
-                                    }} size={18} /></button>
-                                    <button> <BiSolidEditAlt onClick={(e) => {
-                                        handleEditProject(e, projectData._id)
-                                        handleSingleProjectData(projectData._id)
-                                    }} className="text-primary" size={22} /></button>
-                                    <button><RiDeleteBinLine onClick={(e) => handleProjectDelete(e, projectData._id)} className="text-[#ef2828e5]" size={18} /></button>
+                                    <button>
+                                        <FaRegEye onClick={(e) => {
+                                            handleSingleProjectData(projectData._id)
+                                            handleViewProject(e, projectData._id)
+                                        }} size={18} />
+                                    </button>
+                                    <button>
+                                        <BiSolidEditAlt onClick={(e) => {
+                                            handleEditProject(e, projectData._id)
+                                            handleSingleProjectData(projectData._id)
+                                        }} className="text-primary" size={22} />
+                                    </button>
+                                    <button>
+                                        <RiDeleteBinLine
+                                            onClick={(e) => handleProjectDelete(e, projectData._id)}
+                                            className="text-[#ef2828e5]" size={18} />
+                                    </button>
                                 </div>
                                 </td>
                             </tr>
@@ -101,7 +118,10 @@ const Projects = () => {
                     })}
                 </tbody>
             </table >
-
+            {projectsData <= 0 && < div className="text-center text-2xl font-medium text-gray mt-10">No project here</div>}
+            {projectsData.length > 7 && <div>
+                <Pagination paginationData={{ totalButtonArray: projectTotalButtonArray, currentPage: projectCurrentPage, setCurrentPage: setProjectCurrentPage }} />
+            </div>}
         </div >
     );
 };

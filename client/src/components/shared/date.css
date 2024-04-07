@@ -1,5 +1,5 @@
 .rdrSelected{
-    background-color: #4256D0;
+    background-color: #28282b;
     border-radius: 50%;
 }
 .rdrDay{
@@ -10,8 +10,8 @@
     border-radius: 50%;
     height: 44px;
     width: 39px;
-    border-color: #4256D0;
-    color: #4256D0;
+    border-color: #28282b;
+    color: #28282b;
 }
 .rdrDayStartPreview {
     border-radius: 50%;
@@ -43,5 +43,5 @@
 }
 
 .rdrDayToday .rdrDayNumber span:after{
-    background-color: #4256D0;
+    background-color: #28282b;
 }
