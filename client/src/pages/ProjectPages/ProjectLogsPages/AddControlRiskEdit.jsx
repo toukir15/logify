@@ -3,29 +3,18 @@ import { useState, useRef, useCallback, useContext } from 'react';
 import JoditEditor from 'jodit-react';
 import { BsInfo } from "react-icons/bs";
 import { Tooltip } from 'react-tooltip'
-import Select, { components } from "react-select";
+import Select from "react-select";
 import ImageViewer from 'react-simple-image-viewer';
-import { CgProfile } from 'react-icons/cg';
 import { GlobalContext } from '../../../providers/GlobalProvider';
 import { useNavigate } from "react-router-dom"
 import { useNotify } from '../../../hooks/useNotify';
-
-const MultiValue = props => (
-    <components.MultiValue {...props}>
-        <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
-    </components.MultiValue>
-);
-
-const Option = props => (
-    <components.Option {...props}>
-        <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
-    </components.Option>
-);
+import { useJoditConfig } from '../../../hooks/useJoditConfig';
+import { CustomMultiValue } from "../../../components/shared/CustomMultiValue"
+import { CustomOption } from '../../../components/shared/CustomOption';
 
 const AddControlRiskEdit = () => {
     const navigate = useNavigate()
     const { singleProjectData, setControlRiskData, controlRiskData } = useContext(GlobalContext)
-    console.log(singleProjectData)
     const commentRef = useRef(null);
     const riskOwnerRef = useRef(null)
     const riskCategoryRef = useRef(null)
@@ -33,7 +22,6 @@ const AddControlRiskEdit = () => {
     const likelihoodRef = useRef(null)
     const rattingRef = useRef(null)
     const consequencesRef = useRef(null)
-
     const [currentImage, setCurrentImage] = useState(0);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const images = [
@@ -49,38 +37,6 @@ const AddControlRiskEdit = () => {
         setIsViewerOpen(false);
     };
 
-    const config = {
-        readonly: false,
-        height: '300px',
-        width: '100%',
-        enableDragAndDropFileToEditor: true,
-        uploader: { insertImageAsBase64URI: true },
-        removeButtons: ['brush', 'file'],
-        showXPathInStatusbar: false,
-        showCharsCounter: false,
-        showWordsCounter: false,
-        toolbarAdaptive: true,
-        toolbarSticky: true,
-        toolbarButtons: [
-            'source',
-            '|',
-            'bold',
-            'italic',
-            'underline',
-            '|',
-            'ul',
-            'ol',
-            '|',
-            'link',
-            'image',
-            '|',
-            'align',
-            '|',
-            'undo',
-            'redo',
-        ],
-    };
-
     const handleControlRiskData = (e) => {
         e.preventDefault()
         const risk_name = e.target?.riskName?.value
@@ -94,13 +50,12 @@ const AddControlRiskEdit = () => {
         const risk_consequences_impact = riskConsequencesImpactRef.current.state?.prevProps?.value
         const likelihood = likelihoodRef.current.state?.prevProps?.value
         const ratting = rattingRef.current.state?.prevProps?.value
-        const comment = commentRef.current._wrapperState.initialValue
+        const comment = commentRef.current.value
 
         if (!risk_name || !risk_description || !risk_effect || !risk_matrix_template || !risk_cause || !risk_category || !risk_owner || !consequences || !risk_consequences_impact || !likelihood || !ratting || !comment) {
             useNotify("Some data is messing!", "warning")
             return
         }
-
         const editedData = {
             risk_category,
             risk_name,
@@ -176,7 +131,7 @@ const AddControlRiskEdit = () => {
                         className='w-[70%] z-[50]'
                         defaultValue={controlRiskData.risk_owner}
                         options={singleProjectData?.project_owner}
-                        components={{ MultiValue, Option }}
+                        components={{ MultiValue: CustomMultiValue, Option: CustomOption }}
                         isClearable={true}
                         isMulti={true}
                         styles={{
@@ -275,7 +230,7 @@ const AddControlRiskEdit = () => {
                         <JoditEditor
                             ref={commentRef}
                             value={controlRiskData.comment}
-                            config={config}
+                            config={useJoditConfig}
                             tabIndex={1}
                         />
                     </div>
@@ -306,14 +261,13 @@ const AddControlRiskEdit = () => {
                                 </div>
                             )}
                         </div>
-                        {/* <img className='rounded' src="https://api.logify.au/uploads/risk_matrix_image-1702530495480-613704814.png" alt="" /> */}
                     </div>
                 </div>
 
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor=""></label>
                     <div className="w-[70%] flex gap-8">
-                        <button className="bg-primary py-3 w-full text-white rounded-lg">Add Control</button>
+                        <button className="bg-primary py-3 w-full text-white rounded-lg">Update Control</button>
                         <button type='button' onClick={() => navigate('/projects/logs/control/open/add-control/456465')} className="border border-primary text-primary py-3 w-full rounded-lg">Cancel</button>
                     </div>
                 </div>

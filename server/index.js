@@ -21,11 +21,15 @@ app.use(cors({
 const projects_api = require("./src/routes/projects_api")
 const users_api = require("./src/routes/users_api")
 const authentication_api = require('./src/routes/authentication_api')
+const control_api = require('./src/routes/controls_api')
+const risks_api = require('./src/routes/risks_api')
 
 app.use(express.json())
 app.use('/api/v1/projects_api', projects_api)
 app.use('/api/v1/users_api', users_api)
 app.use('/api/v1/authentication_api', authentication_api)
+app.use('/api/v1/controls_api', control_api)
+app.use('/api/v1/risks_api', risks_api)
 
 app.get('/', (req, res) => {
     console.log('logify server is running')

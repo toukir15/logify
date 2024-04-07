@@ -4,33 +4,15 @@ import JoditEditor from 'jodit-react';
 import { FiPlus } from "react-icons/fi"
 import { BsInfo } from "react-icons/bs";
 import { Tooltip } from 'react-tooltip'
-import Select, { components } from "react-select";
+import Select from "react-select";
 import ImageViewer from 'react-simple-image-viewer';
-import { CgProfile } from 'react-icons/cg';
 import { GlobalContext } from '../../../providers/GlobalProvider';
-
-const options = [
-    { value: 'construction', label: 'Construction' },
-    { value: 'schedule', label: 'Schedule' },
-    { value: 'commercial', label: 'Commercial' },
-    { value: 'design', label: 'Design' },
-];
-
-const MultiValue = props => (
-    <components.MultiValue {...props}>
-        <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
-    </components.MultiValue>
-);
-
-const Option = props => (
-    <components.Option {...props}>
-        <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
-    </components.Option>
-);
+import { useJoditConfig } from '../../../hooks/useJoditConfig';
+import { CustomMultiValue } from "../../../components/shared/CustomMultiValue"
+import { CustomOption } from '../../../components/shared/CustomOption';
 
 const AddRisk = () => {
     const { singleProjectData } = useContext(GlobalContext)
-    console.log(singleProjectData)
     const editor = useRef(null);
     const [content, setContent] = useState('');
     const [selectedOption, setSelectedOption] = useState(null);
@@ -50,42 +32,14 @@ const AddRisk = () => {
         setIsViewerOpen(false);
     };
 
-    const config = {
-        readonly: false, // all options from https://xdsoft.net/jodit/doc/
-        height: '300px',
-        width: '100%',
-        enableDragAndDropFileToEditor: true,
-        uploader: { insertImageAsBase64URI: true },
-        removeButtons: ['brush', 'file'],
-        showXPathInStatusbar: false,
-        showCharsCounter: false,
-        showWordsCounter: false,
-        toolbarAdaptive: true,
-        toolbarSticky: true,
-        toolbarButtons: [
-            'source',
-            '|',
-            'bold',
-            'italic',
-            'underline',
-            '|',
-            'ul',
-            'ol',
-            '|',
-            'link',
-            'image',
-            '|',
-            'align',
-            '|',
-            'undo',
-            'redo',
-        ],
-    };
+    const handleAddControl = (e) => {
+        e.preventDefault()
 
+    }
 
     return (
         <div className="w-full py-10">
-            <form className="flex w-[60%] mx-auto flex-col">
+            <form onSubmit={handleAddControl} className="flex w-[60%] mx-auto flex-col">
                 <div className="flex w-full items-center mb-6">
                     <div className="w-[30%] flex items-center gap-2" >
                         <label htmlFor="">Risk Category</label>
@@ -93,10 +47,9 @@ const AddRisk = () => {
                         <Tooltip id="risk-category" content="Enter generic risk categories to allow grouping of risk, For example, 'Construction, Design, Schedule, Environmental etc, 'corporate construction or other generic items, You can always add more categories in your project page. " style={{ width: "350px" }} className='tooltip-style' place='right' />
                     </div>
                     <Select
+                        ref={riskCategoryRef}
                         className='w-[70%] '
-                        defaultValue={selectedOption}
-                        onChange={setSelectedOption}
-                        options={singleProjectData.risk_categories}
+                        options={singleProjectData?.risk_categories}
                         isClearable={true}
                         styles={{
                             control: (baseStyles, state) => ({
@@ -138,8 +91,8 @@ const AddRisk = () => {
                         className='w-[70%] z-[50]'
                         defaultValue={selectedOption}
                         onChange={setSelectedOption}
-                        options={options}
-                        components={{ MultiValue, Option }}
+                        options={singleProjectData.risk_owner}
+                        components={{ MultiValue: CustomMultiValue, Option: CustomOption }}
                         isClearable={true}
                         isMulti={true}
                         styles={{
@@ -249,10 +202,9 @@ const AddRisk = () => {
                         <JoditEditor
                             ref={editor}
                             value={content}
-                            config={config}
-                            tabIndex={1} // tabIndex of textarea
-                            onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-                        // onChange={newContent => { }}
+                            config={useJoditConfig}
+                            tabIndex={1}
+                            onBlur={newContent => setContent(newContent)}
                         />
                     </div>
                 </div>

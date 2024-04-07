@@ -1,84 +1,58 @@
 /* eslint-disable react/prop-types */
 import { useState, useRef, useContext } from 'react';
 import JoditEditor from 'jodit-react';
-import Select, { components } from "react-select";
-import { CgProfile } from "react-icons/cg";
+import Select from "react-select";
 import { BsInfo } from 'react-icons/bs';
+import axios from "axios"
+import CreatableSelect from 'react-select/creatable';
 import { Tooltip } from 'react-tooltip';
 import Date from '../../../components/shared/Date';
 import { GlobalContext } from '../../../providers/GlobalProvider';
 import { useNavigate } from "react-router-dom"
 import { FaRegEdit } from "react-icons/fa";
 import { RiDeleteBinLine } from "react-icons/ri";
-
-const MultiValue = props => (
-    <components.MultiValue {...props}>
-        <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
-    </components.MultiValue>
-);
-
-const Option = props => (
-    <components.Option {...props}>
-        <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
-    </components.Option>
-);
+import { useJoditConfig } from '../../../hooks/useJoditConfig';
+import { CustomMultiValue } from "../../../components/shared/CustomMultiValue"
+import { CustomOption } from '../../../components/shared/CustomOption';
+import { customStyle } from '../../../hooks/useSelectCustomStyle';
+import { useNotify } from '../../../hooks/useNotify';
 
 const AddControl = () => {
     const { singleProjectData, controlRiskData, setControlRiskData } = useContext(GlobalContext)
-    const editor = useRef(null);
-    const [content, setContent] = useState('');
-    const [controlOwner, setControlOwner] = useState(null);
+    const commentRef = useRef(null);
+    const controlOwnerRef = useRef(null)
+    const tagsRef = useRef(null)
     const [controlDate, setControlDate] = useState(null)
     const [dueDate, setDueDate] = useState(null)
     const navigate = useNavigate()
 
-    console.log(controlRiskData)
-
     const handleAddControl = (e) => {
         e.preventDefault()
-        const addControlData = {
-            control_name: e.target.controlName.value,
-            control_date: controlDate,
-            control_status: controlStatus,
-            comment: content,
-            due_date: dueDate,
-            control_owner: controlOwner,
-            tag: e.target.tag.value
+        const control_name = e.target.controlName.value
+        const comment = commentRef.current.value
+        const control_owner = controlOwnerRef.current.props.value
+        const tags = tagsRef.current.props.value
+        const control_status = e.target.controlStatus.value
+
+        if (!control_name || !comment || !tags || !control_owner || !control_status || !controlDate || !dueDate) {
+            useNotify("Some data is messing!", "warning")
+            return
         }
+
+        const addControlData = {
+            control_name,
+            control_date: controlDate,
+            control_status,
+            comment,
+            due_date: dueDate,
+            control_owner,
+            tags,
+        }
+
+        axios.post("/controls_api/add-control", { addControlData, controlRiskData })
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
     }
-
-    const config = {
-        readonly: false,
-        height: '300px',
-        width: '100%',
-        enableDragAndDropFileToEditor: true,
-        uploader: { insertImageAsBase64URI: true },
-        removeButtons: ['brush', 'file'],
-        showXPathInStatusbar: false,
-        showCharsCounter: false,
-        showWordsCounter: false,
-        toolbarAdaptive: true,
-        toolbarSticky: true,
-        toolbarButtons: [
-            'source',
-            '|',
-            'bold',
-            'italic',
-            'underline',
-            '|',
-            'ul',
-            'ol',
-            '|',
-            'link',
-            'image',
-            '|',
-            'align',
-            '|',
-            'undo',
-            'redo',
-        ],
-    };
-
     return (
         <div className="w-full py-10">
             <form onSubmit={handleAddControl} className="flex w-[60%] mx-auto flex-col">
@@ -108,11 +82,9 @@ const AddControl = () => {
                     <label className="w-[30%]" htmlFor="">Comment</label>
                     <div className='w-[70%] border border-primary rounded'>
                         <JoditEditor
-                            ref={editor}
-                            value={content}
-                            config={config}
+                            ref={commentRef}
+                            config={useJoditConfig}
                             tabIndex={1}
-                            onBlur={newContent => setContent(newContent)}
                         />
                     </div>
                 </div>
@@ -126,12 +98,11 @@ const AddControl = () => {
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="">Control Owner</label>
                     <Select
+                        ref={controlOwnerRef}
                         className='w-[70%] z-[50]'
-                        defaultValue={controlOwner}
-                        onChange={setControlOwner}
-                        options={singleProjectData.project_owner}
+                        options={singleProjectData?.project_owner}
                         isClearable={true}
-                        components={{ MultiValue, Option }}
+                        components={{ CustomMultiValue, CustomOption }}
                         isMulti={true}
                         styles={{
                             control: (baseStyles, state) => ({
@@ -143,8 +114,15 @@ const AddControl = () => {
                     />
                 </div>
                 <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor="">Tag</label>
-                    <input placeholder="Select tag" name="tag" id="tag" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
+                    <label className="w-[30%]" htmlFor="">Tags</label>
+                    <CreatableSelect
+                        placeholder={"Tags"}
+                        ref={tagsRef}
+                        className="w-[70%]"
+                        isMulti
+                        isClearable={false}
+                        styles={customStyle}
+                    />
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor=""></label>

@@ -7,7 +7,6 @@ export const GlobalProvider = ({ children }) => {
     const [singleProjectData, setSingleProjectData] = useState({})
     const [controlRiskData, setControlRiskData] = useState(null)
     const currentUrl = window.location.href;
-    console.log(controlRiskData)
 
     const { isLoading: projectDataIsLoading, error: projectsDataError, data: projectsData, refetch: projectsDataRefetch } = useQuery({
         queryKey: ['projectData'],
@@ -27,8 +26,6 @@ export const GlobalProvider = ({ children }) => {
         const findSingleProjectData = projectsData.find(project => project._id == id)
         setSingleProjectData(findSingleProjectData)
     }
-
-
 
     // global info
     const GlobalInfo = {

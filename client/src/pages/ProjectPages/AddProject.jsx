@@ -4,46 +4,13 @@ import { BsInfo } from "react-icons/bs";
 import { Tooltip } from "react-tooltip";
 import axios from 'axios'
 import CreatableSelect from 'react-select/creatable';
-import Select, { components } from "react-select";
-import { CgProfile } from "react-icons/cg";
+import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import { useNotify } from "../../hooks/useNotify"
 import { GlobalContext } from "../../providers/GlobalProvider";
-
-const MultiValue = props => (
-    <components.MultiValue {...props}>
-        <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
-    </components.MultiValue>
-);
-const Option = props => (
-    <components.Option {...props}>
-        <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
-    </components.Option>
-);
-
-const customStyle = {
-    control: base => ({
-        ...base,
-        borderColor: "#4256D0",
-        padding: "6px 0",
-        fontSize: '16px',
-        "&:hover": {
-            borderColor: "#4256D0",
-        },
-    }),
-    dropdownIndicator: base => ({
-        ...base,
-        display: "none"
-    }),
-    indicatorSeparator: base => ({
-        ...base,
-        display: "none"
-    }),
-    menu: base => ({
-        ...base,
-        display: "none"
-    }),
-}
+import { customStyle } from '../../hooks/useSelectCustomStyle'
+import { CustomMultiValue } from "../../components/shared/CustomMultiValue"
+import { CustomOption } from '../../components/shared/CustomOption';
 
 const AddProject = () => {
     const { projectsDataRefetch, usersData } = useContext(GlobalContext)
@@ -59,7 +26,6 @@ const AddProject = () => {
     const likelihoodRef = useRef(null)
     const riskRattingRef = useRef(null)
     const navigate = useNavigate();
-
 
     const handleAddImageChange = (e, actionName) => {
         if (e.target?.files[0]?.type?.split("/")[0] == "image") {
@@ -173,7 +139,7 @@ const AddProject = () => {
                         ref={projectOwnerRef}
                         options={selectProjectOwnerData}
                         isClearable={true}
-                        components={{ MultiValue, Option }}
+                        components={{ MultiValue: CustomMultiValue, Option: CustomOption }}
                         isMulti={true}
                         styles={{
                             control: (baseStyles, state) => ({

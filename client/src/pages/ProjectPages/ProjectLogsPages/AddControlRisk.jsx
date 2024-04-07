@@ -3,24 +3,14 @@ import { useState, useRef, useCallback, useContext } from 'react';
 import JoditEditor from 'jodit-react';
 import { BsInfo } from "react-icons/bs";
 import { Tooltip } from 'react-tooltip'
-import Select, { components } from "react-select";
+import Select from "react-select";
 import ImageViewer from 'react-simple-image-viewer';
-import { CgProfile } from 'react-icons/cg';
 import { GlobalContext } from '../../../providers/GlobalProvider';
 import { useNavigate } from "react-router-dom"
 import { useNotify } from '../../../hooks/useNotify';
-
-const MultiValue = props => (
-    <components.MultiValue {...props}>
-        <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
-    </components.MultiValue>
-);
-
-const Option = props => (
-    <components.Option {...props}>
-        <div className='flex gap-1 items-center font-medium'><CgProfile size={22} /> {props.data.label}</div>
-    </components.Option>
-);
+import { useJoditConfig } from '../../../hooks/useJoditConfig';
+import { CustomMultiValue } from "../../../components/shared/CustomMultiValue"
+import { CustomOption } from '../../../components/shared/CustomOption';
 
 const AddControlRisk = () => {
     const navigate = useNavigate()
@@ -32,7 +22,6 @@ const AddControlRisk = () => {
     const likelihoodRef = useRef(null)
     const rattingRef = useRef(null)
     const consequencesRef = useRef(null)
-
     const [currentImage, setCurrentImage] = useState(0);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const images = [
@@ -42,42 +31,9 @@ const AddControlRisk = () => {
         setCurrentImage(index);
         setIsViewerOpen(true);
     }, []);
-
     const closeImageViewer = () => {
         setCurrentImage(0);
         setIsViewerOpen(false);
-    };
-
-    const config = {
-        readonly: false,
-        height: '300px',
-        width: '100%',
-        enableDragAndDropFileToEditor: true,
-        uploader: { insertImageAsBase64URI: true },
-        removeButtons: ['brush', 'file'],
-        showXPathInStatusbar: false,
-        showCharsCounter: false,
-        showWordsCounter: false,
-        toolbarAdaptive: true,
-        toolbarSticky: true,
-        toolbarButtons: [
-            'source',
-            '|',
-            'bold',
-            'italic',
-            'underline',
-            '|',
-            'ul',
-            'ol',
-            '|',
-            'link',
-            'image',
-            '|',
-            'align',
-            '|',
-            'undo',
-            'redo',
-        ],
     };
 
     const handleControlRiskData = (e) => {
@@ -118,8 +74,6 @@ const AddControlRisk = () => {
         setControlRiskData(controlRisk)
         navigate("/projects/logs/control/open/add-control/456465")
     }
-
-
     return (
         <div className="w-full py-10">
             <form onSubmit={handleControlRiskData} className="flex w-[60%] mx-auto flex-col">
@@ -174,7 +128,7 @@ const AddControlRisk = () => {
                         ref={riskOwnerRef}
                         className='w-[70%] z-[50]'
                         options={singleProjectData?.project_owner}
-                        components={{ MultiValue, Option }}
+                        components={{ MultiValue: CustomMultiValue, Option: CustomOption }}
                         isClearable={true}
                         isMulti={true}
                         styles={{
@@ -267,7 +221,7 @@ const AddControlRisk = () => {
                     <div className='w-[70%] border border-primary rounded'>
                         <JoditEditor
                             ref={commentRef}
-                            config={config}
+                            config={useJoditConfig}
                             tabIndex={1}
                         />
                     </div>
