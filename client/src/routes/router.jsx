@@ -10,8 +10,6 @@ import LoginPage from "../pages/AuthenticationPage/LoginPage";
 import VerifyPage from "../pages/AuthenticationPage/VerifyPage";
 import Loading from "../components/shared/Loading";
 import CheckEmailPage from "../pages/AuthenticationPage/CheckEmailPage";
-import AddControlRisk from "../pages/ProjectPages/ProjectLogsPages/AddControlRisk";
-import AddControlRiskEdit from "../pages/ProjectPages/ProjectLogsPages/AddControlRiskEdit";
 const Projects = lazy(() => import("../pages/ProjectPages/Projects"))
 const ProtectedRoute = lazy(() => import("./ProtectedRoute"))
 const EditProject = lazy(() => import("../pages/ProjectPages/EditProjects"))
@@ -85,14 +83,6 @@ const router = createBrowserRouter([
                     {
                         path: "/projects/logs/risk/closed/:slag",
                         element: <Suspense fallback={<Loading />}><RiskClosed /></Suspense>
-                    },
-                    {
-                        path: "/projects/logs/:open-risk-status/:open-closed-status/add-control-risk/:slag",
-                        element: <AddControlRisk />
-                    },
-                    {
-                        path: "/projects/logs/:open-risk-status/:open-closed-status/add-control-risk-edit/:slag",
-                        element: <AddControlRiskEdit />
                     },
                     {
                         path: "/projects/logs/:open-risk-status/:open-closed-status/filter/:slag",

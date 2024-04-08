@@ -9,8 +9,6 @@ import { Tooltip } from 'react-tooltip';
 import Date from '../../../components/shared/Date';
 import { GlobalContext } from '../../../providers/GlobalProvider';
 import { useNavigate } from "react-router-dom"
-import { FaRegEdit } from "react-icons/fa";
-import { RiDeleteBinLine } from "react-icons/ri";
 import { useJoditConfig } from '../../../hooks/useJoditConfig';
 import { CustomMultiValue } from "../../../components/shared/CustomMultiValue"
 import { CustomOption } from '../../../components/shared/CustomOption';
@@ -18,7 +16,7 @@ import { customStyle } from '../../../hooks/useSelectCustomStyle';
 import { useNotify } from '../../../hooks/useNotify';
 
 const AddControl = () => {
-    const { singleProjectData, controlRiskData, setControlRiskData } = useContext(GlobalContext)
+    const { singleProjectData, controlsDataRefeatch } = useContext(GlobalContext)
     const commentRef = useRef(null);
     const controlOwnerRef = useRef(null)
     const tagsRef = useRef(null)
@@ -49,8 +47,13 @@ const AddControl = () => {
             tags,
         }
 
-        axios.post("/controls_api/add-control", { addControlData, controlRiskData })
-            .then(response => console.log(response))
+        axios.post("/controls_api/add_control", addControlData)
+            .then(response => {
+                if (response.data.insertedId) {
+                    controlsDataRefeatch()
+                    navigate("/projects/logs/control/open/4512124511")
+                }
+            })
             .catch(error => console.log(error))
     }
     return (
@@ -126,34 +129,8 @@ const AddControl = () => {
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor=""></label>
-                    {controlRiskData && <div className='bg-white w-[70%] p-4 rounded text-sm relative'>
-                        <div>
-                            <p> Risk Name: <span className='text-[#456]'>{controlRiskData?.risk_name}</span></p>
-                            <p> Risk Owner: <span className='text-[#456]'>{controlRiskData?.risk_owner[0].value}</span></p>
-                            <p> Risk Description: <span className='text-[#456]'>{controlRiskData?.risk_description}</span></p>
-                            <p> Risk Category: <span className='text-[#456]'>{controlRiskData?.risk_category.value}</span></p>
-                            <p> Risk Cause: <span className='text-[#456]'>{controlRiskData?.risk_cause}</span></p>
-                            <p> Risk Effect: <span className='text-[#456]'>{controlRiskData?.risk_effect}</span></p>
-                            <p> Risk Consequences: <span className='text-[#456]'>{controlRiskData?.consequences.value}</span></p>
-                            <p> Risk Consequences Impact:<span className='text-[#456]'> {controlRiskData?.risk_consequences_impact.value}</span> </p>
-                            <p> Likelihood:<span className='text-[#456]'> {controlRiskData?.likelihood.value}</span> </p>
-                            <p> Ratting: <span className='text-[#456]'> {controlRiskData?.ratting.value}</span></p>
-                        </div>
-                        <div className='flex gap-2 absolute top-2 right-2'>
-                            <button onClick={() => setControlRiskData(null)} className='text-red-500'> <RiDeleteBinLine /></button>
-                            <button onClick={() => navigate('/projects/logs/:open-risk-status/:open-closed-status/add-control-risk-edit/:slag')} className='text-green-500'> <FaRegEdit /></button>
-                        </div>
-                    </div>}
-                </div>
-
-                {!controlRiskData && <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor=""></label>
-                    <button onClick={() => navigate("/projects/logs/:open-risk-status/:open-closed-status/add-control-risk/:slag")} className="bg-primary py-3 w-[70%] text-white rounded-lg">Add Risk</button>
-                </div>}
-                <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor=""></label>
                     <div className="w-[70%] flex gap-8">
-                        <button className="bg-primary py-3 w-full text-white rounded-lg">Save</button>
+                        <button className="bg-primary py-3 w-full text-white rounded-lg">Add Control</button>
                         <button className="border border-primary text-primary py-3 w-full rounded-lg">Cancel</button>
                     </div>
                 </div>

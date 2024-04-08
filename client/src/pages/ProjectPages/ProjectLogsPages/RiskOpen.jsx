@@ -1,29 +1,9 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { GlobalContext } from "../../../providers/GlobalProvider";
 
 const RiskOpen = () => {
-    const risksOpenData = [
-        {
-            risk_category: 'GRB Bearing & Repaint risk risk',
-            risk_name: 'Resource Constraints',
-            risk_description: 'Design resource unable to meet demand.',
-            ratting: 'High',
-            latest_control: 'Not added',
-        },
-        {
-            risk_category: 'GRB Bearing & Repaint',
-            risk_name: 'Resource Constraints',
-            risk_description: 'Design resource unable to meet demand.',
-            ratting: 'High',
-            latest_control: 'Not added',
-        },
-        {
-            risk_category: 'GRB Bearing & Repaint',
-            risk_name: 'Resource Constraints',
-            risk_description: 'Design resource unable to meet demand.',
-            ratting: 'High',
-            latest_control: 'Not added',
-        },
-    ]
+    const { risksData } = useContext(GlobalContext)
     const navigate = useNavigate();
     return (
         <div className="py-10">
@@ -33,24 +13,23 @@ const RiskOpen = () => {
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Risk Name</th>
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Risk Description</th>
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Rating</th>
-                    <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Latest Control</th>
+                    <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Risk Cause</th>
                 </thead>
                 <tbody>
-                    {risksOpenData.map((riskOpenData, index) => {
+                    {risksData.map((riskOpenData, index) => {
                         return (
                             <tr onClick={() => navigate(`/projects/logs/risk/open/${"45121245112"}/view-risk/${'45642'}`)} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
-                                <td className="py-5 px-4 text-start">{riskOpenData.risk_category}</td>
+                                <td className="py-5 px-4 text-start">{riskOpenData.risk_category.value}</td>
                                 <td className="py-5 px-4 text-start">{riskOpenData.risk_name} </td>
                                 <td className="py-5 px-4 text-start">{riskOpenData.risk_description}</td>
-                                <td className="py-5 px-4 text-start">{riskOpenData.ratting}</td>
-                                <td className="py-5 px-4 text-start">{riskOpenData.latest_control}</td>
+                                <td className="py-5 px-4 text-start">{riskOpenData.ratting.value}</td>
+                                <td className="py-5 px-4 text-start">{riskOpenData.risk_cause}</td>
                             </tr>
                         );
                     })}
 
                 </tbody>
             </table>
-
         </div>
     );
 };

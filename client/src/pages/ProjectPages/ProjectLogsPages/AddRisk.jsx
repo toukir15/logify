@@ -1,22 +1,28 @@
 /* eslint-disable react/prop-types */
 import { useState, useRef, useCallback, useContext } from 'react';
 import JoditEditor from 'jodit-react';
-import { FiPlus } from "react-icons/fi"
 import { BsInfo } from "react-icons/bs";
 import { Tooltip } from 'react-tooltip'
 import Select from "react-select";
 import ImageViewer from 'react-simple-image-viewer';
 import { GlobalContext } from '../../../providers/GlobalProvider';
+import { useNavigate } from "react-router-dom"
+import { useNotify } from '../../../hooks/useNotify';
 import { useJoditConfig } from '../../../hooks/useJoditConfig';
 import { CustomMultiValue } from "../../../components/shared/CustomMultiValue"
 import { CustomOption } from '../../../components/shared/CustomOption';
+import axios from "axios"
 
 const AddRisk = () => {
+    const navigate = useNavigate()
     const { singleProjectData } = useContext(GlobalContext)
-    const editor = useRef(null);
-    const [content, setContent] = useState('');
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [consequencesInputNumber, setConsequencesInputNumber] = useState(1)
+    const commentRef = useRef(null);
+    const riskOwnerRef = useRef(null)
+    const riskCategoryRef = useRef(null)
+    const riskConsequencesImpactRef = useRef(null)
+    const likelihoodRef = useRef(null)
+    const rattingRef = useRef(null)
+    const consequencesRef = useRef(null)
     const [currentImage, setCurrentImage] = useState(0);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const images = [
@@ -26,20 +32,57 @@ const AddRisk = () => {
         setCurrentImage(index);
         setIsViewerOpen(true);
     }, []);
-
     const closeImageViewer = () => {
         setCurrentImage(0);
         setIsViewerOpen(false);
     };
 
-    const handleAddControl = (e) => {
+    const handleRisk = (e) => {
         e.preventDefault()
+        const risk_name = e.target?.riskName?.value
+        const risk_description = e.target?.riskDescription?.value
+        const risk_effect = e.target?.riskEffect?.value
+        const risk_matrix_template = singleProjectData.risk_matrix_template
+        const risk_cause = e.target?.riskCause?.value
+        const risk_owner = riskOwnerRef.current.state?.prevProps?.value
+        const risk_category = riskCategoryRef.current.state?.prevProps?.value
+        const consequences = consequencesRef.current.state?.prevProps?.value
+        const risk_consequences_impact = riskConsequencesImpactRef.current.state?.prevProps?.value
+        const likelihood = likelihoodRef.current.state?.prevProps?.value
+        const ratting = rattingRef.current.state?.prevProps?.value
+        const comment = commentRef.current.value
 
+        if (!risk_name || !risk_description || !risk_effect || !risk_matrix_template || !risk_cause || !risk_category || !risk_owner || !consequences || !risk_consequences_impact || !likelihood || !ratting || !comment) {
+            useNotify("Some data is messing!", "warning")
+            return
+        }
+
+        const riskData = {
+            risk_category,
+            risk_name,
+            risk_description,
+            risk_cause,
+            risk_owner,
+            risk_effect,
+            consequences,
+            risk_consequences_impact,
+            likelihood,
+            ratting,
+            comment,
+            risk_matrix_template
+        }
+
+        axios.post("/risks_api/add-risk", riskData)
+            .then(response => {
+                if (response.status == 200) {
+                    navigate("/projects/logs/risk/open/45121245112")
+                }
+            })
+            .catch(error => console.log(error))
     }
-
     return (
         <div className="w-full py-10">
-            <form onSubmit={handleAddControl} className="flex w-[60%] mx-auto flex-col">
+            <form onSubmit={handleRisk} className="flex w-[60%] mx-auto flex-col">
                 <div className="flex w-full items-center mb-6">
                     <div className="w-[30%] flex items-center gap-2" >
                         <label htmlFor="">Risk Category</label>
@@ -88,10 +131,9 @@ const AddRisk = () => {
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="">Risk Owner</label>
                     <Select
+                        ref={riskOwnerRef}
                         className='w-[70%] z-[50]'
-                        defaultValue={selectedOption}
-                        onChange={setSelectedOption}
-                        options={singleProjectData.risk_owner}
+                        options={singleProjectData?.project_owner}
                         components={{ MultiValue: CustomMultiValue, Option: CustomOption }}
                         isClearable={true}
                         isMulti={true}
@@ -110,53 +152,39 @@ const AddRisk = () => {
                         <div data-tooltip-id="risk-effect" className='bg-[#aaaaaa] hover:bg-[#4B5563] rounded-full text-white mt-1 cursor-pointer'><BsInfo /></div>
                         <Tooltip id="risk-effect" content="Describe the effect of the risk, 'For example 'Causing serious injury or death'." style={{ width: "350px" }} place='right' />
                     </div>
-                    <input placeholder="Enter control name" name="projectName" id="projectName" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
+                    <input placeholder="Enter control name" name="riskEffect" id="riskEffect" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
                 </div>
-                <div className="flex w-full items-center mb-14">
+                <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="">Consequences</label>
-                    <div className='w-[70%] relative'>
-                        {Array(consequencesInputNumber).fill().map((number, i) => {
-                            return (
-                                <div key={i} className='flex gap-4 mt-3'>
-                                    <Select
-                                        className={`w-[70%] z-[40+${consequencesInputNumber}]`}
-                                        defaultValue={selectedOption}
-                                        onChange={setSelectedOption}
-                                        options={singleProjectData.risk_consequences}
-                                        isClearable={true}
-                                        placeholder={'Consequence'}
-                                        styles={{
-                                            control: (baseStyles, state) => ({
-                                                ...baseStyles,
-                                                borderColor: state.isFocused ? '#4256D0' : '#4256D0',
-                                                padding: '6px'
-                                            }),
-                                        }}
-                                    />
-                                    <Select
-                                        className={`w-[70%] z-[40+${consequencesInputNumber}]`}
-                                        defaultValue={selectedOption}
-                                        onChange={setSelectedOption}
-                                        options={singleProjectData.risk_consequences_impact}
-                                        isClearable={true}
-                                        placeholder={'Impact'}
-                                        styles={{
-                                            control: (baseStyles, state) => ({
-                                                ...baseStyles,
-                                                borderColor: state.isFocused ? '#4256D0' : '#4256D0',
-                                                padding: '6px'
-                                            }),
-                                        }}
-                                    />
-                                </div>
-                            )
-                        })}
-
-                        <div className='flex justify-center absolute right-1/2 translate-x-1/2'>
-                            <button type='button' onClick={() => setConsequencesInputNumber(prevState => prevState + 1)} className='border border-primary p-[3px] rounded-full mt-2 text-primary'>
-                                <FiPlus />
-                            </button>
-                        </div>
+                    <div className='flex w-[70%] gap-4 items-center '>
+                        <Select
+                            ref={consequencesRef}
+                            className={`w-[70%] z-[40]`}
+                            options={singleProjectData.risk_consequences}
+                            isClearable={true}
+                            placeholder={'Consequence'}
+                            styles={{
+                                control: (baseStyles, state) => ({
+                                    ...baseStyles,
+                                    borderColor: state.isFocused ? '#4256D0' : '#4256D0',
+                                    padding: '6px'
+                                }),
+                            }}
+                        />
+                        <Select
+                            ref={riskConsequencesImpactRef}
+                            className={`w-[70%] z-[40]`}
+                            options={singleProjectData.risk_consequences_impact}
+                            isClearable={true}
+                            placeholder={'Impact'}
+                            styles={{
+                                control: (baseStyles, state) => ({
+                                    ...baseStyles,
+                                    borderColor: state.isFocused ? '#4256D0' : '#4256D0',
+                                    padding: '6px'
+                                }),
+                            }}
+                        />
                     </div>
                 </div>
                 <div className="flex w-full items-center mb-6">
@@ -164,9 +192,8 @@ const AddRisk = () => {
                     <div className='w-[70%]'>
                         <div className='flex  gap-4'>
                             <Select
+                                ref={likelihoodRef}
                                 className='w-[70%] '
-                                defaultValue={selectedOption}
-                                onChange={setSelectedOption}
                                 options={singleProjectData.likelihood}
                                 isClearable={true}
                                 placeholder={'Likelihood'}
@@ -178,9 +205,8 @@ const AddRisk = () => {
                                     }),
                                 }}
                             />      <Select
+                                ref={rattingRef}
                                 className='w-[70%] '
-                                defaultValue={selectedOption}
-                                onChange={setSelectedOption}
                                 options={singleProjectData.risk_ratting}
                                 isClearable={true}
                                 placeholder={'Ratting'}
@@ -200,11 +226,9 @@ const AddRisk = () => {
                     <label className="w-[30%]" htmlFor="">Comment</label>
                     <div className='w-[70%] border border-primary rounded'>
                         <JoditEditor
-                            ref={editor}
-                            value={content}
+                            ref={commentRef}
                             config={useJoditConfig}
                             tabIndex={1}
-                            onBlur={newContent => setContent(newContent)}
                         />
                     </div>
                 </div>
@@ -234,18 +258,14 @@ const AddRisk = () => {
                                 </div>
                             )}
                         </div>
-                        {/* <img className='rounded' src="https://api.logify.au/uploads/risk_matrix_image-1702530495480-613704814.png" alt="" /> */}
                     </div>
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor=""></label>
-                    <button className="bg-primary py-3 w-[70%] text-white rounded-lg">Add Control</button>
-                </div>
+
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor=""></label>
                     <div className="w-[70%] flex gap-8">
-                        <button className="bg-primary py-3 w-full text-white rounded-lg">Save</button>
-                        <button className="border border-primary text-primary py-3 w-full rounded-lg">Cancel</button>
+                        <button className="bg-primary py-3 w-full text-white rounded-lg">Add Risk</button>
+                        <button type='button' onClick={() => navigate('/projects/logs/control/open/add-control/456465')} className="border border-primary text-primary py-3 w-full rounded-lg">Cancel</button>
                     </div>
                 </div>
             </form>

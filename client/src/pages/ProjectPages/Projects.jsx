@@ -11,8 +11,7 @@ import Pagination from "../../components/shared/Pagination";
 
 const Projects = () => {
     const navigate = useNavigate()
-    const { projectsData, projectsDataRefetch, handleSingleProjectData } = useContext(GlobalContext)
-
+    const { projectsData, projectsDataRefetch, handleSingleProjectData, controlsDataRefeatch, setProjectID } = useContext(GlobalContext)
     const [projectCurrentPage, setProjectCurrentPage] = useState(1)
     const projectTotalButton = Math.ceil(projectsData.length / 7)
     const projectTotalButtonArray = [...Array(projectTotalButton).keys()]
@@ -77,8 +76,8 @@ const Projects = () => {
                         return (
                             <tr
                                 onClick={() => {
-                                    navigate(`/projects/logs/control/open/${"45121245112"}`)
                                     handleSingleProjectData(projectData._id)
+                                    navigate(`/projects/logs/control/open/${projectData._id}`)
                                 }
                                 }
                                 className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>

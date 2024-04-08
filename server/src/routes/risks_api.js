@@ -9,7 +9,16 @@ const run = async () => {
     router.post("/add-risk", async (req, res) => {
         try {
             const result = await risks_collection.insertOne(req.body)
-            console.log(result)
+            res.status(200).send(result)
+        }
+        catch (error) {
+            res.status(500).send({ message: "Internal server error." })
+        }
+    })
+
+    router.get("/get-risks", async (req, res) => {
+        try {
+            const result = await risks_collection.find().toArray()
             res.status(200).send(result)
         }
         catch (error) {
