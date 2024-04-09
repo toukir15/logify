@@ -1,34 +1,44 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../../providers/GlobalProvider";
+import Pagination from "../../../components/shared/Pagination";
 
 const RiskClosed = () => {
     const { risksData } = useContext(GlobalContext)
+    const risksClosedData = risksData.filter(riskClosedData => riskClosedData.status == "closed")
+    const [riskClosedCurrentPage, setRiskClosedCurrentPage] = useState(1)
+    const riskClosedTotalButton = Math.ceil(risksClosedData?.length / 7)
+    const riskClosedTotalButtonArray = [...Array(riskClosedTotalButton).keys()]
+    const riskClosedDataShowPosition = 7 * riskClosedCurrentPage
     const navigate = useNavigate();
     return (
         <div className="py-10">
             <table className="w-full">
-                <thead>
+                {risksClosedData.length > 0 && < thead >
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Risk Category</th>
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Risk Name</th>
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Risk Description</th>
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Rating</th>
                     <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Risk Cause</th>
-                </thead>
+                </thead>}
                 <tbody>
-                    {risksData.map((riskOpenData, index) => {
+                    {risksClosedData.slice(riskClosedDataShowPosition - 7, riskClosedDataShowPosition)?.map((riskClosedData, index) => {
                         return (
                             <tr onClick={() => navigate(`/projects/logs/risk/open/${"45121245112"}/view-risk/${'45642'}`)} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
-                                <td className="py-5 px-4 text-start">{riskOpenData.risk_category.value}</td>
-                                <td className="py-5 px-4 text-start">{riskOpenData.risk_name} </td>
-                                <td className="py-5 px-4 text-start">{riskOpenData.risk_description}</td>
-                                <td className="py-5 px-4 text-start">{riskOpenData.ratting.value}</td>
-                                <td className="py-5 px-4 text-start">{riskOpenData.risk_cause}</td>
+                                <td className="py-5 px-4 text-start">{riskClosedData.risk_category.value}</td>
+                                <td className="py-5 px-4 text-start">{riskClosedData.risk_name} </td>
+                                <td className="py-5 px-4 text-start">{riskClosedData.risk_description}</td>
+                                <td className="py-5 px-4 text-start">{riskClosedData.ratting.value}</td>
+                                <td className="py-5 px-4 text-start">{riskClosedData.risk_cause}</td>
                             </tr>
                         );
                     })}
                 </tbody>
             </table>
+            {risksClosedData.length > 7 && <div>
+                <Pagination paginationData={{ totalButtonArray: riskClosedTotalButtonArray, currentPage: riskClosedCurrentPage, setCurrentPage: setRiskClosedCurrentPage }} />
+            </div>}
+            {!risksClosedData.length && < div className="text-center text-2xl font-medium text-gray mt-10">No risks here</div>}
         </div>
     );
 };

@@ -23,6 +23,8 @@ const AddControl = () => {
     const [controlDate, setControlDate] = useState(null)
     const [dueDate, setDueDate] = useState(null)
     const navigate = useNavigate()
+    const projectID = window.location.href.split("/")[8]
+    const openClosedStatus = window.location.href.split("/")[6]
 
     const handleAddControl = (e) => {
         e.preventDefault()
@@ -45,13 +47,15 @@ const AddControl = () => {
             due_date: dueDate,
             control_owner,
             tags,
+            project_id: projectID,
+            status: openClosedStatus
         }
 
         axios.post("/controls_api/add_control", addControlData)
             .then(response => {
                 if (response.data.insertedId) {
                     controlsDataRefeatch()
-                    navigate("/projects/logs/control/open/4512124511")
+                    navigate(`/projects/logs/control/open/${projectID}`)
                 }
             })
             .catch(error => console.log(error))

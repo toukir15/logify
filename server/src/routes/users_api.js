@@ -42,7 +42,7 @@ const run = async () => {
             res.status(200).send(result)
         }
         catch (error) {
-            res.status(500).send("Internal server error.")
+            res.status(500).send({ message: 'Internal server error' })
         }
     })
 
@@ -113,7 +113,7 @@ const run = async () => {
             const result = await users_collection.updateOne({ email: req.email }, { $set: update_field })
             res.status(200).send({ result: result, message: "Update profile data successfully." })
         } catch (error) {
-            res.status(500).send(error, 'Internal server error');
+            res.status(500).send({ message: 'Internal server error' })
         }
     })
 

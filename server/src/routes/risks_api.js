@@ -18,7 +18,7 @@ const run = async () => {
 
     router.get("/get-risks", async (req, res) => {
         try {
-            const result = await risks_collection.find().toArray()
+            const result = await risks_collection.find({ project_id: req.query.project_id }).toArray()
             res.status(200).send(result)
         }
         catch (error) {

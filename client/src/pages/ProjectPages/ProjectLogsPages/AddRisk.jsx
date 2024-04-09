@@ -15,7 +15,9 @@ import axios from "axios"
 
 const AddRisk = () => {
     const navigate = useNavigate()
-    const { singleProjectData } = useContext(GlobalContext)
+    const { singleProjectData, risksDataRefeatch } = useContext(GlobalContext)
+    const projectID = window.location.href.split("/")[8]
+    const openClosedStatus = window.location.href.split("/")[6]
     const commentRef = useRef(null);
     const riskOwnerRef = useRef(null)
     const riskCategoryRef = useRef(null)
@@ -69,13 +71,16 @@ const AddRisk = () => {
             likelihood,
             ratting,
             comment,
-            risk_matrix_template
+            risk_matrix_template,
+            project_id: projectID,
+            status: openClosedStatus
         }
 
         axios.post("/risks_api/add-risk", riskData)
             .then(response => {
                 if (response.status == 200) {
-                    navigate("/projects/logs/risk/open/45121245112")
+                    risksDataRefeatch()
+                    navigate(`/projects/logs/risk/open/${projectID}`)
                 }
             })
             .catch(error => console.log(error))

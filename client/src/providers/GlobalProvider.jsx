@@ -1,12 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 export const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
     const [singleProjectData, setSingleProjectData] = useState({})
+    const [openClosedStatus, setOpenClosedStatus] = useState("open")
     const currentUrl = window.location.href;
-    const projectID = currentUrl.split("/")[7]
+    const projectID = currentUrl.split('/')[7]
+    const status = currentUrl.split('/')[6]
 
     const { isLoading: projectDataIsLoading, error: projectsDataError, data: projectsData, refetch: projectsDataRefetch } = useQuery({
         queryKey: ['projectData'],
@@ -29,13 +31,16 @@ export const GlobalProvider = ({ children }) => {
     const { isLoading: risksDataLoading, error: risksDataError, data: risksData, refetch: risksDataRefeatch } = useQuery({
         queryKey: ['risksData'],
         queryFn: () =>
-            axios.get('/risks_api/get-risks')
+            axios.get(`/risks_api/get-risks?project_id=${projectID}`)
                 .then((res) => res.data)
     })
 
+    useEffect(() => {
+        controlsDataRefeatch()
+        risksDataRefeatch()
+    }, [projectID, status])
 
     const handleSingleProjectData = (id) => {
-        controlsDataRefeatch()
         const findSingleProjectData = projectsData.find(project => project._id == id)
         setSingleProjectData(findSingleProjectData)
     }
@@ -53,6 +58,8 @@ export const GlobalProvider = ({ children }) => {
         controlsDataRefeatch,
         risksData,
         risksDataRefeatch,
+        openClosedStatus,
+        setOpenClosedStatus
     };
     return (
         <GlobalContext.Provider value={GlobalInfo}>

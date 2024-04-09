@@ -58,7 +58,6 @@ const AddProject = () => {
         const projectValue = e.target.projectValue?.value
         const projectDescriptioin = e.target.projectDescription?.value
         const projectOwner = projectOwnerRef.current.state.selectValue
-        console.log(projectOwner)
         const riskConsequences = riskConsequencesRef.current.state.selectValue
         const riskConsequencesImpact = riskConsequencesImpactRef.current.state.selectValue
         const riskCategories = riskCategoriesRef.current.state.selectValue
