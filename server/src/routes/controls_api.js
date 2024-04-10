@@ -24,6 +24,16 @@ const run = async () => {
             res.status(500).send({ message: "Internal server error." })
         }
     })
+    router.patch("/update_control", async (req, res) => {
+        try {
+            console.log(req.body)
+            // const result = await controls_collection.updateOne({ _id: new ObjectId(req.query.project_id) }, { $set: req.body })
+            // console.log(result)
+        }
+        catch (error) {
+            res.status(500).send({ message: "Internal server error." })
+        }
+    })
 
 };
 

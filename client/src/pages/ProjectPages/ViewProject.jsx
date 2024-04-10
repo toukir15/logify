@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { FiEdit, FiPlus } from "react-icons/fi";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
-import { GlobalContext } from "../../../providers/GlobalProvider";
+import { GlobalContext } from "../../providers/GlobalProvider";
 import moment from 'moment';
 import { useNavigate } from "react-router-dom";
 

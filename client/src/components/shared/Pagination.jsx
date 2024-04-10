@@ -2,7 +2,6 @@ import React from 'react'
 import { IoChevronBackOutline } from 'react-icons/io5'
 
 export default function Pagination({ paginationData }) {
-    console.log(paginationData)
     const { totalButtonArray, currentPage, setCurrentPage } = paginationData || {}
     const handlePageNoIncrement = () => {
         if (currentPage <= (totalButtonArray.length - 1)) {

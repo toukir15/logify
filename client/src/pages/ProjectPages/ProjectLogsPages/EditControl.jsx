@@ -15,16 +15,18 @@ import { CustomOption } from '../../../components/shared/CustomOption';
 import { customStyle } from '../../../hooks/useSelectCustomStyle';
 import { useNotify } from '../../../hooks/useNotify';
 
-const AddControl = () => {
-    const { singleProjectData, controlsDataRefeatch } = useContext(GlobalContext)
+const EditControl = () => {
+    const { singleProjectData, controlsDataRefeatch, singleControlData } = useContext(GlobalContext)
     const commentRef = useRef(null);
     const controlOwnerRef = useRef(null)
     const tagsRef = useRef(null)
     const [controlDate, setControlDate] = useState(null)
     const [dueDate, setDueDate] = useState(null)
     const navigate = useNavigate()
-    const projectID = window.location.href.split("/")[8]
+    const projectId = window.location.href.split("/")[7]
     const openClosedStatus = window.location.href.split("/")[6]
+    const controlId = window.location.href.split("/")[9]
+    console.log(controlId)
 
     const handleAddControl = (e) => {
         e.preventDefault()
@@ -33,30 +35,30 @@ const AddControl = () => {
         const control_owner = controlOwnerRef.current.props.value
         const tags = tagsRef.current.props.value
         const control_status = e.target.controlStatus.value
+        const control_date = controlDate ? controlDate : singleControlData.control_date
+        const due_date = controlDate ? dueDate : singleControlData.due_date
 
-        if (!control_name || !comment || !tags || !control_owner || !control_status || !controlDate || !dueDate) {
+        if (!control_name || !comment || !tags || !control_owner || !control_status || !control_date || !due_date) {
             useNotify("Some data is messing!", "warning")
             return
         }
 
-        const addControlData = {
+        const updateControlData = {
             control_name,
-            control_date: controlDate,
+            control_date,
             control_status,
             comment,
-            due_date: dueDate,
+            due_date,
             control_owner,
             tags,
-            project_id: projectID,
+            project_id: projectId,
             status: openClosedStatus
         }
-        console.log(addControlData)
-
-        axios.post("/controls_api/add_control", addControlData)
+        axios.patch(`/controls_api/update_control?control_id=${controlId}`, updateControlData)
             .then(response => {
                 if (response.data.insertedId) {
                     controlsDataRefeatch()
-                    navigate(`/projects/logs/control/open/${projectID}`)
+                    navigate(`/projects/logs/control/open/${projectId}`)
                 }
             })
             .catch(error => console.log(error))
@@ -70,12 +72,12 @@ const AddControl = () => {
                         <div data-tooltip-id="control-name" className='bg-[#aaaaaa] hover:bg-[#4B5563] rounded-full text-white mt-1 cursor-pointer'><BsInfo /></div>
                         <Tooltip id="control-name" content="High level description an action or control, for example 'Engage architect for Project X. " style={{ width: "350px" }} place='right' />
                     </div>
-                    <input placeholder="Enter control name" name="controlName" id="controlName" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
+                    <input defaultValue={singleControlData.control_name} placeholder="Enter control name" name="controlName" id="controlName" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="">Control Date</label>
                     <div className='w-[70%]'>
-                        <Date dateData={{ date: controlDate, setDate: setControlDate }} />
+                        <Date dateData={{ date: controlDate, setDate: setControlDate, defaultValue: singleControlData.control_date }} />
                     </div>
                 </div>
                 <div className="flex w-full items-center mb-6">
@@ -84,13 +86,14 @@ const AddControl = () => {
                         <div data-tooltip-id="control-status" className='bg-[#aaaaaa] hover:bg-[#4B5563] rounded-full text-white mt-1 cursor-pointer'><BsInfo /></div>
                         <Tooltip id="control-status" content="This is an ongoing log on the status of this task, for example every time during a meeting or new milestone there's a progress update you can log the status of this control'" style={{ width: "350px" }} place='right' />
                     </div>
-                    <textarea className="border-primary border w-[70%] p-3 rounded outline-none" name="controlStatus" id="controlStatus" cols="10" rows="4" placeholder="Write project status"></textarea>
+                    <textarea defaultValue={singleControlData.control_status} className="border-primary border w-[70%] p-3 rounded outline-none" name="controlStatus" id="controlStatus" cols="10" rows="4" placeholder="Write project status"></textarea>
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="">Comment</label>
                     <div className='w-[70%] border border-primary rounded'>
                         <JoditEditor
                             ref={commentRef}
+                            value={singleControlData.comment}
                             config={useJoditConfig}
                             tabIndex={1}
                         />
@@ -99,13 +102,14 @@ const AddControl = () => {
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="">Due Date</label>
                     <div className='w-[70%]'>
-                        <Date dateData={{ date: dueDate, setDate: setDueDate }} />
+                        <Date dateData={{ date: dueDate, setDate: setDueDate, defaultValue: singleControlData.due_date }} />
                     </div>
 
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="">Control Owner</label>
                     <Select
+                        defaultValue={singleControlData.control_owner}
                         ref={controlOwnerRef}
                         className='w-[70%] z-[50]'
                         options={singleProjectData?.project_owner}
@@ -124,6 +128,7 @@ const AddControl = () => {
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="">Tags</label>
                     <CreatableSelect
+                        defaultValue={singleControlData.tags}
                         placeholder={"Tags"}
                         ref={tagsRef}
                         className="w-[70%]"
@@ -135,8 +140,8 @@ const AddControl = () => {
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor=""></label>
                     <div className="w-[70%] flex gap-8">
-                        <button className="bg-primary py-3 w-full text-white rounded-lg">Add Control</button>
-                        <button type='button' onClick={() => navigate("/projects")} className="border border-primary text-primary py-3 w-full rounded-lg">Cancel</button>
+                        <button className="bg-primary py-3 w-full text-white rounded-lg">Edit Control</button>
+                        <button type='button' onClick={() => navigate(`/projects/logs/control/open/${projectId}/view-control/${controlId}`)} className="border border-primary text-primary py-3 w-full rounded-lg">Cancel</button>
                     </div>
                 </div>
             </form>
@@ -144,4 +149,4 @@ const AddControl = () => {
     );
 };
 
-export default AddControl;
+export default EditControl;

@@ -2,13 +2,17 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../../providers/GlobalProvider";
 import Pagination from "../../../components/shared/Pagination";
+import Loading from "../../../components/shared/Loading"
 
 const RiskOpen = () => {
-    const { risksData } = useContext(GlobalContext)
-    const risksOpenData = risksData.filter(riskOpenData => riskOpenData.status == "open")
+    const { risksData, risksDataLoading } = useContext(GlobalContext)
+    const risksOpenData = risksData?.filter(riskOpenData => riskOpenData.status == "open")
+    if (risksDataLoading && !risksOpenData.length) {
+        return <Loading />
+    }
     const [riskOpenCurrentPage, setRiskOpenCurrentPage] = useState(1)
-    const riskOpenTotalButton = Math.ceil(risksOpenData?.length / 7)
-    const riskOpenTotalButtonArray = [...Array(riskOpenTotalButton).keys()]
+    const riskOpenTotalButton = Math?.ceil(risksOpenData?.length / 7)
+    const riskOpenTotalButtonArray = [...Array(riskOpenTotalButton)?.keys()]
     const riskOpenDataShowPosition = 7 * riskOpenCurrentPage
     const navigate = useNavigate();
     return (

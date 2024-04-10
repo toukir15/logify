@@ -9,14 +9,15 @@ import "./date.css"
 
 // eslint-disable-next-line react/prop-types
 const Date = ({ dateData }) => {
-    const { date, setDate } = dateData || {}
+    const { date, setDate, defaultValue } = dateData || {}
     const [isControlDateOpen, setIsControlDateOpen] = useState(false)
     const formattedDate = moment(date).format("DD/MM/YYYY");
 
     return (
         <div>
             <div onClick={() => setIsControlDateOpen(true)} className=' flex items-center justify-between border border-primary rounded p-3 bg-white text-[#4e4e4e] cursor-pointer'>
-                <p>{date ? formattedDate : "DD/MM/YY"}</p>
+                {!defaultValue && <p>{date ? formattedDate : "DD/MM/YY"}</p>}
+                {defaultValue && <p>{date ? formattedDate : moment(defaultValue).format('DD/MM/YYYY')}</p>}
                 <FaCalendarAlt size={20} />
             </div>
             {/* select date  */}
@@ -27,7 +28,8 @@ const Date = ({ dateData }) => {
                             <IoMdClose onClick={() => setIsControlDateOpen(false)} className='cursor-pointer hover:text-primary' size={24} />
                         </div>
                         <div className='flex justify-center'>
-                            <p className='border border-[#e9e9e9] py-3 px-6 rounded text-primary mb-2'>{date ? formattedDate : "DD/MM/YY"}</p>
+                            {!defaultValue && <p className='border border-[#e9e9e9] py-3 px-6 rounded text-primary mb-2'>{date ? formattedDate : "DD/MM/YY"}</p>}
+                            {defaultValue && <p className='border border-[#e9e9e9] py-3 px-6 rounded text-primary mb-2'>{date ? formattedDate : moment(defaultValue).format('DD/MM/YYYY')}</p>}
                         </div>
                         <div style={{ display: 'flex', flexFlow: 'column nowrap' }}>
                             <Calendar onChange={item => setDate(item)}

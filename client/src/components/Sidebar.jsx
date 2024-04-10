@@ -46,9 +46,9 @@ const Sidebar = () => {
     return (
         <aside className="w-[14%] bg-[#161618] text-white p-4 flex flex-col  justify-between">
             <div>
-                <div className="flex items-center gap-2 ml-8 mb-8">
-                    <img src={logo} className="w-10 h-10" alt="" />
-                    <h3 className="text-[20px] font-medium">Logify</h3>
+                <div className="flex items-center gap-2 ml-2 mb-8 mt-4">
+                    <img src={logo} className="w-8 h-8" alt="" />
+                    <h3 className="text-[20px] uppercase font-medium">ProjectSync</h3>
                 </div>
                 <div className="flex flex-col gap-2">
                     <NavLink className="flex items-center gap-2 bg-primary p-2 rounded-lg"><IoSettingsOutline size={20} /><p>Projects</p></NavLink>

@@ -8,16 +8,16 @@ const Users = () => {
     const [userStatus, setUserStatus] = useState("Add Users")
     const { usersData, usersDataRefeatch } = useContext(GlobalContext)
 
-    const verifiedUserData = usersData.filter(data => data.is_verified)
+    const verifiedUserData = usersData?.filter(data => data.is_verified)
     const [verifiedUserCurrentPage, setVerifiedUserCurrentPage] = useState(1)
-    const verifiedUsersTotalButton = Math.ceil(verifiedUserData.length / 7)
-    const verifiedUsersTotalButtonArray = [...Array(verifiedUsersTotalButton).keys()]
+    const verifiedUsersTotalButton = Math?.ceil(verifiedUserData.length / 7)
+    const verifiedUsersTotalButtonArray = [...Array(verifiedUsersTotalButton)?.keys()]
     const verifiedUsersDataShowPosition = 7 * verifiedUserCurrentPage
 
-    const pendingUsersData = usersData.filter(data => !data.is_verified)
+    const pendingUsersData = usersData?.filter(data => !data.is_verified)
     const [pendingUserCurrentPage, setPendingUserCurrentPage] = useState(1)
-    const pendingUsersTotalButton = Math.ceil(pendingUsersData.length / 7)
-    const pendingUsersTotalButtonArray = [...Array(pendingUsersTotalButton).keys()]
+    const pendingUsersTotalButton = Math?.ceil(pendingUsersData.length / 7)
+    const pendingUsersTotalButtonArray = [...Array(pendingUsersTotalButton)?.keys()]
     const pendingUsersDataShowPosition = 7 * pendingUserCurrentPage
 
     const handleUserDelete = (id) => {

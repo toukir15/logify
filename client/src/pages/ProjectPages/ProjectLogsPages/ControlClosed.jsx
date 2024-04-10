@@ -3,13 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "../../../providers/GlobalProvider";
 import moment from "moment";
 import Pagination from "../../../components/shared/Pagination";
+import Loading from "../../../components/shared/Loading"
 
 const ControlClosed = () => {
-    const { controlsData } = useContext(GlobalContext)
-    const controlsClosedData = controlsData.filter(controlOpenData => controlOpenData.status == "closed")
+    const { controlsData, controlsDataLoading } = useContext(GlobalContext)
+    const controlsClosedData = controlsData?.filter(controlOpenData => controlOpenData.status == "closed")
+    if (controlsDataLoading && !controlsClosedData.length) {
+        return <Loading />
+    }
     const [controlClosedCurrentPage, setControlClosedCurrentPage] = useState(1)
-    const controlClosedTotalButton = Math.ceil(controlsClosedData?.length / 7)
-    const controlClosedTotalButtonArray = [...Array(controlClosedTotalButton).keys()]
+    const controlClosedTotalButton = Math?.ceil(controlsClosedData?.length / 7)
+    const controlClosedTotalButtonArray = [...Array(controlClosedTotalButton)?.keys()]
     const controlClosedDataShowPosition = 7 * controlClosedCurrentPage
     const navigate = useNavigate();
     return (
@@ -26,7 +30,7 @@ const ControlClosed = () => {
                 <tbody>
                     {controlsClosedData.slice(controlClosedDataShowPosition - 7, controlClosedDataShowPosition)?.map((controlClosedData, index) => {
                         return (
-                            <tr onClick={() => navigate(`/projects/logs/control/open/${"45121245112"}/view-control/${'45642'}`)} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
+                            <tr onClick={() => navigate(`/projects/logs/control/closed/${"45121245112"}/view-control/${controlClosedData._id}`)} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
                                 <td className="py-5 px-4 text-start">{controlClosedData.control_name}</td>
                                 <td className="py-5 px-4 text-start">{controlClosedData.control_owner[0].value} </td>
                                 <td className="py-5 px-4 text-start">{controlClosedData.control_status}...</td>

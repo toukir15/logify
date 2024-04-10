@@ -5,6 +5,7 @@ import { createContext, useEffect, useState } from "react";
 export const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
     const [singleProjectData, setSingleProjectData] = useState({})
+    const [singleControlData, setSingleControlData] = useState({})
     const [openClosedStatus, setOpenClosedStatus] = useState("open")
     const currentUrl = window.location.href;
     const projectID = currentUrl.split('/')[7]
@@ -44,22 +45,32 @@ export const GlobalProvider = ({ children }) => {
         const findSingleProjectData = projectsData.find(project => project._id == id)
         setSingleProjectData(findSingleProjectData)
     }
+    const handleSingleControlData = (id) => {
+        const findSingleControlData = controlsData.find(control => control._id == id)
+        setSingleControlData(findSingleControlData)
+    }
 
     // global info
     const GlobalInfo = {
         currentUrl,
         projectsData,
+        projectDataIsLoading,
         projectsDataRefetch,
         handleSingleProjectData,
         singleProjectData,
         usersData,
         usersDataRefeatch,
         controlsData,
+        controlsDataLoading,
         controlsDataRefeatch,
         risksData,
+        risksDataLoading,
         risksDataRefeatch,
         openClosedStatus,
-        setOpenClosedStatus
+        setOpenClosedStatus,
+        projectID,
+        handleSingleControlData,
+        singleControlData
     };
     return (
         <GlobalContext.Provider value={GlobalInfo}>

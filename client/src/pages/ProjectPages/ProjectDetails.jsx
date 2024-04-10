@@ -3,7 +3,7 @@ import { FaRegFilePdf } from "react-icons/fa6";
 import { GiSettingsKnobs } from "react-icons/gi";
 import logo from "../../assets/logo-x1DR2QCW.png"
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { GlobalContext } from "../../providers/GlobalProvider";
 
 const ProjectDetails = () => {

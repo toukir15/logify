@@ -11,10 +11,11 @@ import VerifyPage from "../pages/AuthenticationPage/VerifyPage";
 import Loading from "../components/shared/Loading";
 import CheckEmailPage from "../pages/AuthenticationPage/CheckEmailPage";
 const Projects = lazy(() => import("../pages/ProjectPages/Projects"))
+const EditControl = lazy(() => import("../pages/ProjectPages/ProjectLogsPages/EditControl"))
 const ProtectedRoute = lazy(() => import("./ProtectedRoute"))
 const EditProject = lazy(() => import("../pages/ProjectPages/EditProjects"))
 const AddProject = lazy(() => import("../pages/ProjectPages/AddProject"))
-const ViewProject = lazy(() => import("../pages/ProjectPages/ProjectLogsPages/ViewProject"))
+const ViewProject = lazy(() => import("../pages/ProjectPages/ViewProject"))
 const ProjectDetails = lazy(() => import("../pages/ProjectPages/ProjectDetails"))
 const ControlOpen = lazy(() => import("../pages/ProjectPages/ProjectLogsPages/ControlOpen"))
 const ControlClosed = lazy(() => import("../pages/ProjectPages/ProjectLogsPages/ControlClosed"))
@@ -99,6 +100,10 @@ const router = createBrowserRouter([
                     {
                         path: "/projects/logs/:control-risk/:open-closed/add-control/:slag",
                         element: <Suspense fallback={<Loading />}><AddControl /></Suspense>
+                    },
+                    {
+                        path: "/projects/logs/:control-risk/:open-closed/:slag/edit-control/:slag",
+                        element: <Suspense fallback={<Loading />}><EditControl /></Suspense>
                     },
                     {
                         path: "/projects/logs/:control-risk/:open-closed/add-risk/:slag",

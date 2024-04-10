@@ -8,13 +8,21 @@ import Swal from 'sweetalert2'
 import { useContext, useState } from "react";
 import { GlobalContext } from "../../providers/GlobalProvider";
 import Pagination from "../../components/shared/Pagination";
+import Loading from "../../components/shared/Loading";
 
 const Projects = () => {
     const navigate = useNavigate()
-    const { projectsData, projectsDataRefetch, handleSingleProjectData, controlsDataRefeatch } = useContext(GlobalContext)
+    const { projectsData, projectsDataRefetch, handleSingleProjectData, controlsDataRefeatch, projectDataIsLoading } = useContext(GlobalContext)
+    if (!projectDataIsLoading && !projectsData.length) {
+        return <Loading />
+    }
     const [projectCurrentPage, setProjectCurrentPage] = useState(1)
-    const projectTotalButton = Math.ceil(projectsData?.length / 7)
-    const projectTotalButtonArray = [...Array(projectTotalButton).keys()]
+    const projectTotalButton = Math?.ceil(projectsData?.length / 7)
+    // if (!projectTotalButton) {
+    //     return <Loading />
+    // }
+    console.log(projectTotalButton)
+    const projectTotalButtonArray = [...Array(projectTotalButton)?.keys()]
     const projectDataShowPosition = 7 * projectCurrentPage
 
     const handleProjectDelete = (e, id) => {

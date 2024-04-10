@@ -1,12 +1,17 @@
 import { FiEdit, FiPlus } from "react-icons/fi";
 import { IoCheckmarkSharp } from "react-icons/io5";
-import { TfiControlBackward } from "react-icons/tfi";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const RiskViewDetails = () => {
+    const navigate = useNavigate();
     return (
         <div>
             <div className="flex items-center justify-between">
-                <button> <TfiControlBackward size={28} /></button>
+                <button className="flex w-fit cursor-default">
+                    <MdOutlineArrowBackIosNew onClick={() => navigate("/projects")} className="cursor-pointer" size={28} />
+                    <MdOutlineArrowBackIosNew onClick={() => navigate("/projects")} className="cursor-pointer relative right-4" size={28} />
+                </button>
                 <div className="flex gap-10">
                     <button className="bg-[#F3F4F6] w-12 h-12 rounded-full flex justify-center items-center custom-shadow"><FiPlus size={20} /></button>
                     <button className="bg-[#F3F4F6] w-12 h-12 rounded-full flex justify-center items-center custom-shadow"><IoCheckmarkSharp size={20} /></button>
