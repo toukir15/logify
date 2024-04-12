@@ -6,6 +6,7 @@ export const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
     const [singleProjectData, setSingleProjectData] = useState({})
     const [singleControlData, setSingleControlData] = useState({})
+    const [singleRiskData, setSingleRiskData] = useState({})
     const [openClosedStatus, setOpenClosedStatus] = useState("open")
     const currentUrl = window.location.href;
     const projectID = currentUrl.split('/')[7]
@@ -49,6 +50,10 @@ export const GlobalProvider = ({ children }) => {
         const findSingleControlData = controlsData.find(control => control._id == id)
         setSingleControlData(findSingleControlData)
     }
+    const handleSingleRiskData = (id) => {
+        const findSingleRiskData = risksData.find(risk => risk._id == id)
+        setSingleRiskData(findSingleRiskData)
+    }
 
     // global info
     const GlobalInfo = {
@@ -70,7 +75,9 @@ export const GlobalProvider = ({ children }) => {
         setOpenClosedStatus,
         projectID,
         handleSingleControlData,
-        singleControlData
+        singleControlData,
+        singleRiskData,
+        handleSingleRiskData
     };
     return (
         <GlobalContext.Provider value={GlobalInfo}>

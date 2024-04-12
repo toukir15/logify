@@ -56,7 +56,7 @@ const EditControl = () => {
         }
         axios.patch(`/controls_api/update_control?control_id=${controlId}`, updateControlData)
             .then(response => {
-                if (response.data.insertedId) {
+                if (response.status == 200) {
                     controlsDataRefeatch()
                     navigate(`/projects/logs/control/open/${projectId}`)
                 }

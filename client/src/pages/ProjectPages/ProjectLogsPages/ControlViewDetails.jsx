@@ -1,5 +1,4 @@
 import { FiPlus } from "react-icons/fi";
-import { IoCheckmarkSharp } from "react-icons/io5";
 import { FiEdit } from "react-icons/fi";
 import { useContext } from "react";
 import { GlobalContext } from "../../../providers/GlobalProvider";
@@ -12,7 +11,7 @@ const ControlViewDetails = () => {
     const { singleControlData } = useContext(GlobalContext)
     const projectId = window.location.href.split("/")[7]
     const openClosedStatus = window.location.href.split("/")[6]
-    const controlId = window.location.href.split("/")[9]
+    // const riskId = window.location.href.split("/")[9]
     const navigate = useNavigate()
     return (
         <div>
