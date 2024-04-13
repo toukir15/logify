@@ -15,10 +15,12 @@ import axios from "axios"
 
 const EditRisk = () => {
     const navigate = useNavigate()
-    const { singleProjectData, risksDataRefeatch, singleRiskData } = useContext(GlobalContext)
-    console.log(singleRiskData)
-    const projectID = window.location.href.split("/")[8]
+    const { projectsData, risksDataRefeatch, risksData } = useContext(GlobalContext)
+    const projectID = window.location.href.split("/")[7]
     const openClosedStatus = window.location.href.split("/")[6]
+    const riskId = window.location.href.split("/")[9]
+    const singleRiskData = risksData.find(risk => risk._id == riskId)
+    const singleProjectData = projectsData.find(projectData => projectData._id == projectID)
     const commentRef = useRef(null);
     const riskOwnerRef = useRef(null)
     const riskCategoryRef = useRef(null)
@@ -60,7 +62,7 @@ const EditRisk = () => {
             return
         }
 
-        const riskData = {
+        const updateRiskData = {
             risk_category,
             risk_name,
             risk_description,
@@ -77,11 +79,11 @@ const EditRisk = () => {
             status: openClosedStatus
         }
 
-        axios.post("/risks_api/add-risk", riskData)
+        axios.patch(`/risks_api/update_risk?risk_id=${riskId}`, updateRiskData)
             .then(response => {
                 if (response.status == 200) {
                     risksDataRefeatch()
-                    navigate(`/projects/logs/risk/open/${projectID}`)
+                    navigate(`/projects/logs/risk/${openClosedStatus}/${projectID}`)
                 }
             })
             .catch(error => console.log(error))
@@ -278,7 +280,7 @@ const EditRisk = () => {
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor=""></label>
                     <div className="w-[70%] flex gap-8">
-                        <button className="bg-primary py-3 w-full text-white rounded-lg">Add Risk</button>
+                        <button className="bg-primary py-3 w-full text-white rounded-lg">Update Risk</button>
                         <button type='button' onClick={() => navigate('/projects/logs/control/open/add-control/456465')} className="border border-primary text-primary py-3 w-full rounded-lg">Cancel</button>
                     </div>
                 </div>

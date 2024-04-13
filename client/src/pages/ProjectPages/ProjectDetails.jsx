@@ -8,10 +8,11 @@ import { GlobalContext } from "../../providers/GlobalProvider";
 
 const ProjectDetails = () => {
     const navigate = useNavigate()
-    const { setOpenClosedStatus, openClosedStatus } = useContext(GlobalContext)
+    // const { setOpenClosedStatus } = useContext(GlobalContext)
     const checkViewControl = window.location.href.split("/")[8]
     const controlAddRiskStatus = window.location.href.split('/')[5]
     const projectID = window.location.href.split('/')[7]
+    const openClosedStatus = window.location.href.split("/")[6]
 
     return (
         <div className="py-10 px-20">
@@ -28,11 +29,9 @@ const ProjectDetails = () => {
                     <div className="flex gap-8 items-center w-2/4 justify-center">
                         <div>
                             <button onClick={() => {
-                                setOpenClosedStatus('open')
                                 navigate(`/projects/logs/${controlAddRiskStatus}/open/${projectID}`)
                             }} className={`${openClosedStatus == "open" && "bg-primary text-white "} border-primary border  py-2 px-6 rounded-l`}>Open</button>
                             <button onClick={() => {
-                                setOpenClosedStatus('closed')
                                 navigate(`/projects/logs/${controlAddRiskStatus}/closed/${projectID}`)
                             }} className={`${openClosedStatus == "closed" && "bg-primary text-white"} border-primary border py-2 px-6  rounded-r`}>Closed</button>
                         </div>

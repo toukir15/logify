@@ -12,7 +12,7 @@ import Loading from "../../components/shared/Loading";
 
 const Projects = () => {
     const navigate = useNavigate()
-    const { projectsData, projectsDataRefetch, handleSingleProjectData, controlsDataRefeatch, projectDataIsLoading } = useContext(GlobalContext)
+    const { projectsData, projectsDataRefetch, controlsDataRefeatch, projectDataIsLoading } = useContext(GlobalContext)
     if (!projectDataIsLoading && !projectsData.length) {
         return <Loading />
     }
@@ -84,7 +84,6 @@ const Projects = () => {
                         return (
                             <tr
                                 onClick={() => {
-                                    handleSingleProjectData(projectData._id)
                                     controlsDataRefeatch()
                                     navigate(`/projects/logs/control/open/${projectData._id}`)
                                 }
@@ -104,14 +103,12 @@ const Projects = () => {
                                 <td className="py-5 px-4 text-start"><div className="flex gap-3">
                                     <button>
                                         <FaRegEye onClick={(e) => {
-                                            handleSingleProjectData(projectData._id)
                                             handleViewProject(e, projectData._id)
                                         }} size={18} />
                                     </button>
                                     <button>
                                         <BiSolidEditAlt onClick={(e) => {
                                             handleEditProject(e, projectData._id)
-                                            handleSingleProjectData(projectData._id)
                                         }} className="text-primary" size={22} />
                                     </button>
                                     <button>

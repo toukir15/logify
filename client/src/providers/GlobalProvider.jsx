@@ -7,7 +7,6 @@ export const GlobalProvider = ({ children }) => {
     const [singleProjectData, setSingleProjectData] = useState({})
     const [singleControlData, setSingleControlData] = useState({})
     const [singleRiskData, setSingleRiskData] = useState({})
-    const [openClosedStatus, setOpenClosedStatus] = useState("open")
     const currentUrl = window.location.href;
     const projectID = currentUrl.split('/')[7]
     const status = currentUrl.split('/')[6]
@@ -42,14 +41,6 @@ export const GlobalProvider = ({ children }) => {
         risksDataRefeatch()
     }, [projectID, status])
 
-    const handleSingleProjectData = (id) => {
-        const findSingleProjectData = projectsData.find(project => project._id == id)
-        setSingleProjectData(findSingleProjectData)
-    }
-    const handleSingleControlData = (id) => {
-        const findSingleControlData = controlsData.find(control => control._id == id)
-        setSingleControlData(findSingleControlData)
-    }
     const handleSingleRiskData = (id) => {
         const findSingleRiskData = risksData.find(risk => risk._id == id)
         setSingleRiskData(findSingleRiskData)
@@ -61,7 +52,6 @@ export const GlobalProvider = ({ children }) => {
         projectsData,
         projectDataIsLoading,
         projectsDataRefetch,
-        handleSingleProjectData,
         singleProjectData,
         usersData,
         usersDataRefeatch,
@@ -71,10 +61,7 @@ export const GlobalProvider = ({ children }) => {
         risksData,
         risksDataLoading,
         risksDataRefeatch,
-        openClosedStatus,
-        setOpenClosedStatus,
         projectID,
-        handleSingleControlData,
         singleControlData,
         singleRiskData,
         handleSingleRiskData

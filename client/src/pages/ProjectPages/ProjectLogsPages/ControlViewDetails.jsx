@@ -8,10 +8,11 @@ import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { useNavigate } from "react-router-dom"
 
 const ControlViewDetails = () => {
-    const { singleControlData } = useContext(GlobalContext)
+    const { controlsData } = useContext(GlobalContext)
     const projectId = window.location.href.split("/")[7]
     const openClosedStatus = window.location.href.split("/")[6]
-    // const riskId = window.location.href.split("/")[9]
+    const controlId = window.location.href.split("/")[9]
+    const singleControlData = controlsData.find(controlData => controlData._id == controlId)
     const navigate = useNavigate()
     return (
         <div>

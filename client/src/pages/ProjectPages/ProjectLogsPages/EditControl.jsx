@@ -16,7 +16,7 @@ import { customStyle } from '../../../hooks/useSelectCustomStyle';
 import { useNotify } from '../../../hooks/useNotify';
 
 const EditControl = () => {
-    const { singleProjectData, controlsDataRefeatch, singleControlData } = useContext(GlobalContext)
+    const { projectsData, controlsDataRefeatch, controlsData } = useContext(GlobalContext)
     const commentRef = useRef(null);
     const controlOwnerRef = useRef(null)
     const tagsRef = useRef(null)
@@ -26,7 +26,8 @@ const EditControl = () => {
     const projectId = window.location.href.split("/")[7]
     const openClosedStatus = window.location.href.split("/")[6]
     const controlId = window.location.href.split("/")[9]
-    console.log(controlId)
+    const singleProjectData = projectsData.find(singleProject => singleProject._id == projectId)
+    const singleControlData = controlsData.find(control => control._id == controlId)
 
     const handleAddControl = (e) => {
         e.preventDefault()
@@ -58,7 +59,7 @@ const EditControl = () => {
             .then(response => {
                 if (response.status == 200) {
                     controlsDataRefeatch()
-                    navigate(`/projects/logs/control/open/${projectId}`)
+                    navigate(`/projects/logs/control/${openClosedStatus}/${projectId}`)
                 }
             })
             .catch(error => console.log(error))

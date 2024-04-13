@@ -6,10 +6,11 @@ import parse from 'html-react-parser';
 import { GlobalContext } from "../../../providers/GlobalProvider";
 
 const RiskViewDetails = () => {
-    const { singleRiskData, projectID } = useContext(GlobalContext)
+    const { risksData, projectID } = useContext(GlobalContext)
     const openClosedStatus = window.location.href.split("/")[6]
     const riskId = window.location.href.split("/")[9]
-    console.log(riskId)
+    const singleRiskData = risksData.find(riskData => riskData._id == riskId)
+
     const navigate = useNavigate();
     return (
         <div>
@@ -23,7 +24,7 @@ const RiskViewDetails = () => {
                         className="bg-[#F3F4F6] w-12 h-12 rounded-full flex justify-center items-center custom-shadow">
                         <FiPlus size={20} />
                     </button>
-                    <button onClick={() => navigate(`/projects/logs/risk/:open-closed/:slag/edit-risk/:slag`)} className="bg-[#F3F4F6] w-12 h-12 rounded-full flex justify-center items-center custom-shadow">
+                    <button onClick={() => navigate(`/projects/logs/risk/${openClosedStatus}/${projectID}/edit-risk/${riskId}`)} className="bg-[#F3F4F6] w-12 h-12 rounded-full flex justify-center items-center custom-shadow">
                         <FiEdit size={20} />
                     </button>
                 </div>

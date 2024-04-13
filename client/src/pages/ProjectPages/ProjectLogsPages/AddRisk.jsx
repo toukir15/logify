@@ -15,9 +15,10 @@ import axios from "axios"
 
 const AddRisk = () => {
     const navigate = useNavigate()
-    const { singleProjectData, risksDataRefeatch } = useContext(GlobalContext)
+    const { risksDataRefeatch, projectsData } = useContext(GlobalContext)
     const projectID = window.location.href.split("/")[8]
     const openClosedStatus = window.location.href.split("/")[6]
+    const singleProjectData = projectsData.find(projectData => projectData._id == projectID)
     const commentRef = useRef(null);
     const riskOwnerRef = useRef(null)
     const riskCategoryRef = useRef(null)

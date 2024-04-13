@@ -6,6 +6,7 @@ import Loading from "../../../components/shared/Loading"
 
 const RiskOpen = () => {
     const { risksData, risksDataLoading, handleSingleRiskData, projectID } = useContext(GlobalContext)
+    console.log(risksData)
     const risksOpenData = risksData?.filter(riskOpenData => riskOpenData.status == "open")
     if (risksDataLoading && !risksOpenData.length) {
         return <Loading />

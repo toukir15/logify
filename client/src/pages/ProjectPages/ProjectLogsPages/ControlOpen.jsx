@@ -6,7 +6,7 @@ import Pagination from "../../../components/shared/Pagination";
 import Loading from "../../../components/shared/Loading"
 
 const ControlOpen = () => {
-    const { controlsData, controlsDataLoading, projectID, handleSingleControlData } = useContext(GlobalContext)
+    const { controlsData, controlsDataLoading, projectID } = useContext(GlobalContext)
     const controlsOpenData = controlsData?.filter(controlOpenData => controlOpenData.status == "open")
     if (controlsDataLoading && !controlsOpenData.length) {
         return <Loading />
@@ -31,7 +31,6 @@ const ControlOpen = () => {
                     {controlsOpenData.slice(riskOpenDataShowPosition - 7, riskOpenDataShowPosition)?.map((controlOpenData, index) => {
                         return (
                             <tr onClick={() => {
-                                handleSingleControlData(controlOpenData._id)
                                 navigate(`/projects/logs/control/open/${projectID}/view-control/${controlOpenData._id}`)
                             }} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
                                 <td className="py-5 px-4 text-start">{controlOpenData.control_name}</td>

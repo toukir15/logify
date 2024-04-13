@@ -16,7 +16,7 @@ import { customStyle } from '../../../hooks/useSelectCustomStyle';
 import { useNotify } from '../../../hooks/useNotify';
 
 const AddControl = () => {
-    const { singleProjectData, controlsDataRefeatch } = useContext(GlobalContext)
+    const { projectsData, controlsDataRefeatch } = useContext(GlobalContext)
     const commentRef = useRef(null);
     const controlOwnerRef = useRef(null)
     const tagsRef = useRef(null)
@@ -25,6 +25,7 @@ const AddControl = () => {
     const navigate = useNavigate()
     const projectID = window.location.href.split("/")[8]
     const openClosedStatus = window.location.href.split("/")[6]
+    const singleProjectData = projectsData.find(projectData => projectData._id == projectID)
 
     const handleAddControl = (e) => {
         e.preventDefault()
@@ -50,7 +51,6 @@ const AddControl = () => {
             project_id: projectID,
             status: openClosedStatus
         }
-        console.log(addControlData)
 
         axios.post("/controls_api/add_control", addControlData)
             .then(response => {

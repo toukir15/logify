@@ -5,7 +5,7 @@ import Pagination from "../../../components/shared/Pagination";
 import Loading from "../../../components/shared/Loading"
 
 const RiskClosed = () => {
-    const { risksData, risksDataLoading } = useContext(GlobalContext)
+    const { risksData, risksDataLoading, handleSingleRiskData, projectID } = useContext(GlobalContext)
     const risksClosedData = risksData?.filter(riskClosedData => riskClosedData.status == "closed")
     if (risksDataLoading && !risksClosedData.length) {
         return <Loading />
@@ -28,7 +28,11 @@ const RiskClosed = () => {
                 <tbody>
                     {risksClosedData.slice(riskClosedDataShowPosition - 7, riskClosedDataShowPosition)?.map((riskClosedData, index) => {
                         return (
-                            <tr onClick={() => navigate(`/projects/logs/risk/open/${"45121245112"}/view-risk/${'45642'}`)} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
+                            <tr onClick={() => {
+                                handleSingleRiskData(riskClosedData._id)
+                                console.log(riskClosedData._id)
+                                navigate(`/projects/logs/risk/closed/${projectID}/view-risk/${riskClosedData._id}`)
+                            }} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
                                 <td className="py-5 px-4 text-start">{riskClosedData.risk_category.value}</td>
                                 <td className="py-5 px-4 text-start">{riskClosedData.risk_name} </td>
                                 <td className="py-5 px-4 text-start">{riskClosedData.risk_description}</td>
