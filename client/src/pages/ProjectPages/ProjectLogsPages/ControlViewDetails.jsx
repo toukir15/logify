@@ -8,23 +8,22 @@ import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { useNavigate } from "react-router-dom"
 
 const ControlViewDetails = () => {
-    const { controlsData } = useContext(GlobalContext)
-    const projectId = window.location.href.split("/")[7]
-    const openClosedStatus = window.location.href.split("/")[6]
+    const { controlsData, projectID } = useContext(GlobalContext)
     const controlId = window.location.href.split("/")[9]
+    const openClosedStatus = window.location.href.split("/")[6]
     const singleControlData = controlsData.find(controlData => controlData._id == controlId)
     const navigate = useNavigate()
     return (
         <div>
             <div className="flex items-center justify-between">
                 <button className="flex w-fit cursor-default">
-                    <MdOutlineArrowBackIosNew onClick={() => navigate(`/projects/logs/control/${openClosedStatus}/${projectId}`)} className="cursor-pointer" size={28} />
-                    <MdOutlineArrowBackIosNew onClick={() => navigate(`/projects/logs/control/${openClosedStatus}/${projectId}`)} className="cursor-pointer relative right-4" size={28} />
+                    <MdOutlineArrowBackIosNew onClick={() => navigate(`/projects/logs/control/${openClosedStatus}/${projectID}`)} className="cursor-pointer" size={28} />
+                    <MdOutlineArrowBackIosNew onClick={() => navigate(`/projects/logs/control/${openClosedStatus}/${projectID}`)} className="cursor-pointer relative right-4" size={28} />
                 </button>
                 <div className="flex gap-10">
-                    <button onClick={() => navigate(`/projects/logs/control/${openClosedStatus}/add-control/${projectId}`)} className="bg-[#F3F4F6] w-12 h-12 rounded-full flex justify-center items-center custom-shadow"><FiPlus size={20} /></button>
+                    <button onClick={() => navigate(`/projects/logs/control/${openClosedStatus}/add-control/${projectID}`)} className="bg-[#F3F4F6] w-12 h-12 rounded-full flex justify-center items-center custom-shadow"><FiPlus size={20} /></button>
 
-                    <button onClick={() => navigate(`/projects/logs/control/${openClosedStatus}/${projectId}/edit-control/${controlId}`)} className="bg-[#F3F4F6] w-12 h-12 rounded-full flex justify-center items-center custom-shadow"><FiEdit size={20} /></button>
+                    <button onClick={() => navigate(`/projects/logs/control/${openClosedStatus}/${projectID}/edit-control/${controlId}`)} className="bg-[#F3F4F6] w-12 h-12 rounded-full flex justify-center items-center custom-shadow"><FiEdit size={20} /></button>
                 </div>
             </div>
             <div className="mt-10 flex justify-between">

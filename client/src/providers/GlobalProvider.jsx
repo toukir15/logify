@@ -4,12 +4,10 @@ import { createContext, useEffect, useState } from "react";
 
 export const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
-    const [singleProjectData, setSingleProjectData] = useState({})
-    const [singleControlData, setSingleControlData] = useState({})
-    const [singleRiskData, setSingleRiskData] = useState({})
     const currentUrl = window.location.href;
     const projectID = currentUrl.split('/')[7]
-    const status = currentUrl.split('/')[6]
+    const openClosedStatus = currentUrl.split('/')[6]
+    const [initialFetch, setInitialFetch] = useState(false)
 
     const { isLoading: projectDataIsLoading, error: projectsDataError, data: projectsData, refetch: projectsDataRefetch } = useQuery({
         queryKey: ['projectData'],
@@ -24,7 +22,8 @@ export const GlobalProvider = ({ children }) => {
                 .then((res) => res.data)
     })
     const { isLoading: controlsDataLoading, error: controlsDataError, data: controlsData, refetch: controlsDataRefeatch } = useQuery({
-        queryKey: ['controlsData'],
+        queryKey: ['controlsData', initialFetch],
+        enabled: !!projectID,
         queryFn: () =>
             axios.get(`/controls_api/get_controls?project_id=${projectID}`)
                 .then((res) => res.data)
@@ -36,23 +35,12 @@ export const GlobalProvider = ({ children }) => {
                 .then((res) => res.data)
     })
 
-    useEffect(() => {
-        controlsDataRefeatch()
-        risksDataRefeatch()
-    }, [projectID, status])
-
-    const handleSingleRiskData = (id) => {
-        const findSingleRiskData = risksData.find(risk => risk._id == id)
-        setSingleRiskData(findSingleRiskData)
-    }
-
     // global info
     const GlobalInfo = {
         currentUrl,
         projectsData,
         projectDataIsLoading,
         projectsDataRefetch,
-        singleProjectData,
         usersData,
         usersDataRefeatch,
         controlsData,
@@ -62,9 +50,8 @@ export const GlobalProvider = ({ children }) => {
         risksDataLoading,
         risksDataRefeatch,
         projectID,
-        singleControlData,
-        singleRiskData,
-        handleSingleRiskData
+        openClosedStatus,
+        setInitialFetch
     };
     return (
         <GlobalContext.Provider value={GlobalInfo}>

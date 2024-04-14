@@ -5,10 +5,9 @@ import Pagination from "../../../components/shared/Pagination";
 import Loading from "../../../components/shared/Loading"
 
 const RiskOpen = () => {
-    const { risksData, risksDataLoading, handleSingleRiskData, projectID } = useContext(GlobalContext)
-    console.log(risksData)
+    const { risksData, risksDataLoading, projectID } = useContext(GlobalContext)
     const risksOpenData = risksData?.filter(riskOpenData => riskOpenData.status == "open")
-    if (risksDataLoading && !risksOpenData.length) {
+    if (risksDataLoading) {
         return <Loading />
     }
     const [riskOpenCurrentPage, setRiskOpenCurrentPage] = useState(1)
@@ -30,7 +29,6 @@ const RiskOpen = () => {
                     {risksOpenData.slice(riskOpenDataShowPosition - 7, riskOpenDataShowPosition)?.map((riskOpenData, index) => {
                         return (
                             <tr onClick={() => {
-                                handleSingleRiskData(riskOpenData._id)
                                 navigate(`/projects/logs/risk/open/${projectID}/view-risk/${riskOpenData._id}`)
                             }} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
                                 <td className="py-5 px-4 text-start">{riskOpenData.risk_category.value}</td>

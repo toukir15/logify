@@ -5,21 +5,45 @@ import logo from "../../assets/logo-x1DR2QCW.png"
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { GlobalContext } from "../../providers/GlobalProvider";
+import { useRef } from 'react';
+import generatePDF, { Resolution, Margin } from 'react-to-pdf';
 
 const ProjectDetails = () => {
+    const targetRef = useRef();
     const navigate = useNavigate()
-    // const { setOpenClosedStatus } = useContext(GlobalContext)
+    const { projectID } = useContext(GlobalContext)
+    const openClosedStatus = window.location.href.split('/')[6]
     const checkViewControl = window.location.href.split("/")[8]
     const controlAddRiskStatus = window.location.href.split('/')[5]
-    const projectID = window.location.href.split('/')[7]
-    const openClosedStatus = window.location.href.split("/")[6]
+
+    const options = {
+        method: 'open',
+        resolution: Resolution.HIGH,
+        page: {
+            margin: Margin.SMALL,
+            format: 'letter',
+            orientation: 'landscape',
+        },
+        canvas: {
+            mimeType: 'image/png',
+            qualityRatio: 1
+        },
+        overrides: {
+            pdf: {
+                compress: true
+            },
+            canvas: {
+                useCORS: true
+            }
+        },
+    };
 
     return (
-        <div className="py-10 px-20">
+        <div ref={targetRef} className="py-10 px-20">
             {!checkViewControl && <div>
                 <div className="flex items-center justify-end gap-3 mb-8">
                     <button className="border border-primary w-12 h-12 rounded-full flex justify-center items-center text-primary"><TbFileDownload size={24} /></button>
-                    <button className="border border-primary w-12 h-12 rounded-full flex justify-center items-center text-primary"><FaRegFilePdf size={20} /></button>
+                    <button onClick={() => generatePDF(targetRef, { filename: 'page.pdf' }, options)} className="border border-primary w-12 h-12 rounded-full flex justify-center items-center text-primary"><FaRegFilePdf size={20} /></button>
                 </div>
                 <div className="flex w-full">
                     <div className="flex gap-2 items-center w-1/4">
@@ -62,7 +86,9 @@ const ProjectDetails = () => {
                     </div>
                 </div>
             </div>}
-            <Outlet />
+            <div >
+                <Outlet />
+            </div>
         </div>
     );
 };

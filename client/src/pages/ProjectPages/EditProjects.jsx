@@ -53,7 +53,9 @@ const customStyle = {
 }
 
 const EditProject = () => {
-    const { singleProjectData, projectsDataRefetch } = useContext(GlobalContext)
+    const { projectsData, projectsDataRefetch } = useContext(GlobalContext)
+    const projectID = window.location.href.split("/")[5]
+    const singleProjectData = projectsData.find(project => project._id == projectID)
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
     const [addImage, setAddImage] = useState({})
@@ -147,37 +149,37 @@ const EditProject = () => {
             <form onSubmit={handleProjects} method="post" className="flex w-[50%] mx-auto flex-col">
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="projectName">Project Name</label>
-                    <input defaultValue={singleProjectData.project_name} placeholder="Enter project name" name="projectName" id="projectName" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
+                    <input defaultValue={singleProjectData?.project_name} placeholder="Enter project name" name="projectName" id="projectName" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="client">Client</label>
-                    <input defaultValue={singleProjectData.client} placeholder="Enter client name" name="client" id="client" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
+                    <input defaultValue={singleProjectData?.client} placeholder="Enter client name" name="client" id="client" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="IDNumber">ID Number</label>
-                    <input defaultValue={singleProjectData.ID_number} placeholder="Enter project name" name="IDNumber" id="IDNumber" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
+                    <input defaultValue={singleProjectData?.ID_number} placeholder="Enter project name" name="IDNumber" id="IDNumber" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="projectDescription">Project Description</label>
-                    <textarea defaultValue={singleProjectData.project_description} className="border-primary border w-[70%] p-3 rounded outline-none" name="projectDescription" id="projectDescription" cols="10" rows="4" placeholder="Write project description"></textarea>
+                    <textarea defaultValue={singleProjectData?.project_description} className="border-primary border w-[70%] p-3 rounded outline-none" name="projectDescription" id="projectDescription" cols="10" rows="4" placeholder="Write project description"></textarea>
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="date">Date</label>
                     <div className="flex w-[70%] gap-6">
                         <div className="grid grid-cols-2 gap-6 w-full items-center ">
-                            <Date dateData={{ date: startDate ? startDate : singleProjectData.start_date, setDate: setStartDate }} />
-                            <Date dateData={{ date: endDate ? endDate : singleProjectData.end_date, setDate: setEndDate }} />
+                            <Date dateData={{ date: startDate ? startDate : singleProjectData?.start_date, setDate: setStartDate }} />
+                            <Date dateData={{ date: endDate ? endDate : singleProjectData?.end_date, setDate: setEndDate }} />
                         </div>
                     </div>
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="projectValue">Project Value</label>
-                    <input defaultValue={singleProjectData.project_value} placeholder="Enter project value" name="projectValue" id="projectValue" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
+                    <input defaultValue={singleProjectData?.project_value} placeholder="Enter project value" name="projectValue" id="projectValue" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
                 </div>
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor="projectOwner">Project Owner</label>
                     <Select
-                        defaultValue={singleProjectData.project_owner}
+                        defaultValue={singleProjectData?.project_owner}
                         className='w-[70%] z-[50]'
                         ref={projectOwnerRef}
                         options={options}
@@ -197,11 +199,11 @@ const EditProject = () => {
                     <label className="w-[30%]" htmlFor="addImage">Add Image</label>
                     <input onChange={(e) => handleAddImageChange(e, "add image")} name="add_image" type="file" id="addImage" className="hidden" />
                     <label type="button" htmlFor="addImage" className="py-2 px-5 rounded-full text-white text-sm bg-primary cursor-pointer">Upload File</label>
-                    {addImage.placeholder && singleProjectData.add_image && <div className="border p-2 ml-2 border-[#4E81CD]">
+                    {addImage.placeholder && singleProjectData?.add_image && <div className="border p-2 ml-2 border-[#4E81CD]">
                         <img className="h-[30px]" src={addImage.placeholder} alt="" />
                     </div>}
-                    {!addImage.placeholder && singleProjectData.add_image && <div className="border p-2 ml-2 border-[#4E81CD]">
-                        <img className="h-[30px]" src={`http://localhost:5000/public/uploads/${singleProjectData.add_image}`} alt="" />
+                    {!addImage.placeholder && singleProjectData?.add_image && <div className="border p-2 ml-2 border-[#4E81CD]">
+                        <img className="h-[30px]" src={`http://localhost:5000/public/uploads/${singleProjectData?.add_image}`} alt="" />
                     </div>}
                 </div>
 
@@ -212,7 +214,7 @@ const EditProject = () => {
                         <Tooltip id="risk-consequences" content="Enter your corporate consequence values from your risk matrix table. For example, 'Financial, Environment, Schedule Delay, Reputation, etc  " style={{ width: "350px" }} place='right' />
                     </div>
                     <CreatableSelect
-                        defaultValue={singleProjectData.risk_consequences}
+                        defaultValue={singleProjectData?.risk_consequences}
                         placeholder={"Enter risk consequences"}
                         ref={riskConsequencesRef}
                         className="w-[70%]"
@@ -229,7 +231,7 @@ const EditProject = () => {
                         <Tooltip id="risk-consequence-impact" content="Enter your corporate consequence impacts from your risk matrix table. For example, 'Insignificant, Mirror, Moderate, Major, Significant" style={{ width: "350px" }} place='right' />
                     </div>
                     <CreatableSelect
-                        defaultValue={singleProjectData.risk_consequences_impact}
+                        defaultValue={singleProjectData?.risk_consequences_impact}
                         placeholder={"Enter risk consequences impact"}
                         ref={riskConsequencesImpactRef}
                         className="w-[70%]"
@@ -245,7 +247,7 @@ const EditProject = () => {
                         <Tooltip id="risk-categories" content="Enter generic risk categories to allow grouping of risks. For example, 'Construction. Design, Schedule, Environmental etc. 'If unsure use 'corporate, construction or other generic terms. You can always add more categories in your project page.'" style={{ width: "350px" }} place='right' />
                     </div>
                     <CreatableSelect
-                        defaultValue={singleProjectData.risk_categories}
+                        defaultValue={singleProjectData?.risk_categories}
                         placeholder={"Enter risk categories"}
                         ref={riskCategoriesRef}
                         className="w-[70%]"
@@ -262,7 +264,7 @@ const EditProject = () => {
                         <Tooltip id="likelihood" content="Enter your corporate likelihood values. For example, Rare, Unlikely, Possible and almost Certain." style={{ width: "350px" }} place='right' />
                     </div>
                     <CreatableSelect
-                        defaultValue={singleProjectData.likelihood}
+                        defaultValue={singleProjectData?.likelihood}
                         placeholder={"Enter likelihood"}
                         ref={likelihoodRef}
                         className="w-[70%]"
@@ -280,7 +282,7 @@ const EditProject = () => {
                         <Tooltip id="risk-ratting" content="Enter your corporate risk ratting values. For example, Low, Medium, High and Critical." style={{ width: "350px" }} place='right' />
                     </div>
                     <CreatableSelect
-                        defaultValue={singleProjectData.risk_ratting}
+                        defaultValue={singleProjectData?.risk_ratting}
                         placeholder={"Enter risk ratting"}
                         ref={riskRattingRef}
                         className="w-[70%]"
@@ -295,11 +297,11 @@ const EditProject = () => {
                     <div className="w-[70%]">
                         <input onChange={(e) => handleAddImageChange(e, "risk matrix template")} name="risk_matrix_template" type="file" id="riskMatrixTemplate" className="hidden" />
                         <label type="button" htmlFor="riskMatrixTemplate" className="py-2 px-5 rounded-full text-white text-sm bg-primary cursor-pointer ">Upload File</label>
-                        {riskMatrixTemplate.placeholder && singleProjectData.add_image && <div className="border p-2 ml-2 border-[#4E81CD] mt-2 rounded">
+                        {riskMatrixTemplate.placeholder && singleProjectData?.add_image && <div className="border p-2 ml-2 border-[#4E81CD] mt-2 rounded">
                             <img src={riskMatrixTemplate.placeholder} alt="" />
                         </div>}
-                        {!riskMatrixTemplate.placeholder && singleProjectData.risk_matrix_template && <div className="border p-2 ml-2 border-[#4E81CD] mt-2 rounded">
-                            <img src={`http://localhost:5000/public/uploads/${singleProjectData.risk_matrix_template}`} alt="" />
+                        {!riskMatrixTemplate.placeholder && singleProjectData?.risk_matrix_template && <div className="border p-2 ml-2 border-[#4E81CD] mt-2 rounded">
+                            <img src={`http://localhost:5000/public/uploads/${singleProjectData?.risk_matrix_template}`} alt="" />
                         </div>}
                     </div>
                 </div>

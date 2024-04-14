@@ -26,6 +26,7 @@ const AddControl = () => {
     const projectID = window.location.href.split("/")[8]
     const openClosedStatus = window.location.href.split("/")[6]
     const singleProjectData = projectsData.find(projectData => projectData._id == projectID)
+    console.log(projectsData)
 
     const handleAddControl = (e) => {
         e.preventDefault()
@@ -56,7 +57,7 @@ const AddControl = () => {
             .then(response => {
                 if (response.data.insertedId) {
                     controlsDataRefeatch()
-                    navigate(`/projects/logs/control/open/${projectID}`)
+                    navigate(`/projects/logs/control/${openClosedStatus}/${projectID}`)
                 }
             })
             .catch(error => console.log(error))

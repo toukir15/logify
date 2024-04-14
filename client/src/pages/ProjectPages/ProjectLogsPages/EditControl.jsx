@@ -16,17 +16,16 @@ import { customStyle } from '../../../hooks/useSelectCustomStyle';
 import { useNotify } from '../../../hooks/useNotify';
 
 const EditControl = () => {
-    const { projectsData, controlsDataRefeatch, controlsData } = useContext(GlobalContext)
+    const { projectsData, controlsDataRefeatch, controlsData, projectID } = useContext(GlobalContext)
     const commentRef = useRef(null);
     const controlOwnerRef = useRef(null)
     const tagsRef = useRef(null)
     const [controlDate, setControlDate] = useState(null)
     const [dueDate, setDueDate] = useState(null)
     const navigate = useNavigate()
-    const projectId = window.location.href.split("/")[7]
-    const openClosedStatus = window.location.href.split("/")[6]
     const controlId = window.location.href.split("/")[9]
-    const singleProjectData = projectsData.find(singleProject => singleProject._id == projectId)
+    const openClosedStatus = window.location.href.split("/")[6]
+    const singleProjectData = projectsData.find(singleProject => singleProject._id == projectID)
     const singleControlData = controlsData.find(control => control._id == controlId)
 
     const handleAddControl = (e) => {
@@ -52,14 +51,14 @@ const EditControl = () => {
             due_date,
             control_owner,
             tags,
-            project_id: projectId,
+            project_id: projectID,
             status: openClosedStatus
         }
         axios.patch(`/controls_api/update_control?control_id=${controlId}`, updateControlData)
             .then(response => {
                 if (response.status == 200) {
                     controlsDataRefeatch()
-                    navigate(`/projects/logs/control/${openClosedStatus}/${projectId}`)
+                    navigate(`/projects/logs/control/${openClosedStatus}/${projectID}`)
                 }
             })
             .catch(error => console.log(error))
@@ -141,8 +140,8 @@ const EditControl = () => {
                 <div className="flex w-full items-center mb-6">
                     <label className="w-[30%]" htmlFor=""></label>
                     <div className="w-[70%] flex gap-8">
-                        <button className="bg-primary py-3 w-full text-white rounded-lg">Edit Control</button>
-                        <button type='button' onClick={() => navigate(`/projects/logs/control/open/${projectId}/view-control/${controlId}`)} className="border border-primary text-primary py-3 w-full rounded-lg">Cancel</button>
+                        <button className="bg-primary py-3 w-full text-white rounded-lg">Update Control</button>
+                        <button type='button' onClick={() => navigate(`/projects/logs/control/open/${projectID}/view-control/${controlId}`)} className="border border-primary text-primary py-3 w-full rounded-lg">Cancel</button>
                     </div>
                 </div>
             </form>

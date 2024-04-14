@@ -12,16 +12,12 @@ import Loading from "../../components/shared/Loading";
 
 const Projects = () => {
     const navigate = useNavigate()
-    const { projectsData, projectsDataRefetch, controlsDataRefeatch, projectDataIsLoading } = useContext(GlobalContext)
+    const { projectsData, projectsDataRefetch, projectDataIsLoading, setInitialFetch } = useContext(GlobalContext)
     if (!projectDataIsLoading && !projectsData.length) {
         return <Loading />
     }
     const [projectCurrentPage, setProjectCurrentPage] = useState(1)
     const projectTotalButton = Math?.ceil(projectsData?.length / 7)
-    // if (!projectTotalButton) {
-    //     return <Loading />
-    // }
-    console.log(projectTotalButton)
     const projectTotalButtonArray = [...Array(projectTotalButton)?.keys()]
     const projectDataShowPosition = 7 * projectCurrentPage
 
@@ -55,12 +51,12 @@ const Projects = () => {
 
     const handleEditProject = (e, id) => {
         e.stopPropagation()
-        navigate(`/projects/edit-project?id=${id}`)
+        navigate(`/projects/edit-project/${id}`)
     }
 
     const handleViewProject = (e, id) => {
         e.stopPropagation()
-        navigate(`/projects/view-project?id=${id}`)
+        navigate(`/projects/view-project/${id}`)
     }
 
     return (
@@ -84,7 +80,7 @@ const Projects = () => {
                         return (
                             <tr
                                 onClick={() => {
-                                    controlsDataRefeatch()
+                                    setInitialFetch(true)
                                     navigate(`/projects/logs/control/open/${projectData._id}`)
                                 }
                                 }
@@ -101,7 +97,7 @@ const Projects = () => {
                                     <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(projectData.end_date).format("DD/MM/YYYY")}</p>
                                 </td>
                                 <td className="py-5 px-4 text-start"><div className="flex gap-3">
-                                    <button>
+                                    <button type="button">
                                         <FaRegEye onClick={(e) => {
                                             handleViewProject(e, projectData._id)
                                         }} size={18} />

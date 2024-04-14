@@ -102,7 +102,6 @@ const run = async () => {
             }
         });
 };
-
-run(); // Call run function to execute the code inside it
+run();
 
 module.exports = router;

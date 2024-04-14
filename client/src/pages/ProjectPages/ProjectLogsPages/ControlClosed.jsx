@@ -8,7 +8,7 @@ import Loading from "../../../components/shared/Loading"
 const ControlClosed = () => {
     const { controlsData, controlsDataLoading } = useContext(GlobalContext)
     const controlsClosedData = controlsData?.filter(controlOpenData => controlOpenData.status == "closed")
-    if (controlsDataLoading && !controlsClosedData.length) {
+    if (controlsDataLoading) {
         return <Loading />
     }
     const [controlClosedCurrentPage, setControlClosedCurrentPage] = useState(1)

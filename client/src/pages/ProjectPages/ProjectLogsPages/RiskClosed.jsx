@@ -5,9 +5,9 @@ import Pagination from "../../../components/shared/Pagination";
 import Loading from "../../../components/shared/Loading"
 
 const RiskClosed = () => {
-    const { risksData, risksDataLoading, handleSingleRiskData, projectID } = useContext(GlobalContext)
+    const { risksData, risksDataLoading, projectID } = useContext(GlobalContext)
     const risksClosedData = risksData?.filter(riskClosedData => riskClosedData.status == "closed")
-    if (risksDataLoading && !risksClosedData.length) {
+    if (risksDataLoading) {
         return <Loading />
     }
     const [riskClosedCurrentPage, setRiskClosedCurrentPage] = useState(1)
@@ -29,7 +29,6 @@ const RiskClosed = () => {
                     {risksClosedData.slice(riskClosedDataShowPosition - 7, riskClosedDataShowPosition)?.map((riskClosedData, index) => {
                         return (
                             <tr onClick={() => {
-                                handleSingleRiskData(riskClosedData._id)
                                 console.log(riskClosedData._id)
                                 navigate(`/projects/logs/risk/closed/${projectID}/view-risk/${riskClosedData._id}`)
                             }} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>

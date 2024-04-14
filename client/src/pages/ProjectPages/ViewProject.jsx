@@ -6,7 +6,9 @@ import moment from 'moment';
 import { useNavigate } from "react-router-dom";
 
 const ViewProject = () => {
-    const { singleProjectData } = useContext(GlobalContext)
+    const { projectsData } = useContext(GlobalContext)
+    const projectID = window.location.href.split("/")[5]
+    const singleProjectData = projectsData.find(project => project._id == projectID)
     const navigate = useNavigate()
     return (
         <div className="py-10 px-20">
@@ -23,7 +25,7 @@ const ViewProject = () => {
             <div className="mt-10 flex justify-between">
                 <div className="flex items-center gap-4">
                     <div className="border border-primary w-[70px] h-[70px] flex justify-center items-center">
-                        <img className="w-14 h-14 object-fill" src={`http://localhost:5000/public/uploads/${singleProjectData.add_image}`} alt="" />
+                        <img className="w-14 h-14 object-fill" src={`http://localhost:5000/public/uploads/${singleProjectData?.add_image}`} alt="" />
                     </div>
                     <div>
                         <h4 className="text-2xl font-medium mb-4">Project Name</h4>

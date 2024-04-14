@@ -10,14 +10,13 @@ const RiskViewDetails = () => {
     const openClosedStatus = window.location.href.split("/")[6]
     const riskId = window.location.href.split("/")[9]
     const singleRiskData = risksData.find(riskData => riskData._id == riskId)
-
     const navigate = useNavigate();
     return (
         <div>
             <div className="flex items-center justify-between">
                 <button className="flex w-fit cursor-default">
-                    <MdOutlineArrowBackIosNew onClick={() => navigate("/projects")} className="cursor-pointer" size={28} />
-                    <MdOutlineArrowBackIosNew onClick={() => navigate("/projects")} className="cursor-pointer relative right-4" size={28} />
+                    <MdOutlineArrowBackIosNew onClick={() => navigate(`/projects/logs/risk/${openClosedStatus}/${projectID}`)} className="cursor-pointer" size={28} />
+                    <MdOutlineArrowBackIosNew onClick={() => navigate(`/projects/logs/risk/${openClosedStatus}/${projectID}`)} className="cursor-pointer relative right-4" size={28} />
                 </button>
                 <div className="flex gap-10">
                     <button onClick={() => navigate(`/projects/logs/risk/${openClosedStatus}/add-risk/${projectID}`)}

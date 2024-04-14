@@ -55,11 +55,11 @@ const router = createBrowserRouter([
                 element: <Suspense fallback={<Loading />}><AddProject /></Suspense>
             },
             {
-                path: "/projects/edit-project",
+                path: "/projects/edit-project/:slag",
                 element: <Suspense fallback={<Loading />}><EditProject /></Suspense>
             },
             {
-                path: "/projects/view-project",
+                path: "/projects/view-project/:slag",
                 element: <Suspense fallback={<Loading />}><ViewProject /></Suspense>
             },
             {

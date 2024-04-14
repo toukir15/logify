@@ -8,14 +8,16 @@ import Loading from "../../../components/shared/Loading"
 const ControlOpen = () => {
     const { controlsData, controlsDataLoading, projectID } = useContext(GlobalContext)
     const controlsOpenData = controlsData?.filter(controlOpenData => controlOpenData.status == "open")
-    if (controlsDataLoading && !controlsOpenData.length) {
+    if (controlsDataLoading) {
         return <Loading />
     }
+
     const [riskOpenCurrentPage, setRiskOpenCurrentPage] = useState(1)
     const riskOpenTotalButton = Math?.ceil(controlsOpenData?.length / 7)
     const riskOpenTotalButtonArray = [...Array(riskOpenTotalButton)?.keys()]
     const riskOpenDataShowPosition = 7 * riskOpenCurrentPage
     const navigate = useNavigate();
+
     return (
         <div className="py-10">
             <table className="w-full">
