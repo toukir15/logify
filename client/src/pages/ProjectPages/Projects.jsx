@@ -12,8 +12,8 @@ import Loading from "../../components/shared/Loading";
 
 const Projects = () => {
     const navigate = useNavigate()
-    const { projectsData, projectsDataRefetch, projectDataIsLoading, setInitialFetch } = useContext(GlobalContext)
-    if (!projectDataIsLoading && !projectsData.length) {
+    const { projectsData, projectsDataRefetch, projectDataIsLoading, setProjectID, setInitialFetch, setUserInitialFetch } = useContext(GlobalContext)
+    if (projectDataIsLoading) {
         return <Loading />
     }
     const [projectCurrentPage, setProjectCurrentPage] = useState(1)
@@ -62,7 +62,10 @@ const Projects = () => {
     return (
         <div className="py-10 px-20">
             <div className="flex justify-end">
-                <Link to='/projects/add-project' className="bg-primary rounded-lg text-white py-2 px-4 mb-8">Add Projects</Link>
+                <button onClick={() => {
+                    setUserInitialFetch()
+                    navigate(`/projects/add-project`)
+                }} className="bg-primary rounded-lg text-white py-2 px-4 mb-8">Add Projects</button>
             </div>
             <table className="w-full">
                 {projectsData > 0 && <thead>
@@ -81,6 +84,7 @@ const Projects = () => {
                             <tr
                                 onClick={() => {
                                     setInitialFetch(true)
+                                    setProjectID(projectData._id)
                                     navigate(`/projects/logs/control/open/${projectData._id}`)
                                 }
                                 }

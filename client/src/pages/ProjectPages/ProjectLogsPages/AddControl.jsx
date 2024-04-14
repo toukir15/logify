@@ -26,7 +26,6 @@ const AddControl = () => {
     const projectID = window.location.href.split("/")[8]
     const openClosedStatus = window.location.href.split("/")[6]
     const singleProjectData = projectsData.find(projectData => projectData._id == projectID)
-    console.log(projectsData)
 
     const handleAddControl = (e) => {
         e.preventDefault()
@@ -52,7 +51,6 @@ const AddControl = () => {
             project_id: projectID,
             status: openClosedStatus
         }
-
         axios.post("/controls_api/add_control", addControlData)
             .then(response => {
                 if (response.data.insertedId) {
@@ -112,7 +110,6 @@ const AddControl = () => {
                         options={singleProjectData?.project_owner}
                         isClearable={true}
                         components={{ CustomMultiValue, CustomOption }}
-                        isMulti={true}
                         styles={{
                             control: (baseStyles, state) => ({
                                 ...baseStyles,

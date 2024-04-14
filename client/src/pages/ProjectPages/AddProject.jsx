@@ -14,7 +14,7 @@ import { CustomOption } from '../../components/shared/CustomOption';
 
 const AddProject = () => {
     const { projectsDataRefetch, usersData } = useContext(GlobalContext)
-    const selectProjectOwnerData = usersData.map(user => ({ value: user.first_name, label: user.first_name, email: user.email }))
+    const selectProjectOwnerData = usersData?.map(user => ({ value: user.first_name, label: user.first_name, email: user.email }))
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
     const [addImage, setAddImage] = useState({})
@@ -94,7 +94,7 @@ const AddProject = () => {
             .then(data => {
                 if (data.status == 200) {
                     projectsDataRefetch()
-                    // navigate("/projects")
+                    navigate("/projects")
                 }
             })
             .catch(error => console.log(error))

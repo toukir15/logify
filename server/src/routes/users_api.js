@@ -38,7 +38,7 @@ const run = async () => {
 
     router.get("/get_users", verifyJWT, async (req, res) => {
         try {
-            const result = await users_collection.find({ admin_id: req.id }).toArray()
+            const result = await users_collection.find().toArray()
             res.status(200).send(result)
         }
         catch (error) {

@@ -100,7 +100,7 @@ const Sidebar = () => {
                         {notifyEmailExist && <div className=" absolute top-12 left-1/2 -translate-x-1/2 text-red-500">Email is Already Exist</div>}
                         <input required type="email" id="email" className="border py-2 w-full px-2 text-primary rounded outline-none" placeholder="Email Address" />
                         <div className="flex justify-center items-center text-white mt-5">
-                            <button disabled={addUserLoading} className={`${addUserLoading ? "bg-[#727fd2]" : "bg-primary"}  px-10 py-2 rounded-lg`}>Invite</button>
+                            <button disabled={addUserLoading} className={`${addUserLoading ? "bg-[#5c5c5c]" : "bg-primary"}  px-10 py-2 rounded-lg`}>Invite</button>
                         </div>
                     </form>
                 </div>

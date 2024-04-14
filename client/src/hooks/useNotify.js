@@ -17,7 +17,6 @@ export const useNotify = (message, type) => {
 
     switch (type) {
         case "success":
-            console.log(type)
             toast.success(message, {
                 position: "top-right"
             });

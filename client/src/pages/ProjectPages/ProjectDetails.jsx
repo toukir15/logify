@@ -1,20 +1,17 @@
-import { TbFileDownload } from "react-icons/tb";
 import { FaRegFilePdf } from "react-icons/fa6";
 import { GiSettingsKnobs } from "react-icons/gi";
 import logo from "../../assets/logo-x1DR2QCW.png"
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import { GlobalContext } from "../../providers/GlobalProvider";
 import { useRef } from 'react';
 import generatePDF, { Resolution, Margin } from 'react-to-pdf';
 
 const ProjectDetails = () => {
     const targetRef = useRef();
     const navigate = useNavigate()
-    const { projectID } = useContext(GlobalContext)
     const openClosedStatus = window.location.href.split('/')[6]
     const checkViewControl = window.location.href.split("/")[8]
     const controlAddRiskStatus = window.location.href.split('/')[5]
+    const projectID = window.location.href.split("/")[7]
 
     const options = {
         method: 'open',
@@ -42,7 +39,6 @@ const ProjectDetails = () => {
         <div ref={targetRef} className="py-10 px-20">
             {!checkViewControl && <div>
                 <div className="flex items-center justify-end gap-3 mb-8">
-                    <button className="border border-primary w-12 h-12 rounded-full flex justify-center items-center text-primary"><TbFileDownload size={24} /></button>
                     <button onClick={() => generatePDF(targetRef, { filename: 'page.pdf' }, options)} className="border border-primary w-12 h-12 rounded-full flex justify-center items-center text-primary"><FaRegFilePdf size={20} /></button>
                 </div>
                 <div className="flex w-full">

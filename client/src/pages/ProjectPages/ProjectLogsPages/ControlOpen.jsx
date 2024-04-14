@@ -6,12 +6,23 @@ import Pagination from "../../../components/shared/Pagination";
 import Loading from "../../../components/shared/Loading"
 
 const ControlOpen = () => {
-    const { controlsData, controlsDataLoading, projectID } = useContext(GlobalContext)
-    const controlsOpenData = controlsData?.filter(controlOpenData => controlOpenData.status == "open")
+    const { controlsData, controlsDataLoading } = useContext(GlobalContext)
+    const controlName = ""
+    const projectID = window.location.href.split("/")[7]
+
+    const controlsOpenData = controlsData?.filter(controlData => {
+        if (controlName) {
+            console.log(controlName)
+            return (controlData.project_id == projectID && controlData.status == "open" && controlData.control_name == controlName)
+        }
+        else {
+            return (controlData.project_id == projectID && controlData.status == "open")
+        }
+    })
+
     if (controlsDataLoading) {
         return <Loading />
     }
-
     const [riskOpenCurrentPage, setRiskOpenCurrentPage] = useState(1)
     const riskOpenTotalButton = Math?.ceil(controlsOpenData?.length / 7)
     const riskOpenTotalButtonArray = [...Array(riskOpenTotalButton)?.keys()]
@@ -36,15 +47,15 @@ const ControlOpen = () => {
                                 navigate(`/projects/logs/control/open/${projectID}/view-control/${controlOpenData._id}`)
                             }} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
                                 <td className="py-5 px-4 text-start">{controlOpenData.control_name}</td>
-                                <td className="py-5 px-4 text-start">{controlOpenData.control_owner[0].value} </td>
-                                <td className="py-5 px-4 text-start">{controlOpenData.control_status}...</td>
+                                <td className="py-5 px-4 text-start">{controlOpenData.control_owner.value} </td>
+                                <td className="py-5 px-4 text-start">{controlOpenData.control_status}{controlOpenData.length > 20 && "..."}</td>
                                 <td className="py-5 px-4 text-start">
                                     <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(controlOpenData.control_date).format("DD/MM/YYYY")}</p>
                                 </td>
                                 <td className="py-5 px-4 text-start">
-                                    <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(controlOpenData.control_date).format("DD/MM/YYYY")}</p>
+                                    <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(controlOpenData.due_date).format("DD/MM/YYYY")}</p>
                                 </td>
-                                <td className="py-5 px-4 text-start">{controlOpenData.tags[0].value}</td>
+                                <td className="py-5 px-4 text-start">{controlOpenData.tags[0].value} {controlOpenData.tags.length > 1 && "..."}</td>
                             </tr>
                         );
                     })}

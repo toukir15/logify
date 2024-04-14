@@ -5,8 +5,9 @@ import Pagination from "../../../components/shared/Pagination";
 import Loading from "../../../components/shared/Loading"
 
 const RiskClosed = () => {
-    const { risksData, risksDataLoading, projectID } = useContext(GlobalContext)
-    const risksClosedData = risksData?.filter(riskClosedData => riskClosedData.status == "closed")
+    const { risksData, risksDataLoading } = useContext(GlobalContext)
+    const projectID = window.location.href.split("/")[7]
+    const risksClosedData = risksData?.filter(riskData => (riskData.project_id == projectID && riskData.status == "closed"))
     if (risksDataLoading) {
         return <Loading />
     }
@@ -29,7 +30,6 @@ const RiskClosed = () => {
                     {risksClosedData.slice(riskClosedDataShowPosition - 7, riskClosedDataShowPosition)?.map((riskClosedData, index) => {
                         return (
                             <tr onClick={() => {
-                                console.log(riskClosedData._id)
                                 navigate(`/projects/logs/risk/closed/${projectID}/view-risk/${riskClosedData._id}`)
                             }} className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
                                 <td className="py-5 px-4 text-start">{riskClosedData.risk_category.value}</td>

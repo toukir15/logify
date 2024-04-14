@@ -33,7 +33,7 @@ const ControlViewDetails = () => {
                 </div>
                 <div>
                     <h4 className="text-2xl font-medium mb-4">Owner</h4>
-                    <p>{singleControlData.control_owner[0].value}</p>
+                    <p>{singleControlData.control_owner.value}</p>
                 </div>
                 <div>
                     <h4 className="text-2xl font-medium mb-4">Date</h4>
@@ -43,9 +43,11 @@ const ControlViewDetails = () => {
                     <h4 className="text-2xl font-medium mb-4">Due Date</h4>
                     <p>{moment(singleControlData.due_date).format('DD/MM/YYYY')}</p>
                 </div>
-                <div>
-                    <h4 className="text-2xl font-medium mb-4">Tags</h4>
-                    <p>{singleControlData.tags[0].value} {singleControlData.length > 1 && "..."} </p>
+            </div>
+            <div className="mt-12">
+                <h4 className="text-3xl  mb-4 font-medium">Tags</h4>
+                <div className="flex gap-2">
+                    {singleControlData.tags.map(tag => <p className="bg-[#484747] text-white px-6 py-1 rounded-full text-sm">{tag.value}</p>)}
                 </div>
             </div>
             <div className="mt-12">

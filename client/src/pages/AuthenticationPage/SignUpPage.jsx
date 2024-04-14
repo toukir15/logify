@@ -23,6 +23,7 @@ export default function SignUpPage() {
         }
         axios.post("/authentication_api/sign_up", signUpData)
             .then((response) => {
+                console.log(response)
                 if (response.data.is_already_crated) {
                     setSignUpemailStatus(true)
                 }
@@ -86,7 +87,7 @@ export default function SignUpPage() {
                     <input required className='border mt-1 p-2 rounded border-[#E8E8E8]' id='confirmPassword' name='confirmPassword' placeholder='Confirm password' type="password" />
                 </div>
                 {signUpEmailStatus && <p className='text-sm text-red-500'>An account with this email address already exists.</p>}
-                <button disabled={signUpLoading} className={`${signUpLoading ? "bg-[#727fd2]" : "bg-primary"} text-white py-[10px] px-12 rounded-xl font-bold mt-6 mb-6`}>Signup</button>
+                <button disabled={signUpLoading} className={`${signUpLoading ? "bg-[#5c5c5c]" : "bg-primary"} text-white py-[10px] px-12 rounded-xl font-bold mt-6 mb-6`}>Signup</button>
                 <p className='text-[#b5b4b4] mt-8'>Already have an account? <Link to={`/login`} className='hover:cursor-pointer hover:underline hover:text-[#959595]'>Login</Link></p>
             </form>}
 
@@ -114,7 +115,7 @@ export default function SignUpPage() {
                     <input required className='border mt-1 p-2 rounded border-[#E8E8E8]' id='confirmPassword' name='confirmPassword' placeholder='Confirm password' type="password" />
                 </div>
                 {invitedEmailStatus && <p className='text-sm text-red-500'>An account with this email address already exists.</p>}
-                <button disabled={inviteSignUpLoading} className={`${inviteSignUpLoading ? "bg-[#727fd2]" : "bg-primary"} text-white py-[10px] px-12 rounded-xl font-bold mt-6 mb-6`}>Signup</button>
+                <button disabled={inviteSignUpLoading} className={`${inviteSignUpLoading ? "bg-[#5c5c5c]" : "bg-primary"} text-white py-[10px] px-12 rounded-xl font-bold mt-6 mb-6`}>Signup</button>
             </form>}
         </div>
     )

@@ -81,7 +81,7 @@ const AddRisk = () => {
             .then(response => {
                 if (response.status == 200) {
                     risksDataRefeatch()
-                    navigate(`/projects/logs/risk/open/${projectID}`)
+                    navigate(`/projects/logs/risk/${openClosedStatus}/${projectID}`)
                 }
             })
             .catch(error => console.log(error))

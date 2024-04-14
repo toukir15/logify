@@ -7,7 +7,8 @@ import Loading from "../../../components/shared/Loading"
 
 const ControlClosed = () => {
     const { controlsData, controlsDataLoading } = useContext(GlobalContext)
-    const controlsClosedData = controlsData?.filter(controlOpenData => controlOpenData.status == "closed")
+    const projectID = window.location.href.split("/")[7]
+    const controlsClosedData = controlsData?.filter(controlData => (controlData.project_id == projectID && controlData.status == "closed"))
     if (controlsDataLoading) {
         return <Loading />
     }
@@ -31,19 +32,19 @@ const ControlClosed = () => {
                     {controlsClosedData.slice(controlClosedDataShowPosition - 7, controlClosedDataShowPosition)?.map((controlClosedData, index) => {
                         return (
                             <tr onClick={() => {
-                                navigate(`/projects/logs/control/closed/${"45121245112"}/view-control/${controlClosedData._id}`)
+                                navigate(`/projects/logs/control/closed/${projectID}/view-control/${controlClosedData._id}`)
                             }
                             } className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
                                 <td className="py-5 px-4 text-start">{controlClosedData.control_name}</td>
-                                <td className="py-5 px-4 text-start">{controlClosedData.control_owner[0].value} </td>
-                                <td className="py-5 px-4 text-start">{controlClosedData.control_status}...</td>
+                                <td className="py-5 px-4 text-start">{controlClosedData.control_owner.value} </td>
+                                <td className="py-5 px-4 text-start">{controlClosedData.control_status}{controlClosedData.length > 20 && "..."}</td>
                                 <td className="py-5 px-4 text-start">
                                     <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(controlClosedData.control_date).format("DD/MM/YYYY")}</p>
                                 </td>
                                 <td className="py-5 px-4 text-start">
-                                    <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(controlClosedData.control_date).format("DD/MM/YYYY")}</p>
+                                    <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(controlClosedData.due_date).format("DD/MM/YYYY")}</p>
                                 </td>
-                                <td className="py-5 px-4 text-start">{controlClosedData.tags[0].value}</td>
+                                <td className="py-5 px-4 text-start">{controlClosedData.tags[0].value} {controlClosedData.tags.length > 1 && "..."}</td>
                             </tr>
                         );
                     })}

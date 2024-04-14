@@ -14,7 +14,7 @@ const run = async () => {
     router.post("/sign_up", async (req, res) => {
         try {
             const find_user = await users_collection.findOne({ email: req.body.email_address })
-            if (find_user.is_verified) {
+            if (find_user?.is_verified) {
                 return res.status(200).send({ is_already_crated: true })
             }
             else {
@@ -84,8 +84,6 @@ const run = async () => {
 
     router.post("/sign_out", async (req, res) => {
         try {
-            console.log(process.env.KEY)
-            // res.redirect("/login")
             return res
                 .clearCookie("access_token")
                 .status(200)

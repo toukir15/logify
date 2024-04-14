@@ -5,8 +5,9 @@ import Pagination from "../../../components/shared/Pagination";
 import Loading from "../../../components/shared/Loading"
 
 const RiskOpen = () => {
-    const { risksData, risksDataLoading, projectID } = useContext(GlobalContext)
-    const risksOpenData = risksData?.filter(riskOpenData => riskOpenData.status == "open")
+    const { risksData, risksDataLoading } = useContext(GlobalContext)
+    const projectID = window.location.href.split("/")[7]
+    const risksOpenData = risksData?.filter(riskData => (riskData.project_id == projectID && riskData.status == "open"))
     if (risksDataLoading) {
         return <Loading />
     }
