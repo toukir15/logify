@@ -10,6 +10,7 @@ export const GlobalProvider = ({ children }) => {
     const openClosedStatus = currentUrl.split('/')[6]
     const [initialFetch, setInitialFetch] = useState(false)
     const [userInitalFetch, setUserInitialFetch] = useState(false)
+    const [controlFilterData, setControlFilterData] = useState(null)
 
     const { isLoading: projectDataIsLoading, error: projectsDataError, data: projectsData, refetch: projectsDataRefetch } = useQuery({
         queryKey: ['projectData'],
@@ -26,13 +27,13 @@ export const GlobalProvider = ({ children }) => {
     const { isLoading: controlsDataLoading, error: controlsDataError, data: controlsData, refetch: controlsDataRefeatch } = useQuery({
         queryKey: ['controlsData', initialFetch],
         queryFn: () =>
-            axios.get(`/controls_api/get_controls?project_id=${id}`)
+            axios.get(`/controls_api/get_controls`)
                 .then((res) => res.data)
     })
     const { isLoading: risksDataLoading, error: risksDataError, data: risksData, refetch: risksDataRefeatch } = useQuery({
         queryKey: ['risksData', initialFetch],
         queryFn: () =>
-            axios.get(`/risks_api/get-risks?project_id=${id}`)
+            axios.get(`/risks_api/get-risks`)
                 .then((res) => res.data)
     })
     // global info
@@ -53,7 +54,9 @@ export const GlobalProvider = ({ children }) => {
         openClosedStatus,
         setInitialFetch,
         setUserInitialFetch,
-        setProjectID
+        setProjectID,
+        setControlFilterData,
+        controlFilterData
     };
     return (
         <GlobalContext.Provider value={GlobalInfo}>

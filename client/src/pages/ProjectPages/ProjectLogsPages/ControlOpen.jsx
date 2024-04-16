@@ -7,22 +7,16 @@ import Loading from "../../../components/shared/Loading"
 
 const ControlOpen = () => {
     const { controlsData, controlsDataLoading } = useContext(GlobalContext)
-    const controlName = ""
     const projectID = window.location.href.split("/")[7]
 
     const controlsOpenData = controlsData?.filter(controlData => {
-        if (controlName) {
-            console.log(controlName)
-            return (controlData.project_id == projectID && controlData.status == "open" && controlData.control_name == controlName)
-        }
-        else {
-            return (controlData.project_id == projectID && controlData.status == "open")
-        }
+        return (controlData.project_id == projectID && controlData.status == "open")
     })
 
     if (controlsDataLoading) {
         return <Loading />
     }
+
     const [riskOpenCurrentPage, setRiskOpenCurrentPage] = useState(1)
     const riskOpenTotalButton = Math?.ceil(controlsOpenData?.length / 7)
     const riskOpenTotalButtonArray = [...Array(riskOpenTotalButton)?.keys()]

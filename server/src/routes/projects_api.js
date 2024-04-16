@@ -50,7 +50,7 @@ const run = async () => {
         }
     });
 
-    router.get("/get_projects", verifyJWT, async (req, res) => {
+    router.get("/get_projects", async (req, res) => {
         try {
             const result = await projects_collection.find().sort({ timestamp: -1 }).toArray();
             res.send(result);

@@ -18,7 +18,7 @@ const run = async () => {
     })
     router.get("/get_controls", async (req, res) => {
         try {
-            const result = await controls_collection.find({ project_id: req.query.project_id }).sort({ timestamp: -1 }).toArray()
+            const result = await controls_collection.find().sort({ timestamp: -1 }).toArray()
             res.status(200).send(result)
         }
         catch (error) {

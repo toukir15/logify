@@ -2,16 +2,19 @@ import { FaRegFilePdf } from "react-icons/fa6";
 import { GiSettingsKnobs } from "react-icons/gi";
 import logo from "../../assets/logo-x1DR2QCW.png"
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import generatePDF, { Resolution, Margin } from 'react-to-pdf';
+import { GlobalContext } from "../../providers/GlobalProvider";
 
 const ProjectDetails = () => {
     const targetRef = useRef();
     const navigate = useNavigate()
+    const { projectsData } = useContext(GlobalContext)
     const openClosedStatus = window.location.href.split('/')[6]
     const checkViewControl = window.location.href.split("/")[8]
     const controlAddRiskStatus = window.location.href.split('/')[5]
     const projectID = window.location.href.split("/")[7]
+    const singleProjectData = projectsData.find(project => project._id == projectID)
 
     const options = {
         method: 'open',
@@ -42,9 +45,10 @@ const ProjectDetails = () => {
                     <button onClick={() => generatePDF(targetRef, { filename: 'page.pdf' }, options)} className="border border-primary w-12 h-12 rounded-full flex justify-center items-center text-primary"><FaRegFilePdf size={20} /></button>
                 </div>
                 <div className="flex w-full">
-                    <div className="flex gap-2 items-center w-1/4">
-                        <img className="w-[50px]" src={logo} alt="" />
-                        <p>MIP</p>
+                    <div className="flex gap-4 items-center w-1/4">
+                        {/* <img className="w-[50px]" src={logo} alt="" /> */}
+                        <img className="w-[50px] object-fill" src={`http://localhost:5000/public/uploads/${singleProjectData.add_image}`} alt="" />
+                        <p>{singleProjectData.project_name}</p>
                     </div>
                     <div className="flex gap-8 items-center w-2/4 justify-center">
                         <div>
@@ -74,11 +78,6 @@ const ProjectDetails = () => {
                             <Link to={`/projects/logs/${controlAddRiskStatus}/${openClosedStatus}/add-control/${projectID}`}>
                                 <button className="border-primary bg-primary border text-white py-2 px-4  rounded-lg">Add Control</button>
                             </Link>}
-
-                        <Link to={`/projects/logs/${controlAddRiskStatus}/${openClosedStatus}/filter/${projectID}`}>
-                            <button className="flex gap-2 items-center text-primary"><p>Filters</p><p className="rotate-90"> <GiSettingsKnobs size={18} /></p>
-                            </button>
-                        </Link>
                     </div>
                 </div>
             </div>}

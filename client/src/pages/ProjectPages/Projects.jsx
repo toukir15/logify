@@ -12,7 +12,7 @@ import Loading from "../../components/shared/Loading";
 
 const Projects = () => {
     const navigate = useNavigate()
-    const { projectsData, projectsDataRefetch, projectDataIsLoading, setProjectID, setInitialFetch, setUserInitialFetch } = useContext(GlobalContext)
+    const { projectsData, projectsDataRefetch, projectDataIsLoading, setProjectID, initialFetch, setInitialFetch, setUserInitialFetch } = useContext(GlobalContext)
     if (projectDataIsLoading) {
         return <Loading />
     }
@@ -83,7 +83,7 @@ const Projects = () => {
                         return (
                             <tr
                                 onClick={() => {
-                                    setInitialFetch(true)
+                                    setInitialFetch(!initialFetch)
                                     setProjectID(projectData._id)
                                     navigate(`/projects/logs/control/open/${projectData._id}`)
                                 }

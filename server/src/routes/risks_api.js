@@ -9,7 +9,7 @@ const run = async () => {
 
     router.post("/add-risk", async (req, res) => {
         try {
-            const result = await risks_collection.insertOne(req.body)
+            const result = await risks_collection.insertOne({ ...req.body, timestamp: new Date() })
             res.status(200).send(result)
         }
         catch (error) {
@@ -19,7 +19,7 @@ const run = async () => {
 
     router.get("/get-risks", async (req, res) => {
         try {
-            const result = await risks_collection.find({ project_id: req.query.project_id }).toArray()
+            const result = await risks_collection.find().sort({ timestamp: -1 }).toArray()
             res.status(200).send(result)
         }
         catch (error) {

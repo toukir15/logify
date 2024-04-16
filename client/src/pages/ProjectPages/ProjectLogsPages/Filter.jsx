@@ -1,18 +1,15 @@
 /* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { DateRangePicker } from "react-date-range";
 import { CgProfile } from "react-icons/cg";
 import { FaCalendarAlt } from "react-icons/fa";
 import Select, { components } from "react-select";
 import { addDays } from 'date-fns';
 import useFormatDate from "../../../hooks/useFormatDate"
-
-const options = [
-    { value: 'construction', label: 'Construction', },
-    { value: 'schedule', label: 'Schedule', },
-    { value: 'commercial', label: 'Commercial', },
-    { value: 'design', label: 'Design', },
-];
+import { GlobalContext } from "../../../providers/GlobalProvider";
+import { useNavigate } from "react-router-dom";
+import CreatableSelect from 'react-select/creatable';
+import { customStyle } from '../../../hooks/useSelectCustomStyle';
 
 const MultiValue = props => (
     <components.MultiValue {...props}>
@@ -27,8 +24,14 @@ const Option = props => (
 );
 
 const Filter = () => {
+    const { projectsData, setControlFilterData } = useContext(GlobalContext)
+    const projectID = window.location.href.split("/")[8]
+    const singleProject = projectsData.find(project => project._id == projectID)
     const [selectedOption, setSelectedOption] = useState(null);
     const [isOpenDatePicker, setIsOpenDatePicker] = useState(false)
+    const tagsRef = useRef(null)
+    const navigate = useNavigate()
+
     const [state, setState] = useState([
         {
             startDate: new Date(),
@@ -39,31 +42,71 @@ const Filter = () => {
     const formattedStartDate = useFormatDate(state[0].startDate)
     const formattedEndDate = useFormatDate(state[0].endDate)
 
+    const handleControlFilter = (e) => {
+        e.preventDefault()
+        const controlFilterData = {
+            controlName: e.target.controlName.value,
+            controlStatus: e.target.controlStatus.value,
+        }
+        setControlFilterData(controlFilterData)
+        navigate(`/projects/logs/control/open/661c0c3995881fdbfa1a3a3f`)
+    }
+
     return (
         <div className='py-2 px-20'>
-            {!isOpenDatePicker && <form className="w-[70%] mx-auto">
+            {!isOpenDatePicker && <form onSubmit={handleControlFilter} className="w-[70%] mx-auto">
                 <h3 className="text-primary text-2xl font-medium mb-6">Control Filter</h3>
-                <div onClick={() => setIsOpenDatePicker(true)} className="border border-primary py-4 px-3 rounded bg-white text-[#A8A8A8] mb-6 flex justify-between cursor-pointer">
+                <div onClick={() => setIsOpenDatePicker(true)} className="border border-primary py-[14px] px-3 rounded bg-white text-[#A8A8A8] mb-6 flex justify-between cursor-pointer">
                     <p>{formattedStartDate ? formattedStartDate : "DD/MM/YY"} - {formattedEndDate ? formattedEndDate : "DD/MM/YY"}</p>
                     <FaCalendarAlt className="text-primary" size={20} />
                 </div>
-                <input placeholder="Control name" type="text" className="border border-primary py-4 px-3 rounded w-full bg-white text-[#A8A8A8] mb-6 outline-none" />
-                <input placeholder="Description" type="text" className="border border-primary py-4 px-3 rounded w-full bg-white text-[#A8A8A8] mb-6 outline-none" />
-                <input placeholder="Tag" type="text" className="border border-primary py-4 px-3 rounded w-full bg-white text-[#A8A8A8] mb-6 outline-none" />
+                <input placeholder="Control name" id="controlName" type="text" className="border border-primary py-[14px] px-3 rounded w-full bg-white text-[#A8A8A8] mb-6 outline-none" />
+                <input placeholder="Control status" id="controlStatus" type="text" className="border border-primary py-[14px] px-3 rounded w-full bg-white text-[#A8A8A8] mb-6 outline-none" />
+                <CreatableSelect
+                    className="mb-6"
+                    placeholder={"Tags"}
+                    ref={tagsRef}
+                    isMulti
+                    isClearable={false}
+                    styles={{
+                        control: base => ({
+                            ...base,
+                            borderColor: "#28282b",
+                            padding: "8px 0",
+                            fontSize: '16px',
+                            "&:hover": {
+                                borderColor: "#28282b",
+                            },
+                        }),
+                        dropdownIndicator: base => ({
+                            ...base,
+                            display: "none"
+                        }),
+                        indicatorSeparator: base => ({
+                            ...base,
+                            display: "none"
+                        }),
+                        menu: base => ({
+                            ...base,
+                            display: "none"
+                        }),
+                    }}
+                />
                 <Select
-                    className=''
-                    defaultValue={selectedOption}
                     onChange={setSelectedOption}
-                    options={options}
+                    options={singleProject.project_owner}
                     isClearable={true}
                     components={{ MultiValue, Option }}
                     placeholder={`Select Owner`}
-                    isMulti={true}
                     styles={{
-                        control: (baseStyles, state) => ({
-                            ...baseStyles,
-                            borderColor: state.isFocused ? '#4E81CD' : '#4E81CD',
-                            padding: '10px 2px'
+                        control: base => ({
+                            ...base,
+                            borderColor: "#28282b",
+                            padding: "8px 0",
+                            fontSize: '16px',
+                            "&:hover": {
+                                borderColor: "#28282b",
+                            },
                         }),
                     }}
                 />
