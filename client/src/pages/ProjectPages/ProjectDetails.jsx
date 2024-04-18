@@ -47,7 +47,7 @@ const ProjectDetails = () => {
                 <div className="flex w-full">
                     <div className="flex gap-4 items-center w-1/4">
                         {/* <img className="w-[50px]" src={logo} alt="" /> */}
-                        <img className="w-[50px] object-fill" src={`http://localhost:5000/public/uploads/${singleProjectData.add_image}`} alt="" />
+                        <img className="w-[50px] object-fill" src={`${import.meta.env.VITE_BASE_URL}/public/uploads/${singleProjectData.add_image}`} alt="" />
                         <p>{singleProjectData.project_name}</p>
                     </div>
                     <div className="flex gap-8 items-center w-2/4 justify-center">

@@ -54,6 +54,7 @@ const SettingsPage = () => {
                 if (data.status == 200) {
                     userDataRefetch()
                     navigate("/projects")
+                    useNotify("Update Profile Successfully", "success")
                 }
             })
             .catch(error => console.log(error))
@@ -91,7 +92,7 @@ const SettingsPage = () => {
                             <img className="h-[30px]" src={profileImage.placeholder} alt="" />
                         </div>}
                         {!profileImage.placeholder && user.profile_image && <div className="border p-2 ml-2 border-[#4E81CD]">
-                            <img className="h-[30px]" src={`http://localhost:5000/public/uploads/${user.profile_image}`} alt="" />
+                            <img className="h-[30px]" src={`${import.meta.env.VITE_BASE_URL}/public/uploads/${user.profile_image}`} alt="" />
                         </div>}
                     </div>
                 </div>

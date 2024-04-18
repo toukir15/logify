@@ -44,7 +44,7 @@ const Sidebar = () => {
     }
 
     return (
-        <aside className="w-[14%] bg-[#161618] text-white p-4 flex flex-col  justify-between">
+        <aside className="w-[14%] bg-[#161618] text-white p-4 md:flex flex-col justify-between md:block hidden">
             <div>
                 <div className="flex items-center gap-2 ml-2 mb-8 mt-4">
                     <img src={logo} className="w-8 h-8" alt="" />
@@ -75,11 +75,11 @@ const Sidebar = () => {
                 </div>
             </div>
             <div className="flex gap-2 items-center text-light-gray">
-                {user?.profile_image && <img src={`http://localhost:5000/public/uploads/${user?.profile_image}`} className="w-10 h-10 object-cover rounded-full " alt="" />}
+                {user?.profile_image && <img src={`${import.meta.env.VITE_BASE_URL}/public/uploads/${user?.profile_image}`} className="w-10 h-10 object-cover rounded-full " alt="" />}
                 {!user?.profile_image && <img src={avatar} className="w-10 h-10 object-cover rounded-full " alt="" />}
                 <div>
-                    <p>{user.first_name} {user.last_name}</p>
-                    <p className="text-sm">{user.email}</p>
+                    <p>{user?.first_name} {user?.last_name}</p>
+                    <p className="text-sm">{user?.email}</p>
                 </div>
             </div>
 

@@ -15,7 +15,7 @@ const Date = ({ dateData }) => {
 
     return (
         <div>
-            <div onClick={() => setIsControlDateOpen(true)} className=' flex items-center justify-between border border-primary rounded p-3 bg-white text-primary cursor-pointer'>
+            <div onClick={() => setIsControlDateOpen(true)} className=' flex items-center justify-between border border-primary  rounded p-3 bg-white text-primary cursor-pointer'>
                 {!defaultValue && <p className={`${!date && "text-[#929191]"}`}>{date ? formattedDate : "DD/MM/YY"}</p>}
                 {defaultValue && <p>{date ? formattedDate : moment(defaultValue).format('DD/MM/YYYY')}</p>}
                 <FaCalendarAlt size={20} />

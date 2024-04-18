@@ -1,7 +1,7 @@
 import { FaRegEye } from "react-icons/fa6";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { BiSolidEditAlt } from "react-icons/bi";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import moment from 'moment';
 import Swal from 'sweetalert2'
@@ -60,73 +60,77 @@ const Projects = () => {
     }
 
     return (
-        <div className="py-10 px-20">
+        <div className="py-4 md:py-10 px-4 md:px-20">
             <div className="flex justify-end">
                 <button onClick={() => {
                     setUserInitialFetch()
                     navigate(`/projects/add-project`)
-                }} className="bg-primary rounded-lg text-white py-2 px-4 mb-8">Add Projects</button>
+                }} className="bg-primary text-sm md:text-[16px] rounded-lg text-white py-3 px-4 mb-4 md:mb-8">Add Projects</button>
             </div>
-            <table className="w-full">
-                {projectsData > 0 && <thead>
-                    <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Project Name</th>
-                    <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Image</th>
-                    <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">ID Number</th>
-                    <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Client</th>
-                    <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Project Value</th>
-                    <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Start Date</th>
-                    <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">End Date</th>
-                    <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Action</th>
-                </thead>}
-                <tbody>
-                    {projectsData.slice(projectDataShowPosition - 7, projectDataShowPosition)?.map((projectData, index) => {
-                        return (
-                            <tr
-                                onClick={() => {
-                                    setInitialFetch(!initialFetch)
-                                    setProjectID(projectData._id)
-                                    navigate(`/projects/logs/control/open/${projectData._id}`)
-                                }
-                                }
-                                className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
-                                <td className="py-5 px-4 text-start" > {projectData.project_name}</td>
-                                <td className="py-5 px-4 text-start"><img className="h-10 w-10" src={`http://localhost:5000/public/uploads/${projectData.add_image}`} alt="" /> </td>
-                                <td className="py-5 px-4 text-start">{projectData.ID_number}</td>
-                                <td className="py-5 px-4 text-start">{projectData.client}</td>
-                                <td className="py-5 px-4 text-start">{projectData.project_value}</td>
-                                <td className="py-5 px-4 text-start">
-                                    <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(projectData.start_date).format("DD/MM/YYYY")}</p>
-                                </td>
-                                <td className="py-5 px-4 text-start">
-                                    <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(projectData.end_date).format("DD/MM/YYYY")}</p>
-                                </td>
-                                <td className="py-5 px-4 text-start"><div className="flex gap-3">
-                                    <button type="button">
-                                        <FaRegEye onClick={(e) => {
-                                            handleViewProject(e, projectData._id)
-                                        }} size={18} />
-                                    </button>
-                                    <button>
-                                        <BiSolidEditAlt onClick={(e) => {
-                                            handleEditProject(e, projectData._id)
-                                        }} className="text-primary" size={22} />
-                                    </button>
-                                    <button>
-                                        <RiDeleteBinLine
-                                            onClick={(e) => handleProjectDelete(e, projectData._id)}
-                                            className="text-[#ef2828e5]" size={18} />
-                                    </button>
-                                </div>
-                                </td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table >
-            {projectsData <= 0 && < div className="text-center text-2xl font-medium text-gray mt-10">No project here</div>}
+            <div className="overflow-x-scroll md:overflow-x-hidden text-sm md:text-[16px]">
+                <table className="w-full">
+                    {projectsData.length > 0 && <thead>
+                        <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Project Name</th>
+                        <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Image</th>
+                        <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">ID Number</th>
+                        <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Client</th>
+                        <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Project Value</th>
+                        <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Start Date</th>
+                        <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">End Date</th>
+                        <th className="text-start pt-4 pb-8 px-3 text-gray font-normal">Action</th>
+                    </thead>}
+                    <tbody>
+                        {projectsData.slice(projectDataShowPosition - 7, projectDataShowPosition)?.map((projectData, index) => {
+                            return (
+                                <tr
+                                    onClick={() => {
+                                        setInitialFetch(!initialFetch)
+                                        setProjectID(projectData._id)
+                                        navigate(`/projects/logs/control/open/${projectData._id}`)
+                                    }
+                                    }
+                                    className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={index}>
+                                    <td className="py-5 px-4 text-start" > {projectData.project_name}</td>
+                                    <td className="py-5 px-4 text-start"><img className="h-10 w-10" src={`${import.meta.env.VITE_BASE_URL}/public/uploads/${projectData.add_image}`} alt="" /> </td>
+                                    <td className="py-5 px-4 text-start">{projectData.ID_number}</td>
+                                    <td className="py-5 px-4 text-start">{projectData.client}</td>
+                                    <td className="py-5 px-4 text-start">{projectData.project_value}</td>
+                                    <td className="py-5 px-4 text-start">
+                                        <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(projectData.start_date).format("DD/MM/YYYY")}</p>
+                                    </td>
+                                    <td className="py-5 px-4 text-start">
+                                        <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(projectData.end_date).format("DD/MM/YYYY")}</p>
+                                    </td>
+                                    <td className="py-5 px-4 text-start"><div className="flex gap-3">
+                                        <button type="button">
+                                            <FaRegEye onClick={(e) => {
+                                                handleViewProject(e, projectData._id)
+                                            }} size={18} />
+                                        </button>
+                                        <button>
+                                            <BiSolidEditAlt onClick={(e) => {
+                                                handleEditProject(e, projectData._id)
+                                            }} className="text-primary" size={22} />
+                                        </button>
+                                        <button>
+                                            <RiDeleteBinLine
+                                                onClick={(e) => handleProjectDelete(e, projectData._id)}
+                                                className="text-[#ef2828e5]" size={18} />
+                                        </button>
+                                    </div>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                    </tbody>
+                </table >
+                {projectsData <= 0 && < div className="text-center text-2xl font-medium text-gray mt-10">No project here</div>}
+
+            </div>
             {projectsData.length > 7 && <div>
                 <Pagination paginationData={{ totalButtonArray: projectTotalButtonArray, currentPage: projectCurrentPage, setCurrentPage: setProjectCurrentPage }} />
             </div>}
+
         </div >
     );
 };

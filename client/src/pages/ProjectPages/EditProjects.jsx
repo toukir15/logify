@@ -139,6 +139,7 @@ const EditProject = () => {
                 if (data.status == 200) {
                     projectsDataRefetch()
                     navigate("/projects")
+                    useNotify("Update project data successfully", "success")
                 }
             })
             .catch(error => console.log(error))

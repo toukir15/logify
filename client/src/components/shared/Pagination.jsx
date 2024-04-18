@@ -14,7 +14,7 @@ export default function Pagination({ paginationData }) {
         }
     }
     return (
-        <div className="flex  gap-2 justify-end text-primary">
+        <div className="flex mt-4 md:mt-0  gap-2 justify-end text-primary">
             <div onClick={handlePageNoDecrement} className="border border-primary flex justify-center items-center w-9  h-9 hover:bg-primary hover:text-white transition duration-100 cursor-pointer rounded-full">
                 <IoChevronBackOutline size={20} />
             </div>

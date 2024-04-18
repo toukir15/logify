@@ -29,7 +29,7 @@ const AddRisk = () => {
     const [currentImage, setCurrentImage] = useState(0);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const images = [
-        `http://localhost:5000/public/uploads/${singleProjectData.risk_matrix_template}`,
+        `${import.meta.env.VITE_BASE_URL}/public/uploads/${singleProjectData.risk_matrix_template}`,
     ];
     const openImageViewer = useCallback((index) => {
         setCurrentImage(index);
@@ -81,7 +81,8 @@ const AddRisk = () => {
             .then(response => {
                 if (response.status == 200) {
                     risksDataRefeatch()
-                    navigate(`/projects/logs/risk/${openClosedStatus}/${projectID}`)
+                    navigate(`/ projects / logs / risk / ${openClosedStatus} / ${projectID}`)
+                    useNotify("Added Successfully Risk", "success")
                 }
             })
             .catch(error => console.log(error))
@@ -165,7 +166,7 @@ const AddRisk = () => {
                     <div className='flex w-[70%] gap-4 items-center '>
                         <Select
                             ref={consequencesRef}
-                            className={`w-[70%] z-[40]`}
+                            className={`w - [70 %] z - [40]`}
                             options={singleProjectData.risk_consequences}
                             isClearable={true}
                             placeholder={'Consequence'}
@@ -179,7 +180,7 @@ const AddRisk = () => {
                         />
                         <Select
                             ref={riskConsequencesImpactRef}
-                            className={`w-[70%] z-[40]`}
+                            className={`w - [70 %] z - [40]`}
                             options={singleProjectData.risk_consequences_impact}
                             isClearable={true}
                             placeholder={'Impact'}

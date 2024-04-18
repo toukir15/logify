@@ -53,9 +53,11 @@ const AddControl = () => {
         }
         axios.post("/controls_api/add_control", addControlData)
             .then(response => {
+                console.log(response)
                 if (response.data.insertedId) {
                     controlsDataRefeatch()
                     navigate(`/projects/logs/control/${openClosedStatus}/${projectID}`)
+                    useNotify("Added Successfully Control", "success")
                 }
             })
             .catch(error => console.log(error))

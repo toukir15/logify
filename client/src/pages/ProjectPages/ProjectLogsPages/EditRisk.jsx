@@ -30,7 +30,7 @@ const EditRisk = () => {
     const [currentImage, setCurrentImage] = useState(0);
     const [isViewerOpen, setIsViewerOpen] = useState(false);
     const images = [
-        `http://localhost:5000/public/uploads/${singleProjectData.risk_matrix_template}`,
+        `{${import.meta.env.VITE_BASE_URL}/public/uploads/${singleProjectData.risk_matrix_template}`,
     ];
     const openImageViewer = useCallback((index) => {
         setCurrentImage(index);
@@ -83,6 +83,7 @@ const EditRisk = () => {
                 if (response.status == 200) {
                     risksDataRefeatch()
                     navigate(`/projects/logs/risk/${openClosedStatus}/${projectID}`)
+                    useNotify("Update Risk Successfully", "success")
                 }
             })
             .catch(error => console.log(error))

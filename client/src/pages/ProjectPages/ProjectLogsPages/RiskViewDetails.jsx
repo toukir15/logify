@@ -73,7 +73,7 @@ const RiskViewDetails = () => {
             <div className="mt-12">
                 <h2 className="text-3xl mb-4 font-medium">Risk Matrix Template</h2>
                 <div className="border border-primary w-[510px] h-[410px] flex justify-center items-center">
-                    <img className="w-[500px] h-[400px] object-fill" src={`http://localhost:5000/public/uploads/${singleRiskData.risk_matrix_template}`} alt="" />
+                    <img className="w-[500px] h-[400px] object-fill" src={`${import.meta.env.VITE_BASE_URL}/public/uploads/${singleRiskData.risk_matrix_template}`} alt="" />
                 </div>
             </div>
         </div>

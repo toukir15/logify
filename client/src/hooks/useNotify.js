@@ -18,13 +18,14 @@ export const useNotify = (message, type) => {
     switch (type) {
         case "success":
             toast.success(message, {
-                position: "top-right"
+                position: "top-right",
+                autoClose: 2000
             });
             break;
         case "warning":
             toast.warn(message, {
                 position: "top-right",
-                autoClose: 2800
+                autoClose: 2000
             });
             break;
     }

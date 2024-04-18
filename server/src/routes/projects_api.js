@@ -46,7 +46,7 @@ const run = async () => {
             await projects_collection.insertOne(project_data);
             res.status(200).send('File uploaded successfully');
         } catch (error) {
-            res.status(500).send('Internal server error');
+            res.status(500).send({ message: 'Internal server error', error });
         }
     });
 

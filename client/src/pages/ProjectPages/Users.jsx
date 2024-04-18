@@ -66,18 +66,18 @@ const Users = () => {
                     <tbody>
                         {verifiedUserData.slice(verifiedUsersDataShowPosition - 7, verifiedUsersDataShowPosition).map((verifiedUser) => {
                             return (
-                                <tr className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={verifiedUser._id}>
-                                    <td className="py-5 px-4 text-start" > {verifiedUser.first_name}</td>
-                                    <td className="py-5 px-4 text-start">{verifiedUser.last_name}</td>
-                                    <td className="py-5 px-4 text-start">{verifiedUser.email}</td>
-                                    <td className="py-5 px-4 text-start"><button onClick={() => handleUserDelete(verifiedUser._id)} className="bg-primary text-white py-2 px-4 rounded">Delete</button></td>
+                                <tr className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={verifiedUser?._id}>
+                                    <td className="py-5 px-4 text-start" > {verifiedUser?.first_name}</td>
+                                    <td className="py-5 px-4 text-start">{verifiedUser?.last_name}</td>
+                                    <td className="py-5 px-4 text-start">{verifiedUser?.email}</td>
+                                    <td className="py-5 px-4 text-start"><button onClick={() => handleUserDelete(verifiedUser?._id)} className="bg-primary text-white py-2 px-4 rounded">Delete</button></td>
                                 </tr>
                             );
                         })}
                     </tbody>
                 </table >}
                 {verifiedUserData <= 0 && userStatus == "Add Users" && < div className="text-center text-2xl font-medium text-gray mt-10">No user here</div>}
-                {verifiedUserData.length > 7 && userStatus == "Add Users" && <div>
+                {verifiedUserData?.length > 7 && userStatus == "Add Users" && <div>
                     <Pagination paginationData={{ totalButtonArray: verifiedUsersTotalButtonArray, currentPage: verifiedUserCurrentPage, setCurrentPage: setVerifiedUserCurrentPage }} />
                 </div>}
             </div>
@@ -85,7 +85,7 @@ const Users = () => {
             {/* pending user table  */}
             <div>
                 {userStatus == "Pending Users" && <table className="w-full">
-                    {pendingUsersData.length > 0 && <thead>
+                    {pendingUsersData?.length > 0 && <thead>
                         <th className="text-start pt-4 pb-8 px-[14px] text-gray font-normal">First Name</th>
                         <th className="text-start pt-4 pb-8 px-[14px] text-gray font-normal">Last Name</th>
                         <th className="text-start pt-4 pb-8 px-[14px] text-gray font-normal">Email</th>
@@ -94,16 +94,16 @@ const Users = () => {
                     <tbody>
                         {pendingUsersData.slice(pendingUsersDataShowPosition - 7, pendingUsersDataShowPosition).map((verifiedUser, i) => {
                             return (
-                                <tr className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={verifiedUser._id}>
-                                    <td className={`py-5 px-4 text-start ${!verifiedUser.first_name && "text-gray"}`} >
-                                        {verifiedUser.first_name ? verifiedUser.first_name : "update soon"}
+                                <tr className="bg-white border-b-[20px] border-light-gray cursor-pointer" key={verifiedUser?._id}>
+                                    <td className={`py-5 px-4 text-start ${!verifiedUser?.first_name && "text-gray"}`} >
+                                        {verifiedUser?.first_name ? verifiedUser?.first_name : "update soon"}
                                     </td>
-                                    <td className={`py-5 px-4 text-start ${!verifiedUser.last_name && "text-gray"}`}>
-                                        {verifiedUser.last_name ? verifiedUser.last_name : "update soon"}
+                                    <td className={`py-5 px-4 text-start ${!verifiedUser?.last_name && "text-gray"}`}>
+                                        {verifiedUser?.last_name ? verifiedUser?.last_name : "update soon"}
                                     </td>
-                                    <td className={`py-5 px-4 text-start`}>{verifiedUser.email}</td>
+                                    <td className={`py-5 px-4 text-start`}>{verifiedUser?.email}</td>
                                     <td className={`py-5 px-4 text-start`}>
-                                        <button onClick={() => handleUserDelete(verifiedUser._id)} className="bg-primary text-white py-2 px-4 rounded">Delete</button>
+                                        <button onClick={() => handleUserDelete(verifiedUser?._id)} className="bg-primary text-white py-2 px-4 rounded">Delete</button>
                                     </td>
                                 </tr>
                             );

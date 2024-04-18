@@ -25,7 +25,7 @@ const ViewProject = () => {
             <div className="mt-10 flex justify-between">
                 <div className="flex items-center gap-4">
                     <div className="border border-primary w-[70px] h-[70px] flex justify-center items-center">
-                        <img className="w-14 h-14 object-fill" src={`http://localhost:5000/public/uploads/${singleProjectData?.add_image}`} alt="" />
+                        <img className="w-14 h-14 object-fill" src={`${import.meta.env.VITE_BASE_URL}/public/uploads/${singleProjectData?.add_image}`} alt="" />
                     </div>
                     <div>
                         <h4 className="text-2xl font-medium mb-4">Project Name</h4>
@@ -81,7 +81,7 @@ const ViewProject = () => {
                 <h2 className="text-3xl mb-4 font-medium">Risk Matrix Template</h2>
                 <div className="w-[512px] h-[512px] border border-primary flex justify-center items-center">
                     <img
-                        src={`http://localhost:5000/public/uploads/${singleProjectData.add_image}`}
+                        src={`${import.meta.env.VITE_BASE_URL}/public/uploads/${singleProjectData.add_image}`}
                         className='w-[500px] h-[500px] object-fill rounded'
                         alt=""
                     />

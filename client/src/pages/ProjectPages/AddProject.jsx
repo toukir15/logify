@@ -95,46 +95,47 @@ const AddProject = () => {
                 if (data.status == 200) {
                     projectsDataRefetch()
                     navigate("/projects")
+                    useNotify("Added Project Successfully", "success")
                 }
             })
             .catch(error => console.log(error))
     }
     return (
-        <div className="w-full py-20">
-            <form onSubmit={handleProject} method="post" className="flex w-[50%] mx-auto flex-col">
-                <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor="projectName">Project Name</label>
-                    <input placeholder="Enter project name" name="projectName" id="projectName" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
+        <div className="w-full py-6 md:py-20">
+            <form onSubmit={handleProject} method="post" className="flex md:w-[50%] mx-auto px-4 flex-col">
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <label className="md:w-[30%] mb-1 " htmlFor="projectName">Project Name</label>
+                    <input placeholder="Enter project name" name="projectName" id="projectName" className="border-primary border md:w-[70%] p-3 rounded outline-none" type="text" />
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor="client">Client</label>
-                    <input placeholder="Enter client name" name="client" id="client" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <label className="md:w-[30%] mb-1" htmlFor="client">Client</label>
+                    <input placeholder="Enter client name" name="client" id="client" className="border-primary border md:w-[70%] p-3 rounded outline-none" type="text" />
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor="IDNumber">ID Number</label>
-                    <input placeholder="Enter project name" name="IDNumber" id="IDNumber" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <label className="md:w-[30%] mb-1" htmlFor="IDNumber">ID Number</label>
+                    <input placeholder="Enter project name" name="IDNumber" id="IDNumber" className="border-primary border md:w-[70%] p-3 rounded outline-none" type="text" />
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor="projectDescription">Project Description</label>
-                    <textarea className="border-primary border w-[70%] p-3 rounded outline-none" name="projectDescription" id="projectDescription" cols="10" rows="4" placeholder="Write project description"></textarea>
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <label className="md:w-[30%] mb-1" htmlFor="projectDescription">Project Description</label>
+                    <textarea className="border-primary border md:w-[70%] p-3 rounded outline-none" name="projectDescription" id="projectDescription" cols="10" rows="4" placeholder="Write project description"></textarea>
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor="date">Date</label>
-                    <div className="flex w-[70%] gap-6">
-                        <div className="grid grid-cols-2 gap-6 w-full items-center ">
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <label className="md:w-[30%] mb-1" htmlFor="date">Date</label>
+                    <div className="flex md:w-[70%] gap-6">
+                        <div className="grid grid-cols-2 gap-2 md:gap-6 w-full items-center ">
                             <Date dateData={{ date: startDate, setDate: setStartDate }} />
                             <Date dateData={{ date: endDate, setDate: setEndDate }} />
                         </div>
                     </div>
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor="projectValue">Project Value</label>
-                    <input placeholder="Enter project value" name="projectValue" id="projectValue" className="border-primary border w-[70%] p-3 rounded outline-none" type="text" />
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <label className="md:w-[30%] mb-1" htmlFor="projectValue">Project Value</label>
+                    <input placeholder="Enter project value" name="projectValue" id="projectValue" className="border-primary border md:w-[70%] p-3 rounded outline-none" type="text" />
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor="projectOwner">Project Owner</label>
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <label className="md:w-[30%] mb-1" htmlFor="projectOwner">Project Owner</label>
                     <Select
-                        className='w-[70%] z-[50]'
+                        className='md:w-[70%] z-[50]'
                         ref={projectOwnerRef}
                         options={selectProjectOwnerData}
                         isClearable={true}
@@ -149,33 +150,33 @@ const AddProject = () => {
                         }}
                     />
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor="addImage">Add Image</label>
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <label className="md:w-[30%] mb-1" htmlFor="addImage">Add Image</label>
                     <input onChange={(e) => handleAddImageChange(e, "add image")} type="file" id="addImage" className="hidden" />
-                    <label type="button" htmlFor="addImage" className="py-2 px-5 rounded-full text-white text-sm bg-primary cursor-pointer">Upload File</label>
+                    <label type="button" htmlFor="addImage" className="py-2 px-5 rounded-full text-white text-sm bg-primary cursor-pointer w-fit">Upload File</label>
                     {addImage.placeholder && <div className="border p-2 ml-2 border-[#4E81CD]">
                         <img className="h-[30px]" src={addImage.placeholder} alt="" />
                     </div>}
                 </div>
 
-                <div className="flex w-full items-center mb-6">
-                    <div className="w-[30%]  flex items-center gap-2">
-                        <label htmlFor="">Risk Consequences</label>
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <div className="md:w-[30%]  flex items-center gap-2">
+                        <label className="mb-1 md:mb-0" htmlFor="">Risk Consequences</label>
                         <div data-tooltip-id="risk-consequences" className='bg-[#aaaaaa] hover:bg-[#4B5563] rounded-full text-white mt-1 cursor-pointer'><BsInfo /></div>
                         <Tooltip id="risk-consequences" content="Enter your corporate consequence values from your risk matrix table. For example, 'Financial, Environment, Schedule Delay, Reputation, etc  " style={{ width: "350px" }} place='right' />
                     </div>
                     <CreatableSelect
                         placeholder={"Enter risk consequences"}
                         ref={riskConsequencesRef}
-                        className="w-[70%]"
+                        className="md:w-[70%]"
                         isMulti
                         isClearable={false}
                         styles={customStyle}
                     />
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <div className="w-[30%]  flex items-center gap-2">
-                        <label htmlFor="">Risk Consequence Impacts
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <div className="md:w-[30%]  flex items-center gap-2">
+                        <label className="mb-1 md:mb-0" htmlFor="">Risk Consequence Impacts
                         </label>
                         <div data-tooltip-id="risk-consequence-impact" className='bg-[#aaaaaa] hover:bg-[#4B5563] rounded-full text-white mt-1 cursor-pointer'><BsInfo /></div>
                         <Tooltip id="risk-consequence-impact" content="Enter your corporate consequence impacts from your risk matrix table. For example, 'Insignificant, Mirror, Moderate, Major, Significant" style={{ width: "350px" }} place='right' />
@@ -183,30 +184,30 @@ const AddProject = () => {
                     <CreatableSelect
                         placeholder={"Enter risk consequences impact"}
                         ref={riskConsequencesImpactRef}
-                        className="w-[70%]"
+                        className="md:w-[70%]"
                         isMulti
                         isClearable={false}
                         styles={customStyle}
                     />
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <div className="w-[30%] flex items-center gap-2">
-                        <label htmlFor="riskCategories">Risk Categories</label>
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <div className="md:w-[30%] flex items-center gap-2">
+                        <label className="mb-1 md:mb-0" htmlFor="riskCategories">Risk Categories</label>
                         <div data-tooltip-id="risk-categories" className='bg-[#aaaaaa] hover:bg-[#4B5563] rounded-full text-white mt-1 cursor-pointer'><BsInfo /></div>
                         <Tooltip id="risk-categories" content="Enter generic risk categories to allow grouping of risks. For example, 'Construction. Design, Schedule, Environmental etc. 'If unsure use 'corporate, construction or other generic terms. You can always add more categories in your project page.'" style={{ width: "350px" }} place='right' />
                     </div>
                     <CreatableSelect
                         placeholder={"Enter risk categories"}
                         ref={riskCategoriesRef}
-                        className="w-[70%]"
+                        className="md:w-[70%]"
                         isMulti
                         isClearable={false}
                         styles={customStyle}
                     />
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <div className="w-[30%]  flex items-center gap-2">
-                        <label htmlFor="likelihood">Likelihood
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <div className="md:w-[30%]  flex items-center gap-2">
+                        <label className="mb-1 md:mb-0" htmlFor="likelihood">Likelihood
                         </label>
                         <div data-tooltip-id="likelihood" className='bg-[#aaaaaa] hover:bg-[#4B5563] rounded-full text-white mt-1 cursor-pointer'><BsInfo /></div>
                         <Tooltip id="likelihood" content="Enter your corporate likelihood values. For example, Rare, Unlikely, Possible and almost Certain." style={{ width: "350px" }} place='right' />
@@ -214,16 +215,16 @@ const AddProject = () => {
                     <CreatableSelect
                         placeholder={"Enter likelihood"}
                         ref={likelihoodRef}
-                        className="w-[70%]"
+                        className="md:w-[70%]"
                         isMulti
                         isClearable={false}
                         styles={customStyle}
                     />
                 </div>
-                <div className="flex w-full items-center mb-6">
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
 
-                    <div className="w-[30%]  flex items-center gap-2">
-                        <label htmlFor="">Risk Rating
+                    <div className="md:w-[30%]  flex items-center gap-2">
+                        <label className="mb-1 md:mb-0" htmlFor="">Risk Rating
                         </label>
                         <div data-tooltip-id="risk-ratting" className='bg-[#aaaaaa] hover:bg-[#4B5563] rounded-full text-white mt-1 cursor-pointer'><BsInfo /></div>
                         <Tooltip id="risk-ratting" content="Enter your corporate risk ratting values. For example, Low, Medium, High and Critical." style={{ width: "350px" }} place='right' />
@@ -231,16 +232,16 @@ const AddProject = () => {
                     <CreatableSelect
                         placeholder={"Enter risk ratting"}
                         ref={riskRattingRef}
-                        className="w-[70%]"
+                        className="md:w-[70%]"
                         isMulti
                         isClearable={false}
                         styles={customStyle}
                     />
                 </div>
-                <div className="flex w-full items-center mb-6">
-                    <label className="w-[30%]" htmlFor="">Risk matrix template
+                <div className="flex flex-col md:flex-row w-full md:items-center mb-2 md:mb-6">
+                    <label className="md:w-[30%] mb-1" htmlFor="">Risk matrix template
                     </label>
-                    <div className="w-[70%]">
+                    <div className="md:w-[70%]">
                         <input onChange={(e) => handleAddImageChange(e, "risk matrix template")} type="file" id="riskMatrixTemplate" className="hidden" />
                         <label type="button" htmlFor="riskMatrixTemplate" className="py-2 px-5 rounded-full text-white text-sm bg-primary cursor-pointer ">Upload File</label>
                         {riskMatrixTemplate.placeholder && <div className="border p-2 ml-2 border-[#4E81CD] mt-2 rounded">
@@ -248,9 +249,9 @@ const AddProject = () => {
                         </div>}
                     </div>
                 </div>
-                <div className="flex w-full items-center my-6">
-                    <div className="w-[30%]"></div>
-                    <div className="w-[70%] flex gap-6 ">
+                <div className="flex flex-col md:flex-row w-full md:items-center my-6">
+                    <div className="md:w-[30%] mb-1"></div>
+                    <div className="md:w-[70%] flex gap-6 ">
                         <button className="w-1/2 bg-primary py-3 px-4 text-white rounded-lg">Add Project</button>
                         <button className="w-1/2 border border-primary py-3 px-4 rounded-lg">Cancel</button>
                     </div>

@@ -1,8 +1,11 @@
-import React, { useContext } from 'react'
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import { useNotify } from "../../hooks/useNotify"
 
 export default function LoginPage() {
+    const navigate = useNavigate()
+
     const handleLogin = (e) => {
         e.preventDefault()
         const loginData = {
@@ -12,7 +15,8 @@ export default function LoginPage() {
         axios.post("/authentication_api/login", loginData)
             .then(response => {
                 if (response.status == 200) {
-                    window.location.href = `${import.meta.env.VITE_CLIENT_URL}/projects`
+                    navigate("/projects")
+                    useNotify("Logged In Successfully", "success")
                 }
             })
             .catch(error => console.log(error))

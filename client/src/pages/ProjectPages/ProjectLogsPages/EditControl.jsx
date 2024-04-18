@@ -59,6 +59,7 @@ const EditControl = () => {
                 if (response.status == 200) {
                     controlsDataRefeatch()
                     navigate(`/projects/logs/control/${openClosedStatus}/${projectID}`)
+                    useNotify("Update Control Successfully", "success")
                 }
             })
             .catch(error => console.log(error))

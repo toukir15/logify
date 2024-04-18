@@ -33,6 +33,7 @@ const router = createBrowserRouter([
     {
         path: "/",
         element: <Suspense fallback={<Loading />}><ProtectedRoute> <MainLayout /></ProtectedRoute></Suspense>,
+        // element: <Suspense fallback={<Loading />}><MainLayout /></Suspense>,
         children: [
             {
                 path: "/",

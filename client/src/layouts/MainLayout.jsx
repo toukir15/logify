@@ -16,11 +16,12 @@ const MainLayout = () => {
     const addProjectStatus = window.location.href.split("/")[4]
     const addControlRiskStatus = window.location.href.split("/")[7]
     const filterStatus = window.location.href.split('/')[7]
+    const riskControlID = window.location.href.split('/')[9]
 
     return (
-        <div className="h-screen  flex ">
+        <div className="h-screen flex">
             <Sidebar />
-            <div className="w-[86%] overflow-y-scroll">
+            <div className="md:w-[86%] w-full overflow-y-scroll">
                 <div className="py-6 px-8 bg-white font-medium flex gap-2">
                     <div className="flex items-center gap-1">
                         <button onClick={() => navigate("/projects")} className="text-blue-400">Projects</button>
@@ -53,7 +54,7 @@ const MainLayout = () => {
 
                     {(viewControlRiskStatus == 'view-control' || viewControlRiskStatus == "view-risk" || viewControlRiskStatus == "edit-control" || viewControlRiskStatus == "edit-risk") && <div className="flex items-center gap-1">
                         <MdOutlineArrowBackIosNew className="cursor-pointer rotate-180 mt-1 text-medium" size={14} />
-                        <button onClick={() => navigate(`/projects/logs/control/${openClosedStatus}/${projectID}/${viewControlRiskStatus}`)} className="text-blue-400 capitalize">{viewControlRiskStatus}</button>
+                        <button onClick={() => navigate(`/projects/logs/control/${openClosedStatus}/${projectID}/${viewControlRiskStatus}/${riskControlID}`)} className="text-blue-400 capitalize">{viewControlRiskStatus}</button>
                     </div>}
 
                     {filterStatus == "filter" && <div className="flex items-center gap-1">
