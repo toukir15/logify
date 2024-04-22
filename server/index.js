@@ -16,6 +16,7 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
     exposedHeaders: ["set-cookie"],
+    secure: true,
 }))
 
 const projects_api = require("./src/routes/projects_api")

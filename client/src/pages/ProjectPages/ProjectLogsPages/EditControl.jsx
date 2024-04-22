@@ -16,7 +16,7 @@ import { customStyle } from '../../../hooks/useSelectCustomStyle';
 import { useNotify } from '../../../hooks/useNotify';
 
 const EditControl = () => {
-    const { projectsData, controlsDataRefeatch, controlsData, projectID } = useContext(GlobalContext)
+    const { projectsData, controlsDataRefeatch, controlsData } = useContext(GlobalContext)
     const commentRef = useRef(null);
     const controlOwnerRef = useRef(null)
     const tagsRef = useRef(null)
@@ -25,6 +25,8 @@ const EditControl = () => {
     const navigate = useNavigate()
     const controlId = window.location.href.split("/")[9]
     const openClosedStatus = window.location.href.split("/")[6]
+    const projectID = window.location.href.split("/")[7]
+
     const singleProjectData = projectsData.find(singleProject => singleProject._id == projectID)
     const singleControlData = controlsData.find(control => control._id == controlId)
 
@@ -38,7 +40,9 @@ const EditControl = () => {
         const control_date = controlDate ? controlDate : singleControlData.control_date
         const due_date = controlDate ? dueDate : singleControlData.due_date
 
-        if (!control_name || !comment || !tags || !control_owner || !control_status || !control_date || !due_date) {
+        console.log(tags)
+
+        if (!control_name || !comment || !tags.length || !control_owner || !control_status || !control_date || !due_date) {
             useNotify("Some data is messing!", "warning")
             return
         }
@@ -58,6 +62,7 @@ const EditControl = () => {
             .then(response => {
                 if (response.status == 200) {
                     controlsDataRefeatch()
+                    console.log({ openClosedStatus, projectID })
                     navigate(`/projects/logs/control/${openClosedStatus}/${projectID}`)
                     useNotify("Update Control Successfully", "success")
                 }

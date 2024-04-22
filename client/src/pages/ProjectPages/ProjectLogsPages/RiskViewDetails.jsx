@@ -6,8 +6,9 @@ import parse from 'html-react-parser';
 import { GlobalContext } from "../../../providers/GlobalProvider";
 
 const RiskViewDetails = () => {
-    const { risksData, projectID } = useContext(GlobalContext)
+    const { risksData } = useContext(GlobalContext)
     const openClosedStatus = window.location.href.split("/")[6]
+    const projectID = window.location.href.split("/")[7]
     const riskId = window.location.href.split("/")[9]
     const singleRiskData = risksData.find(riskData => riskData._id == riskId)
     const navigate = useNavigate();

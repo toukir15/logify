@@ -1,6 +1,4 @@
 import { FaRegFilePdf } from "react-icons/fa6";
-import { GiSettingsKnobs } from "react-icons/gi";
-import logo from "../../assets/logo-x1DR2QCW.png"
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { useContext, useRef } from 'react';
 import generatePDF, { Resolution, Margin } from 'react-to-pdf';

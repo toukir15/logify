@@ -49,7 +49,7 @@ const ControlOpen = () => {
                                 <td className="py-5 px-4 text-start">
                                     <p className="bg-[#BBF7D0] w-fit px-3 py-[1px] text-[#158F9C] rounded-full">{moment(controlOpenData.due_date).format("DD/MM/YYYY")}</p>
                                 </td>
-                                <td className="py-5 px-4 text-start">{controlOpenData.tags[0].value} {controlOpenData.tags.length > 1 && "..."}</td>
+                                <td className="py-5 px-4 text-start">{controlOpenData.tags[0]?.value} {controlOpenData.tags.length > 1 && "..."}</td>
                             </tr>
                         );
                     })}

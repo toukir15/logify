@@ -15,9 +15,10 @@ import axios from "axios"
 
 const EditRisk = () => {
     const navigate = useNavigate()
-    const { projectsData, risksDataRefeatch, risksData, projectID } = useContext(GlobalContext)
+    const { projectsData, risksDataRefeatch, risksData } = useContext(GlobalContext)
     const riskId = window.location.href.split("/")[9]
     const openClosedStatus = window.location.href.split("/")[6]
+    const projectID = window.location.href.split("/")[7]
     const singleRiskData = risksData.find(risk => risk._id == riskId)
     const singleProjectData = projectsData.find(projectData => projectData._id == projectID)
     const commentRef = useRef(null);

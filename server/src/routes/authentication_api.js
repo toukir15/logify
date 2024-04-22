@@ -67,7 +67,9 @@ const run = async () => {
                     var cryptoEncrypt = CryptoJS.AES.encrypt(token, process.env.ENCRYPTION_KEY).toString();
                     res.cookie("access_token", cryptoEncrypt, {
                         httpOnly: true,
-                    }).status(200).send({ message: "Login successful" })
+                        secure: true,
+                    }).status(200).send({ message: "Login successful" });
+
                 }
                 else {
                     res.status(203).send("Password does not match.")
