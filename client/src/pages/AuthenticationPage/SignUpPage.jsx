@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import logo from "../../assets/logo.jpg"
 
 export default function SignUpPage() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -64,7 +65,7 @@ export default function SignUpPage() {
     return (
         <div className='bg-[#E8E8E8] h-screen flex justify-center items-center'>
             {!email && !id && <form onSubmit={handleSignUp} className='bg-white w-[600px] shadow-lg py-[30px] rounded-2xl flex justify-center items-center flex-col'>
-                <img src="https://logify.au/assets/logo-x1DR2QCW.png" alt="" />
+                <img className='w-32 mb-4' src={logo} alt="" />
 
                 <div className='flex flex-col w-4/5 md:w-3/5 mb-4'>
                     <label htmlFor="firstName">First name</label>

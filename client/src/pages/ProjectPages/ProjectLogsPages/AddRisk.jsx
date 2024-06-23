@@ -166,7 +166,7 @@ const AddRisk = () => {
                     <div className='flex w-[70%] gap-4 items-center '>
                         <Select
                             ref={consequencesRef}
-                            className={`w - [70 %] z - [40]`}
+                            className={`w-[70%] z-[40]`}
                             options={singleProjectData.risk_consequences}
                             isClearable={true}
                             placeholder={'Consequence'}
@@ -180,7 +180,7 @@ const AddRisk = () => {
                         />
                         <Select
                             ref={riskConsequencesImpactRef}
-                            className={`w - [70 %] z - [40]`}
+                            className={`w-[70%] z-[40]`}
                             options={singleProjectData.risk_consequences_impact}
                             isClearable={true}
                             placeholder={'Impact'}

@@ -57,30 +57,34 @@ const run = async () => {
     })
 
     router.post("/login", async (req, res) => {
-        const { email, password } = req.body
-        const findUser = await users_collection.findOne({ email: email })
-        if (findUser) {
-            if (findUser.is_verified) {
-                const match = await bcrypt.compare(password, findUser.password);
-                if (match) {
-                    const token = jwt.sign({ email: req.body.email, id: findUser._id, role: findUser.role }, process.env.SECRET_KEY, { expiresIn: '15d' });
-                    var cryptoEncrypt = CryptoJS.AES.encrypt(token, process.env.ENCRYPTION_KEY).toString();
-                    res.cookie("access_token", cryptoEncrypt, {
-                        httpOnly: true,
-                        secure: true,
-                    }).status(200).send({ message: "Login successful" });
-
+        try {
+            const { email, password } = req.body
+            const findUser = await users_collection.findOne({ email: email })
+            if (findUser) {
+                if (findUser.is_verified) {
+                    const match = await bcrypt.compare(password, findUser.password);
+                    if (match) {
+                        const token = jwt.sign({ email: req.body.email, id: findUser._id, role: findUser.role }, process.env.SECRET_KEY, { expiresIn: '15d' });
+                        const cryptoEncrypt = CryptoJS.AES.encrypt(token, process.env.ENCRYPTION_KEY).toString();
+                        res.cookie("access_token", cryptoEncrypt, {
+                            httpOnly: true,
+                            secure: true,
+                        }).status(200).send({ message: "Login successful" });
+                    }
+                    else {
+                        res.status(203).send("Password does not match.")
+                    }
                 }
                 else {
-                    res.status(203).send("Password does not match.")
+                    res.status(203).send("Email does not verified.")
                 }
             }
             else {
-                res.status(203).send("Email does not verified.")
+                res.status(203).send("User not found")
             }
         }
-        else {
-            res.status(203).send("User not found")
+        catch (error) {
+            console.log(error)
         }
     })
 

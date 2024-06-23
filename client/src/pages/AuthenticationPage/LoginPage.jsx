@@ -1,10 +1,10 @@
 import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useNotify } from "../../hooks/useNotify"
+import logo from "../../assets/logo.jpg"
 
 export default function LoginPage() {
-    const navigate = useNavigate()
 
     const handleLogin = (e) => {
         e.preventDefault()
@@ -15,8 +15,8 @@ export default function LoginPage() {
         axios.post("/authentication_api/login", loginData)
             .then(response => {
                 if (response.status == 200) {
-                    navigate("/projects")
                     useNotify("Logged In Successfully", "success")
+                    window.location.href = 'http://localhost:5173/projects'
                 }
             })
             .catch(error => console.log(error))
@@ -24,7 +24,7 @@ export default function LoginPage() {
     return (
         <div className='bg-[#E8E8E8] h-screen flex justify-center items-center'>
             <form onSubmit={handleLogin} className='bg-white w-[500px] shadow-lg py-[70px] rounded-2xl flex justify-center items-center flex-col'>
-                <img src="https://logify.au/assets/logo-x1DR2QCW.png" alt="" />
+                <img className='w-32 mb-4' src={logo} alt="" />
                 <div className='flex flex-col w-4/5 md:w-3/5 mb-4'>
                     <label htmlFor="email">Email</label>
                     <input className='border mt-1 p-2 rounded border-[#E8E8E8]' id='email' name='email' placeholder='Email' type="email" />
