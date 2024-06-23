@@ -1,0 +1,1 @@
+const n={control:o=>({...o,borderColor:"#4256D0",padding:"6px 0",fontSize:"16px","&:hover":{borderColor:"#4256D0"}}),dropdownIndicator:o=>({...o,display:"none"}),indicatorSeparator:o=>({...o,display:"none"}),menu:o=>({...o,display:"none"})};export{n as c};
