@@ -1,4 +1,4 @@
-import{r as c,R as o}from"./index-C07UJA1Y.js";function h(e,a){a===void 0&&(a={});var r=a.insertAt;if(!(!e||typeof document>"u")){var s=document.head||document.getElementsByTagName("head")[0],n=document.createElement("style");n.type="text/css",r==="top"&&s.firstChild?s.insertBefore(n,s.firstChild):s.appendChild(n),n.styleSheet?n.styleSheet.cssText=e:n.appendChild(document.createTextNode(e))}}var y=`.styles-module_wrapper__1I_qj {
+import{r as c,R as o}from"./index-Qlug-mrU.js";function h(e,a){a===void 0&&(a={});var r=a.insertAt;if(!(!e||typeof document>"u")){var s=document.head||document.getElementsByTagName("head")[0],n=document.createElement("style");n.type="text/css",r==="top"&&s.firstChild?s.insertBefore(n,s.firstChild):s.appendChild(n),n.styleSheet?n.styleSheet.cssText=e:n.appendChild(document.createTextNode(e))}}var y=`.styles-module_wrapper__1I_qj {
   z-index: 1;
   display: flex;
   align-items: center;
